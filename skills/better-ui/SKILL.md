@@ -1,141 +1,141 @@
 ---
 name: better-ui
-description: Design engineering principles for making interfaces feel polished. Use when building UI components, reviewing frontend code, implementing animations, hover states, shadows, borders, micro-interactions, enter/exit animations, choosing or reviewing icons, or any visual detail work. Triggers on UI polish, design details, "make it feel better", "feels off", stagger animations, border radius, optical alignment, image outlines, box shadows, icons, icon stroke weight, icon states, motion restraint.
+description: インターフェースを洗練させるためのデザインエンジニアリング原則。UIコンポーネントの構築、フロントエンドコードのレビュー、アニメーション、ホバー状態、シャドウ、ボーダー、マイクロインタラクション、登場・退場アニメーションの実装、アイコンの選定やレビュー、その他あらゆる視覚的な細部の作業を行う際に使用する。トリガーワードはUIの磨き上げ、デザインの細部、"もっと良い感じにしたい"、"何かしっくりこない"、スタガーアニメーション、角丸(border radius)、オプティカルアライメント、画像のアウトライン、シャドウ(box-shadow)、アイコン、アイコンのストローク幅、アイコンの状態、モーションの抑制。
 ---
 
-# Details that make interfaces feel better
+# インターフェースの質を高める細部
 
-Great interfaces rarely come from a single thing. It's usually a collection of small details that compound into a great experience. Apply these principles when building or reviewing UI code.
+優れたインターフェースは、単一の要素から生まれることはほとんどない。多くの場合、細部の積み重ねが複合して優れた体験を作り出す。UIコードを構築またはレビューする際は、これらの原則を適用する。
 
-When reviewing, slow the interface down: replay motion at 10% speed in the browser's Animations panel and walk every state: hover, focus, active, loading, empty. What feels off at 10% speed is what's subtly wrong at full speed.
+レビューの際は、インターフェースの動きを遅くする。ブラウザのAnimationsパネルでモーションを10%速度で再生し、ホバー、フォーカス、アクティブ、ローディング、エンプティの各状態を確認する。10%速度で違和感があるものは、等倍速度では気づきにくい微細な誤りである。
 
-Preserve the project's component library, tokens, and density. Match its established motion language except where a principle below prescribes an exact interaction pattern.
+プロジェクトのコンポーネントライブラリ、トークン、密度を維持する。以下の原則が正確なインタラクションパターンを規定している箇所を除き、確立されたモーション言語に合わせる。
 
-Typography (text wrapping, font rendering, tabular numbers, spacing) is covered by the `better-typography` skill; use that for anything text-related. Accessibility (hit areas, focus states, keyboard support, ARIA, reduced motion) is covered by the `better-accessibility` skill. Layout structure (grouping, spacing between sections, breakpoints, spatial RTL) is covered by the `better-layout` skill.
+タイポグラフィ(テキストの折り返し、フォントレンダリング、tabular numbers、スペーシング)は`better-typography`スキルが扱うため、テキストに関することはそちらを使用する。アクセシビリティ(ヒットエリア、フォーカス状態、キーボード操作、ARIA、モーション低減)は`better-accessibility`スキルが扱う。レイアウト構造(グルーピング、セクション間のスペーシング、ブレークポイント、空間的なRTL)は`better-layout`スキルが扱う。
 
 ## Quick Reference
 
-| Category | When to Use |
+| カテゴリ | 使用場面 |
 | --- | --- |
-| [Surfaces](surfaces.md) | Border radius, optical alignment, shadows, image outlines |
-| [Animations](animations.md) | Interruptible animations, enter/exit transitions, icon animations, scale on press, motion restraint |
-| [Icons](icons.md) | Icon stroke weight, states via `currentColor`, outline vs fill, sizing, RTL flipping |
-| [Performance](performance.md) | Transition specificity, `will-change` usage |
+| [サーフェス](surfaces.md) | 角丸(border radius)、オプティカルアライメント、シャドウ、画像のアウトライン |
+| [アニメーション](animations.md) | 中断可能なアニメーション、登場・退場トランジション、アイコンアニメーション、プレス時のスケール、モーションの抑制 |
+| [アイコン](icons.md) | アイコンのストローク幅、`currentColor`による状態表現、アウトライン対フィル、サイズ設定、RTLでの反転 |
+| [パフォーマンス](performance.md) | トランジション対象の指定、`will-change`の使い方 |
 
 ## Core Principles
 
-### 1. Concentric Border Radius
+### 1. 同心円状の角丸(border radius)
 
-Outer radius = inner radius + padding. Mismatched radii on nested elements is the most common thing that makes interfaces feel off.
+外側の半径 = 内側の半径 + パディング。入れ子になった要素間で半径が揃っていないことが、インターフェースの違和感の最も一般的な原因である。
 
-### 2. Optical Over Geometric Alignment
+### 2. 幾何学的整列よりオプティカルアライメントを優先
 
-When geometric centering looks off, align optically. Buttons with icons, play triangles, and asymmetric icons all need manual adjustment.
+幾何学的な中央揃えが不自然に見える場合は、オプティカルアライメント(視覚的な整列)を行う。アイコン付きボタン、再生ボタンの三角形、非対称なアイコンはいずれも手動での調整が必要になる。
 
-### 3. Shadows for Elevation, Borders for Structure
+### 3. 高さ表現(エレベーション)にはシャドウ、構造にはボーダー
 
-For buttons, cards, and containers whose border exists only to create depth, prefer layered transparent `box-shadow` values. Keep borders that communicate structure or state: dividers, layout separators, and selected or focus states.
+奥行きを作る目的だけで存在するボタン、カード、コンテナのボーダーには、透明度を重ねた`box-shadow`を優先する。構造や状態を伝えるボーダー(区切り線、レイアウトの仕切り、選択状態やフォーカス状態)はそのまま残す。
 
-### 4. Interruptible Animations
+### 4. 中断可能なアニメーション
 
-Use CSS transitions for interactive state changes: they can be interrupted mid-animation. Reserve keyframes for staged sequences that run once.
+インタラクティブな状態変化にはCSSトランジションを使う。トランジションはアニメーションの途中で中断できる。キーフレームは、一度だけ実行される段階的なシーケンス用に取っておく。
 
-### 5. Split and Stagger Enter Animations
+### 5. 登場アニメーションは分割してスタガーさせる
 
-For an infrequent staged entrance where sequence helps communicate hierarchy, break content into semantic chunks and stagger them by ~100ms instead of animating one container. Do not stagger routine, high-frequency interactions.
+シーケンスが階層構造を伝えるのに役立つ、頻度の低い段階的な登場については、コンテンツを意味のある塊に分割し、1つのコンテナをまとめてアニメーションさせるのではなく、約100ms間隔でスタガーさせる。日常的で高頻度なインタラクションはスタガーさせない。
 
-### 6. Subtle Exit Animations
+### 6. 控えめな退場アニメーション
 
-Use a small fixed `translateY` instead of full height. Exits should be softer than enters. Use `ease-out` for both enter and exit transitions.
+全体の高さではなく、小さな固定値の`translateY`を使う。退場は登場よりも穏やかにする。登場・退場のどちらのトランジションにも`ease-out`を使う。
 
-### 7. Contextual Icon Animations
+### 7. コンテキストに応じたアイコンアニメーション
 
-Animate icons with `opacity`, `scale`, and `blur` instead of toggling visibility. Use exactly these values: scale from `0.25` to `1`, opacity from `0` to `1`, blur from `4px` to `0px`. If the project has `motion` or `framer-motion` in `package.json`, match that package's import path (or the established nearby imports when both exist) and use `transition: { type: "spring", duration: 0.3, bounce: 0 }`; bounce must always be `0`. If no motion library is installed, keep both icons in the DOM (one absolute-positioned) and cross-fade with CSS transitions using `cubic-bezier(0.2, 0, 0, 1)`; this gives both enter and exit animations without any dependency.
+表示・非表示の切り替えではなく、`opacity`、`scale`、`blur`でアイコンをアニメーションさせる。値は必ず次の通りにする: `scale`は`0.25`から`1`、`opacity`は`0`から`1`、`blur`は`4px`から`0px`。プロジェクトの`package.json`に`motion`または`framer-motion`がある場合は、そのパッケージのインポートパス(両方存在する場合は近くの既存のインポートに合わせる)を踏襲し、`transition: { type: "spring", duration: 0.3, bounce: 0 }`を使う。bounceは必ず`0`にする。モーションライブラリがインストールされていない場合は、両方のアイコンをDOMに残し(片方をabsolute配置にする)、`cubic-bezier(0.2, 0, 0, 1)`を使ったCSSトランジションでクロスフェードさせる。これにより依存関係なしで登場・退場の両方のアニメーションが得られる。
 
-### 8. Image Outlines
+### 8. 画像のアウトライン
 
-Add a subtle `1px` outline with low opacity to images for consistent depth. The color must be pure black in light mode (`oklch(0 0 0 / 0.1)`) and pure white in dark mode (`oklch(1 0 0 / 0.1)`), never a near-black like slate, zinc, or any tinted neutral. A tinted outline picks up the surface color underneath it and reads as dirt on the image edge.
+画像には、一貫した奥行きを出すために、不透明度の低い`1px`のoutlineを追加する。色はライトモードで純粋な黒(`oklch(0 0 0 / 0.1)`)、ダークモードで純粋な白(`oklch(1 0 0 / 0.1)`)にする。スレートやジンクのような黒に近い色や、色味のついたニュートラルカラーは決して使わない。色味のついたアウトラインは下にあるサーフェスの色を拾ってしまい、画像の端が汚れて見える。
 
-### 9. Scale on Press
+### 9. プレス時のスケール
 
-A subtle `scale(0.96)` on click gives buttons tactile feedback. Always use `0.96`. Never use a value smaller than `0.95`: anything below feels exaggerated. Add a `static` prop to disable it when motion would be distracting.
+クリック時に控えめな`scale(0.96)`を適用すると、ボタンに触覚的なフィードバックが生まれる。値は必ず`0.96`にする。`0.95`より小さい値は絶対に使わない。それ以下だと大げさに見える。モーションが邪魔になる場合に無効化できるよう、`static`propを追加する。
 
-### 10. Skip Animation on Page Load
+### 10. ページ読み込み時はアニメーションをスキップ
 
-Use `initial={false}` on `AnimatePresence` to prevent enter animations on first render. Verify it doesn't break intentional entrance animations.
+`AnimatePresence`に`initial={false}`を指定し、初回レンダリング時に登場アニメーションが発生しないようにする。意図した登場アニメーションを壊していないか確認する。
 
-### 11. Never Use `transition: all`
+### 11. `transition: all`は絶対に使わない
 
-Always specify exact properties: `transition-property: scale, opacity`. Tailwind's `transition-transform` covers `transform, translate, scale, rotate`.
+必ず対象のプロパティを明示する: `transition-property: scale, opacity`。Tailwindの`transition-transform`は`transform, translate, scale, rotate`をカバーする。
 
-### 12. Use `will-change` Sparingly
+### 12. `will-change`は控えめに使う
 
-Only for `transform`, `opacity`, `filter`, the properties the GPU can composite. Never use `will-change: all`. Only add when you notice first-frame stutter.
+`transform`、`opacity`、`filter`など、GPUが合成できるプロパティにのみ使う。`will-change: all`は絶対に使わない。最初のフレームでのカクつきに気づいたときだけ追加する。
 
-### 13. Match Icon Stroke to Text Weight
+### 13. アイコンのストロークをテキストのウェイトに合わせる
 
-An icon next to text carries the text's optical weight: `1.5px` stroke beside regular (400) text, `2px` beside semibold (600). One stroke weight per icon set; never mix libraries on one surface.
+テキストの隣にあるアイコンは、テキストの視覚的なウェイトを引き継ぐ: 通常(400)のテキストの隣では`1.5px`のストローク、セミボールド(600)の隣では`2px`。1つのアイコンセットにつきストローク幅は1つに統一し、同じサーフェス上で複数のライブラリを混在させない。
 
-### 14. One SVG, Recolored per State
+### 14. 1つのSVGを状態ごとに再配色する
 
-Icons use `currentColor` and get their states (hover, selected, disabled) from CSS color and opacity, never from separate assets. Outline variant is the default; fill variant marks the active state.
+アイコンは`currentColor`を使い、状態(ホバー、選択、無効)はCSSの色と不透明度から得る。個別のアセットからは得ない。アウトラインのバリアントをデフォルトとし、フィルのバリアントはアクティブ状態を示す。
 
-### 15. Motion Restraint
+### 15. モーションの抑制
 
-No custom animation on high-frequency interactions: the attention cost repeats on every trigger. Motion is never the only feedback channel; every animated state change also needs a static cue (color, icon, label).
+高頻度のインタラクションにカスタムアニメーションを使わない。注意を引くコストがトリガーのたびに繰り返し発生する。モーションを唯一のフィードバック手段にしない。アニメーションする状態変化には必ず、色、アイコン、ラベルなどの静的な手がかりも用意する。
 
 ## Common Mistakes
 
-| Mistake | Fix |
+| 誤り | 修正方法 |
 | --- | --- |
-| Same border radius on closely nested parent and child | Calculate `outerRadius = innerRadius + padding` |
-| Icons look off-center | Adjust optically with padding or fix SVG directly |
-| Border used only to fake elevation | Use layered `box-shadow` with transparency; keep structural and state borders |
-| Jarring staged entrance or contextual exit | Stagger infrequent entrances and keep context-preserving exits subtle |
-| Stateful icon or toggle animates its default state on page load | Add `initial={false}` to that `AnimatePresence`; preserve intentional page entrances |
-| `transition: all` on elements | Specify exact properties |
-| First-frame animation stutter | Add `will-change: transform` (sparingly) |
-| Hairline icon beside bold text | Match the stroke width to the text weight |
-| Separate icon assets per state | One `currentColor` SVG, states via CSS |
-| Filled icons everywhere | Outline as default, fill only for the active state |
-| Entrance animation on every hover or keystroke | Instant feedback or ≤150ms opacity/color transition |
+| 近接する入れ子の親子要素で角丸(border radius)が同じ | `outerRadius = innerRadius + padding`で計算する |
+| アイコンが中央からずれて見える | パディングでオプティカルに調整するか、SVGを直接修正する |
+| 高さ表現(エレベーション)を偽装するためだけに使われたボーダー | 透明度を重ねた`box-shadow`を使う。構造や状態を示すボーダーは維持する |
+| 唐突な段階的登場、または文脈を壊す退場 | 頻度の低い登場はスタガーさせ、文脈を保つ退場は控えめにする |
+| 状態を持つアイコンやトグルが、ページ読み込み時にデフォルト状態のままアニメーションする | その`AnimatePresence`に`initial={false}`を追加する。意図したページ登場アニメーションは維持する |
+| 要素への`transition: all` | 対象のプロパティを明示する |
+| 最初のフレームでのアニメーションのカクつき | (控えめに)`will-change: transform`を追加する |
+| 太字テキストの隣にある極細のアイコン | ストローク幅をテキストのウェイトに合わせる |
+| 状態ごとに個別のアイコンアセット | 1つの`currentColor`のSVGで、状態はCSSで表現する |
+| いたるところでフィルアイコンを使う | デフォルトはアウトライン、アクティブ状態のみフィル |
+| ホバーやキー入力のたびに登場アニメーションが発生する | 即座のフィードバックか、≤150msのopacity/colorトランジションにする |
 
 ## Review Output Format
 
-Use this format only when the user asks for a standalone UI-polish review. When `better-interface` orchestrates the review, provide domain evidence and findings to that skill and let its output format, severity scale, consolidation rules, cap, and verdict take precedence.
+このフォーマットは、ユーザーが単体のUIポリッシュレビューを求めた場合にのみ使用する。`better-interface`がレビューを統括する場合は、そのスキルにドメインの根拠と所見を提供し、出力フォーマット、深刻度スケール、統合ルール、上限、判定はそちらを優先させる。
 
-Present the standalone review in two parts.
+単体のレビューは2つのパートで提示する。
 
-### Findings
+### 所見
 
-Group all confirmed findings by principle. Use a markdown table with **Severity**, **Location**, **Before**, **After**, and **Why** columns. Never use separate "Before:" / "After:" lines.
+確認済みの所見はすべて原則ごとにグループ化する。**深刻度**、**場所**、**変更前**、**変更後**、**理由**の列を持つMarkdownテーブルを使う。"変更前:" / "変更後:" のような別々の行は使わない。
 
-- **Severity**: `HIGH` makes an interaction misleading, unresponsive, or repeatedly disruptive; `MEDIUM` creates a noticeable craft or consistency problem; `LOW` is isolated polish.
-- **Location**: cite `path/to/file:line`. If the artifact has no source files, cite the exact screen and component instead.
-- **Before / After**: show the current implementation and an actionable replacement.
-- **Why**: name the violated principle and explain how it affects the interface.
+- **深刻度**: `HIGH`はインタラクションが誤解を招く、反応しない、または繰り返し妨げになる場合。`MEDIUM`は明らかな作り込みや一貫性の問題がある場合。`LOW`は局所的な仕上げの問題。
+- **場所**: `path/to/file:line`の形式で示す。アーティファクトにソースファイルがない場合は、代わりに具体的な画面とコンポーネントを示す。
+- **変更前 / 変更後**: 現在の実装と、実行可能な置き換え案を示す。
+- **理由**: 違反している原則を明示し、それがインターフェースにどう影響するかを説明する。
 
-Consolidate a repeated systemic issue into one row and list every affected location. Omit principles with no findings.
+繰り返し発生する構造的な問題は1行にまとめ、影響を受けるすべての場所を列挙する。所見のない原則は省略する。
 
-### Example
+### 例
 
-#### Concentric border radius
-| Severity | Location | Before | After | Why |
+#### 同心円状の角丸(border radius)
+| 深刻度 | 場所 | 変更前 | 変更後 | 理由 |
 | --- | --- | --- | --- | --- |
-| LOW | `src/Card.tsx:28` | `rounded-xl` on card + `rounded-xl` on inner button (`p-2`) | `rounded-2xl` on card (`8 + 8 = 16`), `rounded-lg` on inner button | Nested corners should be concentric |
-| LOW | `src/card.css:11` | `border-radius: 16px` on both nested surfaces | Outer `24px`, inner `16px` with `8px` padding | Equal nested radii make the inner surface look pinched |
+| LOW | `src/Card.tsx:28` | カードに`rounded-xl`、内側のボタン(`p-2`)にも`rounded-xl` | カードに`rounded-2xl`(`8 + 8 = 16`)、内側のボタンに`rounded-lg` | 入れ子になった角は同心円状であるべき |
+| LOW | `src/card.css:11` | 入れ子になった両方のサーフェスに`border-radius: 16px` | 外側は`24px`、内側は`16px`でパディング`8px` | 入れ子の半径が等しいと内側のサーフェスが窮屈に見える |
 
-#### Scale on press
-| Severity | Location | Before | After | Why |
+#### プレス時のスケール
+| 深刻度 | 場所 | 変更前 | 変更後 | 理由 |
 | --- | --- | --- | --- | --- |
-| LOW | `src/Button.tsx:19` | `<button className="...">` | Add `active:scale-[0.96] transition-transform` | Press feedback makes the control feel responsive |
-| MEDIUM | `src/button.css:24` | `scale(0.9)` on press | Raise to `scale(0.96)` | Anything below `0.95` feels exaggerated |
+| LOW | `src/Button.tsx:19` | `<button className="...">` | `active:scale-[0.96] transition-transform`を追加 | プレス時のフィードバックにより、コントロールが反応している感覚が生まれる |
+| MEDIUM | `src/button.css:24` | プレス時に`scale(0.9)` | `scale(0.96)`に引き上げる | `0.95`未満だと大げさに見える |
 
-### Verification and Verdict
+### 検証と判定
 
-After the findings:
+所見の後に以下を記載する:
 
-1. **Verification**: list the exact checks run and their observed results. Walk every relevant state and inspect motion at 10% speed when animation is involved. If a check was not run, state what still needs verification.
-2. **Verdict**: `Block` if any `HIGH` finding remains, `Needs changes` if only `MEDIUM` or `LOW` findings remain, and `Approve` only when no actionable findings remain.
+1. **検証**: 実施した具体的なチェックと、その観察結果を列挙する。関連するすべての状態を確認し、アニメーションが関わる場合は10%速度でモーションを検査する。チェックを実施していない場合は、何を検証する必要があるか明記する。
+2. **判定**: `HIGH`の所見が1つでも残っている場合は`Block`、`MEDIUM`または`LOW`の所見のみが残っている場合は`Needs changes`、対応が必要な所見が残っていない場合に限り`Approve`とする。
 
-When there are no findings, omit the tables, state "No actionable UI-polish findings", report verification, and end with `Approve`.
+所見がない場合は、テーブルを省略し、"対応が必要なUIポリッシュの所見なし"と述べ、検証結果を報告したうえで、`Approve`で締めくくる。

@@ -1,28 +1,28 @@
-# Performance
+# パフォーマンス
 
-Transition specificity and GPU compositing hints.
+トランジション対象の指定とGPU合成のヒント。
 
-## Transition Only What Changes
+## 変化するプロパティだけをトランジションする
 
-Never use `transition: all` or Tailwind's `transition-all`. Always specify the exact properties that change. (Tailwind's bare `transition` maps to a curated default list of colors, opacity, shadow and transforms, not to `all`; still prefer naming exactly what changes.)
+`transition: all`やTailwindの`transition-all`は絶対に使わない。変化する正確なプロパティを必ず指定する。(Tailwindの単体の`transition`は、`all`ではなく色・opacity・shadow・transformを厳選したデフォルトリストにマッピングされる。それでも、変化するものを正確に指定することを優先する。)
 
-### Why
+### 理由
 
-- `transition: all` forces the browser to watch every property for changes
-- Causes unexpected transitions on properties you didn't intend to animate (colors, padding, shadows)
-- Prevents browser optimizations
+- `transition: all`はブラウザにすべてのプロパティの変化を監視させることになる
+- 意図していないプロパティ(色、パディング、シャドウ)で予期しないトランジションが起きる
+- ブラウザの最適化を妨げる
 
-### CSS Example
+### CSSの例
 
 ```css
-/* Good: only transition what changes */
+/* 良い例: 変化するものだけをトランジションする */
 .button {
   transition-property: scale, background-color;
   transition-duration: 150ms;
   transition-timing-function: ease-out;
 }
 
-/* Bad: transition everything */
+/* 悪い例: すべてをトランジションする */
 .button {
   transition: all 150ms ease-out;
 }
@@ -31,58 +31,58 @@ Never use `transition: all` or Tailwind's `transition-all`. Always specify the e
 ### Tailwind
 
 ```tsx
-// Good: explicit properties
+// 良い例: プロパティを明示する
 <button className="transition-[scale,background-color] duration-150 ease-out">
 
-// Bad: transition all
+// 悪い例: すべてをトランジションする
 <button className="transition-all duration-150 ease-out">
 ```
 
-### Tailwind `transition-transform` Note
+### Tailwindの`transition-transform`に関する注意
 
-`transition-transform` in Tailwind maps to `transition-property: transform, translate, scale, rotate`, so it covers all transform-related properties, not just `transform`. Use this when you're only animating transforms. For multiple non-transform properties, use the bracket syntax: `transition-[scale,opacity,filter]`.
+Tailwindの`transition-transform`は`transition-property: transform, translate, scale, rotate`にマッピングされる。つまり`transform`だけでなく、transform関連のプロパティすべてをカバーする。transformのみをアニメーションさせる場合はこれを使う。transform以外の複数のプロパティには、ブラケット構文を使う: `transition-[scale,opacity,filter]`。
 
-## Use `will-change` Sparingly
+## `will-change`は控えめに使う
 
-`will-change` hints the browser to pre-promote an element to its own GPU compositing layer. Without it, the browser promotes the element only when the animation starts; that one-time layer promotion can cause a micro-stutter on the first frame.
+`will-change`は、要素を専用のGPU合成レイヤーへあらかじめ昇格させるようブラウザにヒントを与える。これを指定しない場合、ブラウザはアニメーションが開始した時点で初めて要素を昇格させる。この一度限りのレイヤー昇格が、最初のフレームでの微妙なカクつきを引き起こすことがある。
 
-This particularly helps when an element is changing `scale`, `rotation`, or moving around with `transform`. For other properties, it doesn't help much: the browser can't composite them on the GPU anyway.
+これは特に、要素が`scale`や`rotation`を変化させたり、`transform`で動き回ったりする場合に役立つ。それ以外のプロパティに対してはあまり効果がない。そもそもブラウザがそれらをGPUで合成できないためである。
 
-### Rules
+### ルール
 
 ```css
-/* Good: specific property that benefits from GPU compositing */
+/* 良い例: GPU合成の恩恵を受ける具体的なプロパティ */
 .animated-card {
   will-change: transform;
 }
 
-/* Good: multiple compositor-friendly properties */
+/* 良い例: 合成に適した複数のプロパティ */
 .animated-card {
   will-change: transform, opacity;
 }
 
-/* Bad: never use will-change: all */
+/* 悪い例: will-change: all は絶対に使わない */
 .animated-card {
   will-change: all;
 }
 
-/* Bad: properties that can't be GPU-composited anyway */
+/* 悪い例: そもそもGPUで合成できないプロパティ */
 .animated-card {
   will-change: background-color, padding;
 }
 ```
 
-### Useful Properties
+### 有用なプロパティ
 
-| Property | GPU-compositable | Worth using `will-change` |
+| プロパティ | GPU合成可能 | `will-change`を使う価値 |
 | --- | --- | --- |
-| `transform` | Yes | Yes |
-| `opacity` | Yes | Yes |
-| `filter` (blur, brightness) | Yes | Yes |
-| `clip-path` | Newer Chromium only | Rarely; not reliable cross-browser |
-| `top`, `left`, `width`, `height` | No | No |
-| `background`, `border`, `color` | No | No |
+| `transform` | 可能 | あり |
+| `opacity` | 可能 | あり |
+| `filter`(blur、brightness) | 可能 | あり |
+| `clip-path` | 新しめのChromiumのみ | ほとんどなし。クロスブラウザで信頼できない |
+| `top`、`left`、`width`、`height` | 不可能 | なし |
+| `background`、`border`、`color` | 不可能 | なし |
 
-### When to Skip
+### 省略すべき場面
 
-Modern browsers are already good at optimizing on their own. Only add `will-change` when you notice first-frame stutter; Safari in particular benefits from it. Don't add it preemptively to every animated element; each extra compositing layer costs memory.
+最近のブラウザは、すでに自力での最適化が得意である。最初のフレームでのカクつきに気づいたときだけ`will-change`を追加する。特にSafariはこれの恩恵を受けやすい。すべてのアニメーション要素に予防的に追加しない。合成レイヤーが増えるたびにメモリコストがかかる。

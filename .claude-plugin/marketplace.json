@@ -1,6 +1,6 @@
 {
   "name": "interfaces",
-  "description": "Agent skills for building great product interfaces, from typography and color to accessibility and UX writing.",
+  "description": "優れたプロダクトインターフェースを構築するためのエージェントスキル。タイポグラフィや色からアクセシビリティ、UXライティングまで。",
   "owner": {
     "name": "Jakub Krehel",
     "email": "jakub@kbo.sk"
@@ -9,7 +9,7 @@
     {
       "name": "interfaces",
       "source": "./",
-      "description": "Skills for building great product interfaces: typography, colors, layout, accessibility, UI polish, and writing."
+      "description": "優れたプロダクトインターフェースを構築するためのスキル集: タイポグラフィ、色、レイアウト、アクセシビリティ、UIの磨き込み、ライティング。"
     }
   ]
 }

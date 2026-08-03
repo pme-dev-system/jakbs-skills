@@ -1,42 +1,42 @@
-# Icons
+# アイコン
 
-Icon weight, states, sizing, and direction: the details that make icons sit naturally in an interface.
+アイコンのウェイト、状態、サイズ、方向: アイコンをインターフェースに自然になじませるための細部。
 
-## Match Icon Stroke to Text Weight
+## アイコンのストロークをテキストのウェイトに合わせる
 
-An icon next to text should carry the same optical weight as the text, or the pair looks mismatched: a hairline icon beside semibold text reads as broken, a heavy icon beside regular text shouts.
+テキストの隣にあるアイコンは、テキストと同じ視覚的なウェイトを持つべきである。そうでないと、両者はちぐはぐに見える: セミボールドのテキストの隣に極細のアイコンがあると壊れて見え、通常ウェイトのテキストの隣に太いアイコンがあると主張しすぎに見える。
 
-| Adjacent text | Icon stroke width (24px grid) |
+| 隣接するテキスト | アイコンのストローク幅(24pxグリッド) |
 | --- | --- |
-| Regular (400), 14–16px | `1.5px` |
-| Medium/Semibold (500–600) | `2px` |
-| Bold (700), or emphasized standalone | `2.5px` |
+| 通常(400)、14–16px | `1.5px` |
+| Medium/Semibold(500–600) | `2px` |
+| Bold(700)、または強調された単独表示 | `2.5px` |
 
 ```html
-<!-- Good: stroke tuned to the label weight -->
+<!-- 良い例: ラベルのウェイトに合わせたストローク -->
 <button class="flex items-center gap-2 font-semibold">
   <PlusIcon stroke-width="2" class="size-4" />
   New project
 </button>
 
-<!-- Bad: default 1.5px stroke against a bold label -->
+<!-- 悪い例: 太字のラベルに対してデフォルトの1.5pxストローク -->
 <button class="flex items-center gap-2 font-bold">
   <PlusIcon stroke-width="1.5" class="size-4" />
   New project
 </button>
 ```
 
-Two related consistency rules:
+関連する一貫性のルールが2つある:
 
-- **One optical strategy per surface.** Do not mix icon libraries with incompatible stroke conventions on one toolbar. If the chosen library intentionally supports stroke variants, match them to adjacent text as above; otherwise preserve the set's native stroke and use size or color for emphasis.
-- **Size icons relative to the text's cap height**, typically `1em`–`1.25em` when inline with text, so the pair scales together.
+- **1つのサーフェスには1つのオプティカル戦略を使う。** 1つのツールバー上でストロークの規則が異なるアイコンライブラリを混在させない。選んだライブラリが意図的にストロークバリアントをサポートしている場合は、上記のように隣接するテキストに合わせる。そうでない場合は、そのセット本来のストロークを維持し、強調にはサイズや色を使う。
+- **アイコンはテキストのキャップハイトを基準にサイズを決める。** テキストとインラインで並べる場合、通常は`1em`–`1.25em`とし、両者が一緒にスケールするようにする。
 
-## One SVG, Recolored per State
+## 1つのSVGを状態ごとに再配色する
 
-Never ship separate icon assets for default/hover/selected/disabled states. Use a single SVG drawn with `currentColor` and let CSS state drive the color:
+デフォルト/ホバー/選択/無効の各状態に個別のアイコンアセットを用意してはならない。`currentColor`で描画した1つのSVGを使い、状態はCSSの色で切り替える:
 
 ```html
-<!-- Good: one asset, states are CSS -->
+<!-- 良い例: 1つのアセット、状態はCSSで表現 -->
 <svg fill="none" stroke="currentColor" stroke-width="2">…</svg>
 ```
 
@@ -54,49 +54,49 @@ Never ship separate icon assets for default/hover/selected/disabled states. Use 
 </button>
 ```
 
-Hardcoded fills inside the SVG (`fill="#666"`) break this; strip them to `currentColor` when importing icons.
+SVG内にハードコードされたfill(`fill="#666"`)はこの仕組みを壊す。アイコンを取り込む際は`currentColor`に置き換える。
 
-## Outline Default, Fill Active
+## デフォルトはアウトライン、アクティブはフィル
 
-When an icon set offers outline and filled variants, use them as a state pair, not interchangeably:
+アイコンセットがアウトラインとフィルの両方のバリアントを提供している場合、これらは互換ではなく状態のペアとして使う:
 
-| Variant | Use for |
+| バリアント | 使いどころ |
 | --- | --- |
-| Outline | Default state: toolbars, list rows, inline with text |
-| Fill | Selected/active state: the active tab, a toggled bookmark, a liked heart |
+| アウトライン | デフォルト状態: ツールバー、リストの行、テキストとのインライン表示 |
+| フィル | 選択/アクティブ状態: アクティブなタブ、トグルされたブックマーク、いいね済みのハート |
 
 ```tsx
-// Good: variant communicates state
+// 良い例: バリアントが状態を伝える
 <TabIcon variant={isActive ? "solid" : "outline"} />
 
-// Bad: filled icons everywhere, so the active tab has no state signal
+// 悪い例: どこもフィルアイコンばかりで、アクティブなタブに状態シグナルがない
 <TabIcon variant="solid" />
 ```
 
-The swap between variants is a contextual icon animation; use the exact cross-fade values in [animations.md](animations.md).
+バリアント間の切り替えはコンテキストに応じたアイコンアニメーションである。正確なクロスフェードの値は[animations.md](animations.md)を使う。
 
-## Design at Render Size
+## 描画サイズでデザインする
 
-An icon that looks great at 48px can collapse into mush at 16px. Details that read at large sizes (thin interior lines, tight counters, fine texture) blur or alias when small.
+48pxでは美しく見えるアイコンも、16pxではつぶれてしまうことがある。大きいサイズで判読できる細部(細い内部の線、狭いカウンター、細かいテクスチャ)は、小さくなるとぼやけたりエイリアシングを起こしたりする。
 
-- Test every icon at the smallest size it will render (often `16px`); it must stay recognizable there.
-- Prefer simplified glyphs for small contexts over scaling down detailed artwork.
-- Keep icons on the pixel grid at their render size: a 16px icon drawn on a 24px grid with fractional scaling renders soft. Use the icon set's native grid sizes (`16`, `20`, `24`) rather than arbitrary scales.
-- Always SVG, never raster, so the same asset stays crisp at every density.
+- すべてのアイコンを、実際に描画される最小サイズ(多くの場合`16px`)でテストし、その大きさでも判別可能であることを確認する。
+- 小さいコンテキストでは、精緻なアートワークを縮小するより、簡略化したグリフを優先する。
+- 描画サイズでピクセルグリッドに乗るようにアイコンを保つ。24pxグリッドで描かれた16pxアイコンを端数倍率で縮小すると、輪郭がぼやける。任意の倍率ではなく、そのアイコンセット本来のグリッドサイズ(`16`、`20`、`24`)を使う。
+- 常にSVGを使い、ラスター画像は使わない。同じアセットがどの密度でも鮮明に保たれる。
 
-## Icons in RTL
+## RTLにおけるアイコン
 
-Under `dir="rtl"`, flip icons whose meaning is tied to reading direction, and leave the rest alone:
+`dir="rtl"`の下では、意味が読み方向に結びついているアイコンだけを反転させ、それ以外はそのままにする:
 
-| Flip | Don't flip |
+| 反転させる | 反転させない |
 | --- | --- |
-| Back/forward arrows, chevrons in navigation | Logos and brand marks |
-| Text-block glyphs (alignment, lists, indent) | Checkmarks |
-| Speaker/volume waves (emanate in reading direction) | Physical objects: clocks, cups, pencils |
-| "Send" style directional glyphs | Media playback (play/rewind refer to tape direction, convention keeps them LTR) |
+| ナビゲーションの戻る/進む矢印、シェブロン | ロゴやブランドマーク |
+| テキストブロック用のグリフ(揃え、リスト、インデント) | チェックマーク |
+| スピーカー/音量の波(読み方向に向かって広がる) | 物理的なオブジェクト: 時計、カップ、鉛筆 |
+| "送信"のような方向性を持つグリフ | メディア再生(再生/巻き戻しはテープの方向を参照しており、慣例としてLTRのまま) |
 
 ```css
-/* Good: mirror only direction-dependent icons */
+/* 良い例: 方向に依存するアイコンだけを反転させる */
 [dir="rtl"] .icon-directional {
   scale: -1 1;
 }
@@ -107,4 +107,4 @@ Under `dir="rtl"`, flip icons whose meaning is tied to reading direction, and le
 <ChevronRightIcon class="icon-directional rtl:-scale-x-100" />
 ```
 
-Analyze composite icons part by part: a badge or slash overlay may keep its position even when the base glyph flips. Accessible names for icon-only buttons are covered by the `better-accessibility` skill.
+複合アイコンはパーツごとに分析する: バッジやスラッシュのオーバーレイは、ベースのグリフが反転しても位置を維持する場合がある。アイコンのみのボタンのアクセシブルネームは`better-accessibility`スキルが扱う。

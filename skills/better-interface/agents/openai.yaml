@@ -1,5 +1,5 @@
 interface:
   display_name: "Better Interface"
-  short_description: "Cross-discipline interface review"
+  short_description: "分野横断的なインターフェースレビュー"
 policy:
   allow_implicit_invocation: false
