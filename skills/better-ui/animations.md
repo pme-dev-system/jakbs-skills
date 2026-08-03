@@ -1,22 +1,22 @@
-# Animations
+# アニメーション
 
-Interruptible animations, enter/exit transitions, contextual icon animations, and motion restraint.
+中断可能なアニメーション、登場・退場トランジション、コンテキストに応じたアイコンアニメーション、モーションの抑制。
 
-## Interruptible Animations
+## 中断可能なアニメーション
 
-Users change intent mid-interaction. If animations aren't interruptible, the interface feels broken.
+ユーザーはインタラクションの途中で意図を変える。アニメーションが中断可能でないと、インターフェースは壊れているように感じられる。
 
-### CSS Transitions vs. Keyframes
+### CSSトランジション vs. CSSキーフレームアニメーション
 
-| | CSS Transitions | CSS Keyframe Animations |
+| | CSSトランジション | CSSキーフレームアニメーション |
 | --- | --- | --- |
-| **Behavior** | Interpolate toward latest state | Run on a fixed timeline |
-| **Interruptible** | Yes, retargets mid-animation | No, restarts from beginning |
-| **Use for** | Interactive state changes (hover, toggle, open/close) | Staged sequences that run once (enter animations, loading) |
-| **Duration** | Fixed; retargets the value mid-flight, not the timeline | Fixed timeline, restarts from the beginning |
+| **挙動** | 最新の状態に向けて補間する | 固定のタイムラインで実行される |
+| **中断可能か** | 可能。アニメーションの途中で目標値を再設定できる | 不可能。最初からやり直す |
+| **使いどころ** | インタラクティブな状態変化(ホバー、トグル、開閉) | 一度だけ実行される段階的なシーケンス(登場アニメーション、ローディング) |
+| **持続時間** | 固定。タイムラインではなく値を途中で再設定する | 固定のタイムライン。最初からやり直す |
 
 ```css
-/* Good: interruptible transition for a toggle */
+/* 良い例: トグルの中断可能なトランジション */
 .drawer {
   transform: translateX(-100%);
   transition: transform 200ms ease-out;
@@ -25,35 +25,35 @@ Users change intent mid-interaction. If animations aren't interruptible, the int
   transform: translateX(0);
 }
 
-/* Clicking again mid-animation smoothly reverses, no jank */
+/* アニメーションの途中で再度クリックしても、カクつかずスムーズに逆再生される */
 ```
 
 ```css
-/* Bad: keyframe animation for interactive element */
+/* 悪い例: インタラクティブな要素へのキーフレームアニメーション */
 .drawer.open {
   animation: slideIn 200ms ease-out forwards;
 }
 
-/* Closing mid-animation snaps or restarts, feels broken */
+/* アニメーションの途中で閉じると、スナップしたり最初からやり直したりして、壊れているように感じる */
 ```
 
-**Rule:** Always prefer CSS transitions for interactive elements. Reserve keyframes for one-shot sequences.
+**ルール:** インタラクティブな要素には常にCSSトランジションを優先する。キーフレームは一度きりのシーケンス用に取っておく。
 
-## Enter Animations: Split and Stagger
+## 登場アニメーション: 分割してスタガーさせる
 
-Use this pattern for infrequent staged entrances where sequence helps communicate hierarchy, such as the first load of a page hero, success state, or empty state. Break a large container into semantic chunks and animate each individually. Do not stagger routine interactions such as row hovers, keystrokes, or repeated tab changes.
+このパターンは、ページヒーローの初回表示、成功状態、エンプティステートなど、シーケンスが階層構造を伝えるのに役立つ、頻度の低い段階的な登場に使う。大きなコンテナを意味のある塊に分割し、それぞれを個別にアニメーションさせる。行のホバー、キー入力、繰り返されるタブ切り替えのような日常的なインタラクションはスタガーさせない。
 
-### Step by Step
+### 手順
 
-1. **Split** into logical groups (title, description, buttons)
-2. **Stagger** with ~100ms delay between groups
-3. **For titles**, consider splitting into individual words with ~80ms stagger
-4. **Combine** `opacity`, `blur`, and `translateY` for the enter effect
+1. **分割する**: 論理的なグループに分ける(タイトル、説明、ボタン)
+2. **スタガーさせる**: グループ間に約100msの遅延を入れる
+3. **タイトルの場合**は、個々の単語に分割して約80msでスタガーさせることを検討する
+4. **組み合わせる**: `opacity`、`blur`、`translateY`を組み合わせて登場エフェクトを作る
 
-### Code Example
+### コード例
 
 ```tsx
-// Motion (Framer Motion): staggered enter
+// Motion(Framer Motion): スタガーさせた登場
 function PageHeader() {
   return (
     <motion.div
@@ -94,7 +94,7 @@ function PageHeader() {
 }
 ```
 
-### CSS-Only Stagger
+### CSSのみによるスタガー
 
 ```css
 .stagger-item {
@@ -117,14 +117,14 @@ function PageHeader() {
 }
 ```
 
-## Exit Animations
+## 退場アニメーション
 
-Exit animations should be softer and less attention-grabbing than enter animations. The user's focus is moving to the next thing; don't fight for attention.
+退場アニメーションは、登場アニメーションよりも穏やかで、注意を引きすぎないものにする。ユーザーの意識は次のものへ移っている最中であり、そこで注意を奪い合うべきではない。
 
-### Subtle Exit (Recommended)
+### 控えめな退場(推奨)
 
 ```tsx
-// Small fixed translateY: indicates direction without drama
+// 小さな固定値のtranslateY: 大げさにせず方向だけを示す
 <motion.div
   exit={{
     opacity: 0,
@@ -137,11 +137,11 @@ Exit animations should be softer and less attention-grabbing than enter animatio
 </motion.div>
 ```
 
-### Full Exit (When Context Matters)
+### 完全な退場(コンテキストが重要な場合)
 
 ```tsx
-// Slide fully out: use when spatial context is important
-// (e.g., a card returning to a list, a drawer closing)
+// 完全にスライドアウトさせる: 空間的なコンテキストが重要な場合に使う
+// (例: リストに戻っていくカード、閉じるドロワーなど)
 <motion.div
   exit={{
     opacity: 0,
@@ -153,42 +153,42 @@ Exit animations should be softer and less attention-grabbing than enter animatio
 </motion.div>
 ```
 
-### Good vs. Bad
+### 良い例 vs. 悪い例
 
 ```css
-/* Good: subtle exit */
+/* 良い例: 控えめな退場 */
 .item-exit {
   opacity: 0;
   transform: translateY(-12px);
   transition: opacity 150ms ease-out, transform 150ms ease-out;
 }
 
-/* Bad: dramatic exit that steals focus */
+/* 悪い例: 注意を奪う大げさな退場 */
 .item-exit {
   opacity: 0;
   transform: translateY(-100%) scale(0.5);
   transition: all 400ms ease-out;
 }
 
-/* Sometimes correct: remove immediately when motion adds no context */
+/* 状況によっては正しい: モーションがコンテキストを何も伝えない場合は即座に削除する */
 .item-exit {
   display: none;
 }
 ```
 
-**Key points:**
-- Use a small fixed `translateY` (e.g., `-12px`) instead of the full container height
-- Keep some directional movement to indicate where the element went
-- Exit duration should be shorter than enter duration (150ms vs 300ms)
-- Use a subtle exit when it preserves spatial context. Remove immediately when motion adds no information, the interaction repeats frequently, or reduced motion is requested.
+**要点:**
+- コンテナ全体の高さではなく、小さな固定値の`translateY`(例: `-12px`)を使う
+- 要素がどこへ移動したかを示す、方向性のある動きを少し残す
+- 退場の持続時間は登場より短くする(150ms対300ms)
+- 空間的なコンテキストを保持する場合は控えめな退場を使う。モーションが何の情報も加えない場合、そのインタラクションが頻繁に繰り返される場合、またはモーション低減が指定されている場合は即座に削除する
 
-## Contextual Icon Animations
+## コンテキストに応じたアイコンアニメーション
 
-When icons appear or disappear contextually (on hover, on state change), animate them with `opacity`, `scale`, and `blur` rather than just toggling visibility.
+アイコンがコンテキストに応じて(ホバー時や状態変化時に)表示・非表示になる場合は、表示・非表示を単純に切り替えるのではなく、`opacity`、`scale`、`blur`でアニメーションさせる。
 
-### Motion Example
+### Motionの例
 
-This example uses the `motion` package. If the project instead has `framer-motion`, import the same APIs from `"framer-motion"`; never mix an installed package with the other package's import path.
+この例では`motion`パッケージを使用している。プロジェクトが代わりに`framer-motion`を使っている場合は、同じAPIを`"framer-motion"`からインポートする。インストール済みのパッケージと別パッケージのインポートパスを混在させてはならない。
 
 ```tsx
 import { AnimatePresence, motion } from "motion/react";
@@ -212,11 +212,11 @@ function IconButton({ isActive, icon: Icon }) {
 }
 ```
 
-### CSS Transition Approach (No Motion)
+### CSSトランジションによるアプローチ(Motion不使用)
 
-If the project doesn't use Motion (Framer Motion), keep both icons in the DOM and cross-fade them with CSS transitions. Because neither icon unmounts, both enter and exit animate smoothly.
+プロジェクトがMotion(Framer Motion)を使用していない場合は、両方のアイコンをDOMに残し、CSSトランジションでクロスフェードさせる。どちらのアイコンもアンマウントされないため、登場・退場の両方が滑らかにアニメーションする。
 
-The trick: one icon is absolutely positioned on top of the other. Toggling state cross-fades them: the entering icon scales up from `0.25` while the exiting icon scales down to `0.25`, both with opacity and blur.
+仕組み: 一方のアイコンをもう一方の上にabsolute配置する。状態を切り替えると両者はクロスフェードする: 登場するアイコンは`0.25`から拡大し、退場するアイコンは`0.25`まで縮小する。どちらもopacityとblurを伴う。
 
 ```tsx
 function IconButton({ isActive, ActiveIcon, InactiveIcon }) {
@@ -252,41 +252,41 @@ function IconButton({ isActive, ActiveIcon, InactiveIcon }) {
 }
 ```
 
-The non-absolute icon (InactiveIcon) defines the layout size. The absolute icon (ActiveIcon) overlays it without affecting flow.
+absolute配置ではないアイコン(InactiveIcon)がレイアウトサイズを決める。absolute配置のアイコン(ActiveIcon)はフローに影響を与えずにその上に重なる。
 
-### Choosing Between Motion and CSS
+### MotionとCSSの使い分け
 
-| | Motion (Framer Motion) | CSS transitions (both icons in DOM) |
+| | Motion(Framer Motion) | CSSトランジション(両方のアイコンをDOMに残す) |
 | --- | --- | --- |
-| **Enter animation** | Yes | Yes |
-| **Exit animation** | Yes (via `AnimatePresence`) | Yes (cross-fade, icon never unmounts) |
-| **Spring physics** | Yes | No, use `cubic-bezier(0.2, 0, 0, 1)` as approximation |
-| **When to use** | Project already uses `motion` or `framer-motion` | No motion dependency, or keeping bundle small |
+| **登場アニメーション** | 可能 | 可能 |
+| **退場アニメーション** | 可能(`AnimatePresence`経由) | 可能(クロスフェード、アイコンは決してアンマウントされない) |
+| **スプリング物理演算** | 可能 | 不可。近似として`cubic-bezier(0.2, 0, 0, 1)`を使う |
+| **使いどころ** | プロジェクトが既に`motion`または`framer-motion`を使用している場合 | モーション系の依存関係がない場合、またはバンドルを小さく保ちたい場合 |
 
-**Rule:** Check the project's `package.json`. Import from `"motion/react"` when `motion` is installed, or from `"framer-motion"` when `framer-motion` is installed. If both exist, follow the imports already used by the component or its nearest peers. If neither is present, use the CSS cross-fade pattern; don't add a dependency just for icon transitions.
+**ルール:** プロジェクトの`package.json`を確認する。`motion`がインストールされていれば`"motion/react"`から、`framer-motion`がインストールされていれば`"framer-motion"`からインポートする。両方存在する場合は、そのコンポーネントや近くの既存コードで使われているインポートに従う。どちらも存在しない場合はCSSクロスフェードパターンを使う。アイコンのトランジションのためだけに依存関係を追加しない。
 
-### When to Animate Icons
+### アイコンをアニメーションさせるべき場面
 
-| Animate | Don't animate |
+| アニメーションさせる | アニメーションさせない |
 | --- | --- |
-| Icons that appear on hover (action buttons) | Static navigation icons |
-| State change icons (play → pause, like → liked) | Decorative icons |
-| Icons in contextual toolbars | Icons that are always visible |
-| Loading/success state indicators | Icon labels (text next to icon) |
+| ホバー時に表示されるアイコン(アクションボタン) | 常に表示されている静的なナビゲーションアイコン |
+| 状態変化を示すアイコン(再生→一時停止、いいね前→いいね後) | 装飾用のアイコン |
+| コンテキストに応じたツールバー内のアイコン | 常に表示されているアイコン |
+| ローディング/成功状態のインジケーター | アイコンのラベル(アイコンの隣のテキスト) |
 
-**Important:** Always use exactly these values for contextual icon animations; do not deviate:
-- `scale`: `0.25` → `1` (never use `0.5` or `0.6`)
+**重要:** コンテキストに応じたアイコンアニメーションでは、必ず次の値をそのまま使い、逸脱しない:
+- `scale`: `0.25` → `1`(`0.5`や`0.6`は使わない)
 - `opacity`: `0` → `1`
 - `filter`: `"blur(4px)"` → `"blur(0px)"`
-- `transition`: `{ type: "spring", duration: 0.3, bounce: 0 }`; **bounce must always be `0`**, never `0.1` or any other value
+- `transition`: `{ type: "spring", duration: 0.3, bounce: 0 }`。**bounceは必ず`0`にする**。`0.1`など他の値は使わない
 
-## Scale on Press
+## プレス時のスケール
 
-A subtle scale-down on click gives buttons tactile feedback. Always use `scale(0.96)`. Never use a value smaller than `0.95`: anything below feels exaggerated. Use CSS transitions for interruptibility, so that if the user releases mid-press, it smoothly returns.
+クリック時に控えめに縮小させると、ボタンに触覚的なフィードバックが生まれる。値は必ず`scale(0.96)`にする。`0.95`より小さい値は絶対に使わない。それ以下だと大げさに見える。中断可能にするためCSSトランジションを使う。これにより、ユーザーがプレスの途中で指を離しても、滑らかに元へ戻る。
 
-Not every button needs this. Add a `static` prop to your button component that disables the scale effect when the motion would be distracting.
+すべてのボタンにこれが必要なわけではない。モーションが邪魔になる場合にスケール効果を無効化できるよう、ボタンコンポーネントに`static`propを追加する。
 
-### CSS Example
+### CSSの例
 
 ```css
 .button {
@@ -300,7 +300,7 @@ Not every button needs this. Add a `static` prop to your button component that d
 }
 ```
 
-### Tailwind Example
+### Tailwindの例
 
 ```tsx
 <button className="transition-transform duration-150 ease-out active:scale-[0.96]">
@@ -308,7 +308,7 @@ Not every button needs this. Add a `static` prop to your button component that d
 </button>
 ```
 
-### Motion Example
+### Motionの例
 
 ```tsx
 <motion.button whileTap={{ scale: 0.96 }}>
@@ -316,9 +316,9 @@ Not every button needs this. Add a `static` prop to your button component that d
 </motion.button>
 ```
 
-### Static Prop Pattern
+### staticプロパティのパターン
 
-Extract the scale class into a variable and conditionally apply it based on a `static` prop:
+スケール用のクラスを変数として切り出し、`static`propに応じて適用するかどうかを条件分岐させる:
 
 ```tsx
 const tapScale = "active:not-disabled:scale-[0.96]";
@@ -338,19 +338,19 @@ function Button({ static: isStatic, className, children, ...props }) {
   );
 }
 
-// Usage
-<Button>Click me</Button>           {/* scales on press */}
-<Button static>Submit</Button>       {/* no scale */}
+// 使用例
+<Button>Click me</Button>           {/* プレス時にスケールする */}
+<Button static>Submit</Button>       {/* スケールしない */}
 ```
 
-## Skip Animation on Page Load
+## ページ読み込み時はアニメーションをスキップ
 
-Use `initial={false}` on `AnimatePresence` to prevent enter animations from firing on first render. Elements that are already in their default state shouldn't animate in on page load, only on subsequent state changes.
+`AnimatePresence`に`initial={false}`を指定し、初回レンダリング時に登場アニメーションが発火しないようにする。すでにデフォルト状態にある要素は、ページ読み込み時にはアニメーションさせず、その後の状態変化のときだけアニメーションさせるべきである。
 
-### When It Works
+### うまくいく場合
 
 ```tsx
-// Good: icon doesn't animate in on mount, only on state change
+// 良い例: アイコンはマウント時にはアニメーションせず、状態変化のときだけアニメーションする
 <AnimatePresence initial={false} mode="popLayout">
   <motion.span
     key={isActive ? "active" : "inactive"}
@@ -363,14 +363,14 @@ Use `initial={false}` on `AnimatePresence` to prevent enter animations from firi
 </AnimatePresence>
 ```
 
-Works well for: icon swaps, toggles, tabs, segmented controls: anything that has a default state on page load.
+これがうまく機能するのは、アイコンの切り替え、トグル、タブ、セグメントコントロールなど、ページ読み込み時にデフォルト状態を持つあらゆるものである。
 
-### When It Breaks
+### うまくいかない場合
 
-Don't use `initial={false}` when the component relies on its `initial` prop to set up a first-time enter animation, like a staggered page hero or a loading state. In those cases, removing the initial animation skips the entire entrance.
+コンポーネントが、スタガーされたページヒーローやローディング状態のように、初回登場アニメーションのセットアップを`initial`propに依存している場合は、`initial={false}`を使わない。そのような場合、初回アニメーションを取り除くと登場演出全体がスキップされてしまう。
 
 ```tsx
-// Bad: initial={false} would skip the staggered page enter entirely
+// 悪い例: initial={false}にすると、スタガーされたページの登場が完全にスキップされてしまう
 <AnimatePresence initial={false}>
   <motion.div initial="hidden" animate="visible" variants={...}>
     ...
@@ -378,27 +378,27 @@ Don't use `initial={false}` when the component relies on its `initial` prop to s
 </AnimatePresence>
 ```
 
-Verify the component still looks right on a full page refresh before applying this.
+これを適用する前に、ページを完全にリフレッシュしてもコンポーネントが正しく見えるか確認する。
 
-## Motion Restraint
+## モーションの抑制
 
-Motion is a budget, not a garnish. Three rules decide whether an animation belongs at all:
+モーションは予算であり、飾りではない。あるアニメーションを実装すべきかどうかは、次の3つのルールで判断する:
 
-- **No custom animation on high-frequency interactions.** An animation on something users trigger constantly (every keystroke, every list-row hover, every tab switch in a work tool) charges its attention cost on every single trigger. Reserve expressive motion for infrequent moments (first load of a view, success states, empty states); high-frequency interactions get instant feedback or the subtlest possible transition (`opacity`/`background-color` at ≤150ms).
-- **Motion is never the only feedback channel.** Every state change an animation communicates must also be visible when the animation doesn't run: a color change, an icon swap, a label. Users with reduced motion enabled, and anyone who blinked, still need to see what happened.
-- **Brief and precise beats prominent.** If a shorter, smaller animation communicates the same thing, use it. When in doubt, cut the duration, not the clarity.
+- **高頻度のインタラクションにカスタムアニメーションを使わない。** ユーザーが絶えずトリガーするもの(すべてのキー入力、すべてのリスト行のホバー、業務ツールでのすべてのタブ切り替え)へのアニメーションは、トリガーのたびに注意のコストを課す。表現力のあるモーションは、頻度の低い場面(ビューの初回表示、成功状態、エンプティステート)のために取っておく。高頻度のインタラクションには、即座のフィードバックか、可能な限り控えめなトランジション(`opacity`/`background-color`を≤150msで)を使う。
+- **モーションを唯一のフィードバック手段にしない。** アニメーションが伝える状態変化は、アニメーションが実行されないときにも見えなければならない: 色の変化、アイコンの切り替え、ラベルなど。モーション低減を有効にしているユーザーや、まばたきをした人にも、何が起きたかが見える必要がある。
+- **目立つことより、短く的確であることを優先する。** より短く小さなアニメーションで同じことを伝えられるなら、そちらを使う。迷ったら、明確さではなく持続時間を削る。
 
 ```css
-/* Good: high-frequency hover gets a minimal transition */
+/* 良い例: 高頻度のホバーには最小限のトランジションを使う */
 .row:hover {
   background-color: var(--surface-hover);
   transition: background-color 100ms ease-out;
 }
 
-/* Bad: every hover replays a full entrance */
+/* 悪い例: ホバーのたびにフルの登場演出が再生される */
 .row:hover .row-icon {
   animation: bounceIn 500ms;
 }
 ```
 
-Honoring `prefers-reduced-motion` is covered by the `better-accessibility` skill; apply it to every animation in this file.
+`prefers-reduced-motion`への対応は`better-accessibility`スキルが扱う。このファイル内のすべてのアニメーションに適用すること。

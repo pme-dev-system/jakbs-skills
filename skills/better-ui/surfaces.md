@@ -1,21 +1,21 @@
-# Surfaces
+# サーフェス
 
-Border radius, optical alignment, shadows, and image outlines.
+角丸(border radius)、オプティカルアライメント、シャドウ、画像のアウトライン。
 
-## Concentric Border Radius
+## 同心円状の角丸(border radius)
 
-When nesting rounded elements, the outer radius must equal the inner radius plus the padding between them:
+丸みを帯びた要素を入れ子にするとき、外側の半径は内側の半径とその間のパディングの合計に等しくなければならない:
 
 ```
 outerRadius = innerRadius + padding
 ```
 
-This rule is most useful when nested surfaces are close together. If padding is larger than `24px`, treat the layers as separate surfaces and choose each radius independently instead of forcing strict concentric math.
+このルールは、入れ子になったサーフェス同士が近接している場合に最も役立つ。パディングが`24px`より大きい場合は、それらのレイヤーを別々のサーフェスとして扱い、厳密な同心円状の計算を強制するのではなく、それぞれの半径を個別に選ぶ。
 
-### Example
+### 例
 
 ```css
-/* Good: concentric radii */
+/* 良い例: 同心円状の半径 */
 .card {
   border-radius: 20px; /* 12 + 8 */
   padding: 8px;
@@ -24,7 +24,7 @@ This rule is most useful when nested surfaces are close together. If padding is 
   border-radius: 12px;
 }
 
-/* Bad: same radius on both */
+/* 悪い例: 両方とも同じ半径 */
 .card {
   border-radius: 12px;
   padding: 8px;
@@ -34,43 +34,43 @@ This rule is most useful when nested surfaces are close together. If padding is 
 }
 ```
 
-### Tailwind Example
+### Tailwindの例
 
 ```tsx
-// Good: outer radius accounts for padding
-<div className="rounded-2xl p-2">       {/* 16px radius, 8px padding */}
-  <div className="rounded-lg">          {/* 8px radius = 16 - 8 ✓ */}
+// 良い例: 外側の半径がパディングを考慮している
+<div className="rounded-2xl p-2">       {/* 16pxの半径、8pxのパディング */}
+  <div className="rounded-lg">          {/* 8pxの半径 = 16 - 8 ✓ */}
     ...
   </div>
 </div>
 
-// Bad: same radius on both
+// 悪い例: 両方とも同じ半径
 <div className="rounded-xl p-2">
-  <div className="rounded-xl">          {/* same radius, looks off */}
+  <div className="rounded-xl">          {/* 同じ半径で不自然に見える */}
     ...
   </div>
 </div>
 ```
 
-Mismatched border radii on closely nested surfaces is a common source of visual tension. Calculate concentrically when the layers share a visible, even inset; preserve an established component token when the layers are independent or the padding is intentionally asymmetric.
+近接して入れ子になったサーフェス間で角丸(border radius)が揃っていないことは、視覚的な違和感のよくある原因である。レイヤーが目に見える均等な内側の余白を共有している場合は同心円状に計算し、レイヤーが独立しているか、パディングが意図的に非対称である場合は、確立されたコンポーネントトークンを維持する。
 
-## Optical Alignment
+## オプティカルアライメント
 
-When geometric centering looks off, align optically instead.
+幾何学的な中央揃えが不自然に見える場合は、代わりにオプティカルアライメント(視覚的な整列)を行う。
 
-### Buttons with Text + Icon
+### テキスト+アイコンのボタン
 
-When an icon makes otherwise symmetric padding look unbalanced, use slightly less padding on the icon side. A useful starting point is:
-`icon-side padding = text-side padding - 2px`.
+アイコンによって、本来対称なパディングが不均衡に見える場合は、アイコン側のパディングをわずかに減らす。目安となる出発点は次の通り:
+`icon-side padding = text-side padding - 2px`。
 
 ```css
-/* Good: less padding on icon side */
+/* 良い例: アイコン側のパディングを減らす */
 .button-with-icon {
   padding-inline-start: 16px;
-  padding-inline-end: 14px; /* trailing icon side = text side - 2px */
+  padding-inline-end: 14px; /* 末尾のアイコン側 = テキスト側 - 2px */
 }
 
-/* Bad: equal padding looks like icon is pushed too far right */
+/* 悪い例: 均等なパディングだと、アイコンが右に寄りすぎて見える */
 .button-with-icon {
   padding-inline: 16px;
 }
@@ -84,45 +84,45 @@ When an icon makes otherwise symmetric padding look unbalanced, use slightly les
 </button>
 ```
 
-### Play Button Triangles
+### 再生ボタンの三角形
 
-Play icons are triangular and their geometric center is not their visual center. Shift slightly right:
+再生アイコンは三角形であり、その幾何学的な中心は視覚的な中心と一致しない。わずかに右へずらす:
 
 ```css
-/* Good: optically centered */
+/* 良い例: オプティカルに中央揃え */
 .play-button svg {
-  transform: translateX(2px); /* physical correction to the glyph itself */
+  transform: translateX(2px); /* グリフ自体への物理的な補正 */
 }
 
-/* Bad: geometrically centered but looks off */
+/* 悪い例: 幾何学的には中央だが不自然に見える */
 .play-button svg {
-  /* no adjustment */
+  /* 調整なし */
 }
 ```
 
-### Asymmetric Icons (Stars, Arrows, Carets)
+### 非対称なアイコン(星、矢印、キャレット)
 
-Some icons have uneven visual weight. The best fix is adjusting the SVG directly so no extra margin/padding is needed in the component code.
+一部のアイコンは視覚的な重心が偏っている。最善の修正方法は、コンポーネントのコード側で余分なマージン/パディングが不要になるよう、SVG自体を直接調整することである。
 
 ```tsx
-// Best: fix in the SVG itself
-// Adjust the viewBox or path to visually center the icon
+// 最善: SVG自体で修正する
+// viewBoxまたはpathを調整して、アイコンを視覚的に中央揃えにする
 
-// Fallback: adjust with margin
+// フォールバック: マージンで調整する
 <span className="translate-x-px">
   <StarIcon />
 </span>
 ```
 
-## Shadows Instead of Borders
+## ボーダーの代わりにシャドウを使う
 
-For **buttons, cards, and containers** that use a border for depth or elevation, prefer replacing it with a subtle `box-shadow`. Shadows adapt to any background since they use transparency; solid borders don't. This also helps when using images or multiple colors as backgrounds: solid border colors don't work well on backgrounds other than the ones they were designed for.
+奥行きや高さ表現(エレベーション)のためにボーダーを使っている**ボタン、カード、コンテナ**では、それを控えめな`box-shadow`に置き換えることを優先する。シャドウは透明度を利用するため、どんな背景にも適応する。単色のボーダーはそうはいかない。これは画像や複数の色を背景に使う場合にも役立つ。単色のボーダーは、それが設計された背景以外ではうまく機能しない。
 
-**Do not apply this to dividers** (`border-b`, `border-t`, side borders) or any border whose purpose is layout separation rather than element depth. Those should stay as borders.
+**区切り線**(`border-b`、`border-t`、サイドボーダー)や、要素の奥行きではなくレイアウトの分離を目的とするボーダーには、これを適用しない。それらはボーダーのままにする。
 
-### Shadow as Border (Light Mode)
+### ボーダーとしてのシャドウ(ライトモード)
 
-The shadow is comprised of three layers. The first acts as a 1px border ring, the second adds subtle lift, and the third provides ambient depth:
+このシャドウは3つのレイヤーで構成される。1つ目は1pxのボーダーリングとして機能し、2つ目はわずかな浮き上がりを加え、3つ目は環境光による奥行きを与える:
 
 ```css
 :root {
@@ -137,20 +137,20 @@ The shadow is comprised of three layers. The first acts as a 1px border ring, th
 }
 ```
 
-### Shadow as Border (Dark Mode)
+### ボーダーとしてのシャドウ(ダークモード)
 
-In dark mode, simplify to a single white ring, since layered depth shadows aren't visible on dark backgrounds:
+ダークモードでは、単一の白いリングに簡略化する。レイヤー化された奥行きシャドウは、暗い背景では見えないためである:
 
 ```css
-/* Dark mode: adapt to whatever setup the project uses
-   (prefers-color-scheme, class, data attribute, etc.) */
+/* ダークモード: プロジェクトが使用しているどの仕組みにも合わせる
+   (prefers-color-scheme、class、data属性など) */
 --shadow-border: 0 0 0 1px oklch(1 0 0 / 0.08);
 --shadow-border-hover: 0 0 0 1px oklch(1 0 0 / 0.13);
 ```
 
-### Usage with Hover Transition
+### ホバートランジションでの使用
 
-Apply the variable and add `transition-[box-shadow]` for a smooth hover:
+変数を適用し、スムーズなホバーのために`transition-[box-shadow]`を追加する:
 
 ```css
 .card {
@@ -165,37 +165,37 @@ Apply the variable and add `transition-[box-shadow]` for a smooth hover:
 }
 ```
 
-### When to Use Shadows vs. Borders
+### シャドウとボーダーの使い分け
 
-| Use shadows | Use borders |
+| シャドウを使う | ボーダーを使う |
 | --- | --- |
-| Cards, containers with depth | Dividers between list items |
-| Buttons with bordered styles | Table cell boundaries |
-| Elevated elements (dropdowns, modals) | Form input outlines (for accessibility) |
-| Elements on varied backgrounds | Hairline separators in dense UI |
-| Hover/focus states for lift effect | |
+| 奥行きのあるカード、コンテナ | リスト項目間の区切り線 |
+| ボーダースタイルのボタン | テーブルセルの境界 |
+| 高さ表現のある要素(ドロップダウン、モーダル) | フォーム入力欄のアウトライン(アクセシビリティのため) |
+| さまざまな背景の上にある要素 | 密なUIにおけるヘアラインの区切り |
+| 浮き上がり効果を出すホバー/フォーカス状態 | |
 
-## Image Outlines
+## 画像のアウトライン
 
-Add a subtle `1px` outline with low opacity to images. This creates consistent depth, especially in design systems where other elements use borders or shadows.
+画像には、不透明度の低い`1px`のアウトラインを追加する。これにより、特に他の要素がボーダーやシャドウを使っているデザインシステムにおいて、一貫した奥行きが生まれる。
 
-### Color rules (non-negotiable)
+### 色のルール(絶対厳守)
 
-- **Light mode**: pure black, `oklch(0 0 0 / 0.1)`.
-- **Dark mode**: pure white, `oklch(1 0 0 / 0.1)`.
-- Never use a near-black or near-white from the project palette (e.g. slate-900, zinc-900, `#0a0a0a`, `#111827`, `#f5f5f7`). Tinted outlines pick up the surrounding surface color and read as dirt on the image edge.
-- Never match the outline to the project's accent or ink color. The outline is a neutral separator, not a themed element.
+- **ライトモード**: 純粋な黒、`oklch(0 0 0 / 0.1)`。
+- **ダークモード**: 純粋な白、`oklch(1 0 0 / 0.1)`。
+- プロジェクトのパレットから黒や白に近い色(例: slate-900、zinc-900、`#0a0a0a`、`#111827`、`#f5f5f7`)を使わない。色味のついたアウトラインは周囲のサーフェスの色を拾ってしまい、画像の端が汚れて見える。
+- アウトラインをプロジェクトのアクセントカラーやインクカラーに合わせない。アウトラインはテーマに沿った要素ではなく、ニュートラルな区切りである。
 
-### Light Mode
+### ライトモード
 
 ```css
 img {
   outline: 1px solid oklch(0 0 0 / 0.1);
-  outline-offset: -1px; /* draw the ring just inside the image edge */
+  outline-offset: -1px; /* リングを画像の端のすぐ内側に描く */
 }
 ```
 
-### Dark Mode
+### ダークモード
 
 ```css
 img {
@@ -204,7 +204,7 @@ img {
 }
 ```
 
-### Tailwind with Dark Mode
+### ダークモード対応のTailwind
 
 ```tsx
 <img
@@ -214,6 +214,6 @@ img {
 />
 ```
 
-Use `outline-black/10` and `outline-white/10` specifically, not `outline-slate-*`, `outline-zinc-*`, `outline-neutral-*`, or any tinted scale.
+`outline-black/10`と`outline-white/10`を具体的に使い、`outline-slate-*`、`outline-zinc-*`、`outline-neutral-*`など色味のついたスケールは使わない。
 
-**Why outline instead of border?** `outline` never affects layout (no added width or height at any offset), and `outline-offset: -1px` draws the ring just inside the image edge so it hugs the corner radius instead of sitting outside it.
+**なぜborderではなくoutlineなのか?** `outline`はどのオフセットでも幅や高さを追加せず、レイアウトに影響を与えない。また`outline-offset: -1px`によってリングが画像の端のすぐ内側に描かれるため、外側にはみ出さずに角丸(border radius)にぴったり沿う。
