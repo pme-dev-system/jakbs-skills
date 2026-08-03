@@ -1,27 +1,27 @@
-# Color Usage
+# 色の使い方
 
-How to deploy color in an interface: semantic tokens, meaning, emphasis, and appearance variants. For picking the values themselves, see [palette-generation.md](palette-generation.md); for checking pairs, see [accessibility-contrast.md](accessibility-contrast.md).
+インターフェースにおける色の展開方法: セマンティックトークン、意味、強調、見た目のバリエーション。値そのものの選定については[palette-generation.md](palette-generation.md)を、ペアの確認については[accessibility-contrast.md](accessibility-contrast.md)を参照。
 
-## One color, one meaning
+## 1つの色には1つの意味
 
-Use a color consistently for one purpose (interactive, destructive, featured) across the interface. If the brand color signals that text is interactive, that hue (anywhere within ±15°) on non-interactive text tells users to click something that isn't clickable.
+インターフェース全体で、1つの色は一貫して1つの目的(インタラクティブ、破壊的操作、注目)のために使う。ブランドカラーがテキストのインタラクティブ性を示している場合、その色相(±15°以内のどこでも)を非インタラクティブなテキストに使うと、ユーザーはクリックできないものをクリックできると誤解する。
 
 ```css
-/* Bad: brand blue means both "link" and "decorative heading" */
+/* 悪い例: ブランドブルーが「リンク」と「装飾的な見出し」の両方を意味する */
 a { color: oklch(0.623 0.188 259.815); }
 .section-title { color: oklch(0.65 0.17 259.815); }
 
-/* Good: interactive elements own the brand hue; headings stay neutral */
+/* 良い例: インタラクティブ要素がブランドの色相を専有し、見出しはニュートラルのまま */
 a { color: oklch(0.623 0.188 259.815); }
 .section-title { color: oklch(0.279 0.041 260.031); }
 ```
 
-## Semantic tokens over raw values
+## 生の値よりセマンティックトークンを優先する
 
-Name colors by role, not by appearance, and apply them only in that role: `--color-text-secondary` is muted foreground text, and using it as a background breaks every future theme change that assumes the role.
+色は見た目ではなくロールで命名し、そのロールでのみ適用する。`--color-text-secondary`はミュートされた前景テキストであり、それを背景として使うと、そのロールを前提とする将来のテーマ変更をすべて壊す。
 
 ```css
-/* Good: tokens named by role, used in that role */
+/* 良い例: ロールで命名されたトークンを、そのロールで使用 */
 :root {
   --color-text-primary: oklch(0.21 0.006 285.885);
   --color-text-secondary: oklch(0.552 0.016 285.938);
@@ -29,48 +29,48 @@ Name colors by role, not by appearance, and apply them only in that role: `--col
   --color-surface: oklch(1 0 0);
 }
 
-/* Bad: separator token repurposed as text color because it "looked right" */
+/* 悪い例: 「見た目が合っている」という理由でセパレーター用トークンをテキスト色に転用 */
 .caption { color: var(--color-separator); }
 
-/* Bad: secondary-text token repurposed as a background */
+/* 悪い例: セカンダリテキスト用トークンを背景に転用 */
 .tag { background: var(--color-text-secondary); }
 ```
 
-If a role has no token yet, add the token; don't borrow one that happens to have the right value today. In Tailwind projects, this is the `@theme` block; see [gamut-and-tailwind.md](gamut-and-tailwind.md).
+あるロールにまだトークンがない場合は、トークンを追加する。たまたま今の値が合っているという理由で他のトークンを借用しない。Tailwindプロジェクトでは、これは`@theme`ブロックにあたる。[gamut-and-tailwind.md](gamut-and-tailwind.md)を参照。
 
-## One colored action per view
+## 1画面につき1つの色付きアクション
 
-When the product uses filled color to encode primary emphasis, give that treatment to one primary action in the current decision context and leave peer actions neutral. Preserve an established component hierarchy that communicates emphasis another way; do not recolor controls merely to impose this recipe. Multiple colored backgrounds are acceptable when they encode distinct states or categories and do not compete as peer actions.
+プロダクトが塗りつぶしの色を使って主要な強調を表現している場合、現在の意思決定コンテキストにおける1つの主要アクションにのみその処理を施し、並列するアクションはニュートラルのままにする。別の方法で強調を伝える既存のコンポーネント階層があれば、それを維持する。このレシピを押し付けるためだけにコントロールの色を変えない。複数の色付き背景は、それらが異なる状態やカテゴリを表しており、並列アクションとして競合しない場合には許容される。
 
 ```html
-<!-- Good: one filled primary action, neutral secondaries -->
+<!-- 良い例: 塗りつぶしの主要アクションが1つ、副次的なものはニュートラル -->
 <button class="bg-blue-600 text-white">Save</button>
 <button class="text-zinc-700">Cancel</button>
 
-<!-- Bad: every action colored, so nothing is primary -->
+<!-- 悪い例: すべてのアクションが色付きなので、何が主要かわからない -->
 <button class="bg-blue-600 text-white">Save</button>
 <button class="bg-blue-600 text-white">Duplicate</button>
 <button class="bg-blue-600 text-white">Export</button>
 ```
 
-Put the color on the background, not the label: a filled `bg-blue-600 text-white` button reads as primary from across the room; blue label text on a neutral button reads as a link. Selected states (an active tab, a checked segment) may use the accent color on the glyph and label: that is state, not emphasis.
+色はラベルではなく背景に置く。塗りつぶしの`bg-blue-600 text-white`ボタンは離れた場所からでも主要だと読み取れる。一方、ニュートラルなボタンに青いラベルテキストを乗せるとリンクのように読める。選択状態(アクティブなタブ、チェックされたセグメント)では、グリフとラベルにアクセントカラーを使ってもよい。それは強調ではなく状態である。
 
-## Color across cultures
+## 文化による色の違い
 
-Color meaning is not universal. If a color is load-bearing (finance, status, alerts), verify the meaning holds in every locale you ship to.
+色の意味は普遍的ではない。ある色が重要な意味を担っている場合(金融、ステータス、アラート)は、出荷先のすべてのロケールでその意味が通用するか確認する。
 
-| Color | Common Western reading | Elsewhere |
+| 色 | 西洋圏での一般的な解釈 | それ以外の地域 |
 | --- | --- | --- |
-| Red | Danger, loss, errors | Luck, prosperity; **gains** in Chinese financial UIs |
-| Green | Success, gains, go | Losses in Chinese financial UIs |
-| White | Purity, cleanliness | Mourning in parts of East Asia |
-| Gold | Premium, luxury | Religious significance in some regions |
+| 赤 | 危険、損失、エラー | 幸運、繁栄。中国の金融UIでは**利益** |
+| 緑 | 成功、利益、進行 | 中国の金融UIでは損失 |
+| 白 | 純粋さ、清潔さ | 東アジアの一部では喪 |
+| 金 | プレミアム感、高級感 | 一部の地域では宗教的な意味合い |
 
-The classic case: stock tickers show gains in green for English locales and in red for Chinese locales. If your product localizes into such markets, make the gain/loss colors a per-locale token, not a hardcoded value.
+典型的な例: 株価表示は、英語ロケールでは利益を緑で、中国語ロケールでは赤で示す。プロダクトがそうした市場向けにローカライズされる場合は、利益/損失の色をハードコードせず、ロケールごとのトークンにする。
 
-## Light, dark, and increased contrast
+## ライト、ダーク、コントラスト強化
 
-Every custom color needs a light and a dark variant; dark mode derivation is covered in [palette-generation.md](palette-generation.md). Beyond that, users who enable increased contrast expect visibly stronger differentiation; supply it with `prefers-contrast`:
+カスタムカラーにはすべて、ライトとダークのバリアントが必要。ダークモードの導出方法は[palette-generation.md](palette-generation.md)で扱う。それに加えて、コントラスト強化を有効にしたユーザーは、目に見えて強い差別化を期待する。`prefers-contrast`でそれを提供する。
 
 ```css
 :root {
@@ -86,9 +86,9 @@ Every custom color needs a light and a dark variant; dark mode derivation is cov
 }
 ```
 
-The increased-contrast variant widens the foreground/background lightness gap by at least `0.15` L over the default variant. Then re-verify the pair against APCA's preferred thresholds (Lc 90 body, Lc 75 non-body).
+コントラスト強化バリアントは、デフォルトバリアントに対して前景/背景の明度差を少なくとも`0.15` L広げる。その後、APCAの推奨閾値(本文Lc 90、非本文Lc 75)に照らしてそのペアを再検証する。
 
-Two testing rules:
+テストに関する2つのルール:
 
-- **Recheck every foreground/background pair in both appearances.** A pair that passes in light mode can fail in dark mode; the palettes aren't mirror images.
-- **Account for translucency.** A color on a translucent surface (`backdrop-filter` header, overlay) shifts with whatever scrolls behind it. Test it over the lightest and darkest content it can sit on, or make the surface opaque enough that the shift can't break contrast.
+- **両方の見た目で、すべての前景/背景ペアを再チェックする。** ライトモードで合格したペアが、ダークモードでは不合格になることがある。パレットは鏡写しではない。
+- **半透明を考慮する。** 半透明のサーフェス(`backdrop-filter`のヘッダー、オーバーレイ)上の色は、背後をスクロールするものによって変化する。それが乗りうる最も明るいコンテンツと最も暗いコンテンツの両方でテストするか、シフトしてもコントラストが崩れない程度にサーフェスを不透明にする。

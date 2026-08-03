@@ -1,87 +1,87 @@
-# Accessibility & Contrast
+# アクセシビリティとコントラスト
 
-Contrast is always measured between a **foreground color** (text, icon, or UI element) and the **background color** it sits on. When checking contrast, identify the background the element will be rendered against, typically the nearest parent's background color.
+コントラストは常に**前景色**(テキスト、アイコン、UI要素)と、それが乗っている**背景色**の間で測定する。コントラストを確認する際は、その要素が描画される背景を特定する。通常は直近の親要素の背景色になる。
 
-**Report, don't repaint.** When a check fails, report it (the failing foreground/background pair, its measured Lc or ratio, and the threshold it misses) and leave the colors unchanged. A project's colors are a design decision; only apply the fix below when the user asks for one.
+**塗り直すのではなく報告する。** チェックに失敗した場合は、それを報告し(不合格の前景/背景ペア、測定したLcまたは比率、満たせなかった閾値)、色は変更しないままにする。プロジェクトの色はデザイン上の決定である。以下の修正は、ユーザーが求めた場合にのみ適用する。
 
-## APCA thresholds (recommended)
+## APCAの閾値(推奨)
 
-APCA (Accessible Perceptual Contrast Algorithm) is more perceptually accurate than WCAG 2 and pairs naturally with oklch since both are grounded in perceptual lightness. Use APCA as the default.
+APCA(Accessible Perceptual Contrast Algorithm)はWCAG 2よりも知覚的に正確であり、両者とも知覚的な明度に基づいているためoklchと自然に組み合う。デフォルトではAPCAを使う。
 
-Lc (Lightness Contrast) measures the perceived contrast between foreground and background. These levels are simplified from APCA's full font-size/weight lookup table:
+Lc(Lightness Contrast)は前景と背景の知覚的なコントラストを測定する。以下のレベルは、APCAのフォントサイズ/太さの完全なルックアップテーブルを簡略化したものである。
 
-| Content Type | Minimum | Preferred |
+| コンテンツタイプ | 最低限 | 推奨 |
 | --- | --- | --- |
-| Body text (columns/blocks of text) | Lc 75 | Lc 90 |
-| Non-body text (labels, headlines) | Lc 60 | Lc 75 |
-| Large text (≥36px) | Lc 45 | Lc 60 |
-| UI components | Lc 30 | n/a |
+| 本文テキスト(段組み/テキストブロック) | Lc 75 | Lc 90 |
+| 非本文テキスト(ラベル、見出し) | Lc 60 | Lc 75 |
+| 大きいテキスト(≥36px) | Lc 45 | Lc 60 |
+| UIコンポーネント | Lc 30 | n/a |
 
-Lc 30 is also APCA's minimum for disabled and placeholder text; the absolute floor for non-text elements to be discernible at all is Lc 15.
+Lc 30は、無効化されたテキストやプレースホルダーテキストに対するAPCAの最低値でもある。テキスト以外の要素が識別可能であるための絶対的な下限はLc 15。
 
-APCA's Lc value is signed: positive means dark text on a light background, negative means light text on a dark background. Use the absolute value for threshold comparison.
+APCAのLc値には符号がある。正の値は明るい背景に暗いテキスト、負の値は暗い背景に明るいテキストを意味する。閾値との比較には絶対値を使う。
 
-## WCAG 2 thresholds (for legal compliance)
+## WCAG 2の閾値(法的コンプライアンス向け)
 
-WCAG 2 is still required when making formal WCAG 2.x conformance claims. It uses a luminance ratio that can be both too strict and too lenient depending on the color pair.
+正式にWCAG 2.x準拠を主張する場合には、依然としてWCAG 2が必要になる。WCAG 2は輝度比を使用しており、色の組み合わせによっては厳しすぎることも緩すぎることもある。
 
-| Content Type | AA | AAA |
+| コンテンツタイプ | AA | AAA |
 | --- | --- | --- |
-| Normal text (<24px / <18.5px bold) | 4.5:1 | 7:1 |
-| Large text (>=24px / >=18.5px bold) | 3:1 | 4.5:1 |
-| UI components & graphical objects | 3:1 | n/a |
+| 通常テキスト(<24px / 太字<18.5px) | 4.5:1 | 7:1 |
+| 大きいテキスト(>=24px / 太字>=18.5px) | 3:1 | 4.5:1 |
+| UIコンポーネントとグラフィカルオブジェクト | 3:1 | n/a |
 
-WCAG defines "large text" in points: 18pt ≈ `24px`, or 14pt bold ≈ `18.5px`.
+WCAGは「大きいテキスト」をポイント単位で定義している: 18pt ≈ `24px`、または太字14pt ≈ `18.5px`。
 
-## Fixing contrast with oklch (on request)
+## oklchでコントラストを修正する(依頼時)
 
-In hex/rgb, fixing contrast means trial and error across three channels. In oklch, lightness (L) is the clearest first lever: adjust the L distance between the foreground and its background while preserving C and H when possible:
+hex/rgbでは、コントラストの修正は3つのチャンネルにわたる試行錯誤を意味する。oklchでは、明度(L)が最初に扱う最も明確なレバーとなる。可能な限りCとHを維持しながら、前景とその背景の間のL距離を調整する。
 
 ```css
-/* Failing: text too close in lightness to its background (Lc ≈ 50) */
-color: oklch(0.65 0.08 250);      /* foreground */
-background: oklch(0.95 0.02 250); /* background */
+/* 不合格: テキストの明度が背景に近すぎる (Lc ≈ 50) */
+color: oklch(0.65 0.08 250);      /* 前景 */
+background: oklch(0.95 0.02 250); /* 背景 */
 
-/* Fix: darken the text, keep C and H unchanged (Lc ≈ 90) */
-color: oklch(0.3 0.08 250);       /* foreground: more L distance */
-background: oklch(0.95 0.02 250); /* background: unchanged */
+/* 修正: テキストを暗くし、CとHは変更しない (Lc ≈ 90) */
+color: oklch(0.3 0.08 250);       /* 前景: L距離を広げる */
+background: oklch(0.95 0.02 250); /* 背景: 変更なし */
 ```
 
-Note that mid-lightness backgrounds cap the achievable contrast: on a background of L 0.75, even pure black text only reaches about Lc 60; body text needs a background near the light or dark extreme.
+中間的な明度の背景では、達成可能なコントラストに上限がある点に注意する。L 0.75の背景では、純粋な黒のテキストでもLcは約60にしか達しない。本文テキストには、明るいか暗いかの極端に近い背景が必要。
 
-Adjust L first, then remeasure the rendered foreground/background pair. Chroma and hue can still affect the converted color, gamut mapping, and measured contrast; reduce C when needed to keep the adjusted color in gamut.
+まずLを調整し、レンダリングされた前景/背景ペアを再測定する。彩度と色相は、変換後の色、色域マッピング、測定されるコントラストに依然として影響しうる。調整後の色を色域内に収めるために必要であればCを減らす。
 
-## Quick lightness gap guide
+## 明度差のクイックガイド
 
-For body text (targeting |Lc| >= 75):
+本文テキスト向け(|Lc| >= 75を目標とする場合):
 
-- **Light background (L > 0.9):** foreground L should be below 0.35
-- **Dark background (L < 0.25):** foreground L should be above 0.9
+- **明るい背景(L > 0.9):** 前景のLは0.35未満にする
+- **暗い背景(L < 0.25):** 前景のLは0.9超にする
 
-The gap is asymmetric because APCA is polarity-aware: mirrored pairs don't score identically. These are approximations; always verify with an actual contrast calculation.
+APCAは極性を考慮するため、この差は非対称になる。鏡写しのペアでも同じスコアにはならない。これらはあくまで近似値であり、常に実際のコントラスト計算で検証する。
 
-## Light vs dark color detection
+## 明るい色と暗い色の判定
 
-A background counts as light when its oklch lightness exceeds 0.73, the APCA crossover on neutral backgrounds:
+背景は、oklchの明度が0.73を超えると明るいと見なされる。これはニュートラルな背景におけるAPCAのクロスオーバーポイント。
 
 ```
 if L > 0.73 → use dark text on this background
 if L <= 0.73 → use light text on this background
 ```
 
-The crossover is higher than intuition suggests: in the 0.6–0.73 band the background already looks light, but white text still scores meaningfully higher than black.
+このクロスオーバーは直感よりも高い。0.6〜0.73の範囲ではすでに背景は明るく見えるが、白いテキストの方が黒よりも有意に高いスコアになる。
 
-## Hue drift detection
+## 色相ドリフトの検出
 
-To detect hue drift in an existing HSL palette:
+既存のHSLパレットで色相ドリフトを検出するには:
 
-1. Convert each step to oklch
-2. Compare the H values across steps
-3. If the hue spread is greater than 10°, the palette has visible drift
+1. 各ステップをoklchに変換する
+2. ステップ間でH値を比較する
+3. 色相の広がりが10°を超える場合、そのパレットには目に見えるドリフトがある
 
 ```css
-/* HSL blue ramp: hue shifts toward purple */
+/* HSLの青の階調: 色相が紫寄りにシフトする */
 hsl(240, 80%, 20%)  →  oklch H ≈ 269
 hsl(240, 80%, 50%)  →  oklch H ≈ 267
-hsl(240, 80%, 90%)  →  oklch H ≈ 285  /* shifted 18° */
+hsl(240, 80%, 90%)  →  oklch H ≈ 285  /* 18°シフト */
 ```

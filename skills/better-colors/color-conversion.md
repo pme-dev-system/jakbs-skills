@@ -1,53 +1,53 @@
-# Color Conversion
+# 色の変換
 
-Use this reference only when the user asks for conversion, the project is already standardizing on OKLCH, or an agreed color-system migration requires it. Do not convert an isolated value in a project that intentionally uses another notation. When conversion is in scope, convert the color values but leave everything else unchanged: don't change gradient interpolation or restructure the CSS.
+このリファレンスは、ユーザーが変換を求めた場合、プロジェクトがすでにOKLCHへの標準化を進めている場合、または合意済みの色システム移行がそれを必要とする場合にのみ使用する。意図的に別の表記法を使っているプロジェクトで、単発の値を変換しない。変換が対象範囲に含まれる場合は、色の値のみを変換し、それ以外は変更しない。グラデーションの補間方法を変えたり、CSSを再構成したりしない。
 
-## Supported input formats
+## サポートする入力フォーマット
 
-| Format | Examples |
+| フォーマット | 例 |
 | --- | --- |
-| Hex (3/6/8-digit) | `#f00`, `#ff0000`, `#ff000080` |
+| Hex(3/6/8桁) | `#f00`, `#ff0000`, `#ff000080` |
 | `rgb()` / `rgba()` | `rgb(255, 0, 0)`, `rgba(255, 0, 0, 0.5)` |
 | `hsl()` / `hsla()` | `hsl(0, 100%, 50%)`, `hsla(0, 100%, 50%, 0.5)` |
 
-## Conversion examples
+## 変換例
 
 ```css
-/* Before */
+/* 変換前 */
 color: #3b82f6;
 background: #1e293b;
 border-color: #e2e8f0;
 
-/* After */
+/* 変換後 */
 color: oklch(0.623 0.188 259.815);
 background: oklch(0.279 0.037 260.031);
 border-color: oklch(0.929 0.013 255.508);
 ```
 
 ```css
-/* Before */
+/* 変換前 */
 color: rgb(59, 130, 246);
 border: 1px solid rgba(0, 0, 0, 0.1);
 
-/* After */
+/* 変換後 */
 color: oklch(0.623 0.188 259.815);
 border: 1px solid oklch(0 0 0 / 0.1);
 ```
 
-Alpha uses the forward-slash syntax. Omit alpha when it's 1.
+アルファはスラッシュ構文を使う。値が1の場合はアルファを省略する。
 
-## What to leave alone
+## そのままにするもの
 
-- CSS keywords: `currentColor`, `inherit`, `initial`, `unset`, `transparent`
-- Gradient interpolation methods: only convert the color stops, not the function itself
-- Colors in third-party library configs that expect hex input
+- CSSキーワード: `currentColor`, `inherit`, `initial`, `unset`, `transparent`
+- グラデーションの補間方法: 関数自体ではなく、カラーストップのみを変換する
+- hex入力を前提とするサードパーティライブラリ設定内の色
 
-## Bulk conversion
+## 一括変換
 
-Bulk conversion is a migration task, not routine cleanup. When an entire file is explicitly in scope:
+一括変換は日常的なクリーンアップではなく、移行作業である。ファイル全体が明示的に対象範囲に含まれる場合:
 
-1. Replace all hex colors with their oklch equivalents
-2. Replace all `rgb()`, `rgba()`, `hsl()`, `hsla()` function calls
-3. Leave gradient functions unchanged; only convert the color stops within them
-4. Leave `currentColor`, `inherit`, `transparent`, and CSS keywords as-is
-5. Preserve comments and formatting
+1. すべてのhexカラーを対応するoklchに置き換える
+2. `rgb()`、`rgba()`、`hsl()`、`hsla()`の関数呼び出しをすべて置き換える
+3. グラデーション関数自体は変更せず、その中のカラーストップのみを変換する
+4. `currentColor`、`inherit`、`transparent`、その他のCSSキーワードはそのままにする
+5. コメントとフォーマットを維持する
