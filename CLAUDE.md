@@ -1,47 +1,47 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+このファイルは、このリポジトリのコードを扱う際のClaude Code (claude.ai/code) 向けガイダンスを提供する。
 
-## What this repository is
+## このリポジトリについて
 
-A collection of agent skills for building great product interfaces (typography, colors, UI polish), distributed two ways: via `npx skills add jakubkrehel/skills`, and as the Claude Code plugin `interfaces` served by the marketplace in this same repository. It is documentation-only; there is no build, lint, or test tooling.
+優れたプロダクトインターフェース(タイポグラフィ、色、UIの磨き込み)を構築するための、エージェントスキルのコレクション。配布方法は2通りあり、`npx skills add jakubkrehel/skills` 経由と、このリポジトリ自身のマーケットプレイスが提供するClaude Codeプラグイン `interfaces` としての配布がある。ドキュメントのみで構成されており、ビルド・lint・テストの仕組みは存在しない。
 
-`.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` define the plugin and its marketplace. Both are named `interfaces`, so plugin users invoke skills as `/interfaces:better-interface` while skills-CLI users invoke `/better-interface`; keep the README's Use section covering both forms. Skills are discovered from `skills/` automatically, so adding a skill needs no manifest change. Bump `version` in `plugin.json` when you want plugin users to receive an update. Run `claude plugin validate .` and `claude plugin validate .claude-plugin/plugin.json` after touching either manifest.
+`.claude-plugin/plugin.json` と `.claude-plugin/marketplace.json` が、プラグインとそのマーケットプレイスを定義する。どちらも `interfaces` という名前なので、プラグイン利用者は `/interfaces:better-interface` として、skills-CLI利用者は `/better-interface` としてスキルを呼び出す。READMEのUseセクションでは両方の形式をカバーし続けること。スキルは `skills/` から自動的に検出されるため、スキルを追加してもマニフェストの変更は不要。プラグイン利用者に更新を届けたい場合は `plugin.json` の `version` を上げる。どちらかのマニフェストを変更した後は `claude plugin validate .` と `claude plugin validate .claude-plugin/plugin.json` を実行すること。
 
-## Structure
+## 構成
 
-Each skill lives in `skills/<skill-name>/`:
+各スキルは `skills/<skill-name>/` 配下に置かれる:
 
-- `SKILL.md` is the entry point. YAML frontmatter with `name` (matching the directory) and `description` (one-line summary, "Use when..." guidance, and a "Triggers on ..." keyword list that agents match against). The body: a short philosophy paragraph (one or two lines, with hand-off lines naming sibling skills that own adjacent topics), a **Quick Reference** table linking to reference files (only when the skill has them), numbered **Core Principles**, a **Common Mistakes** table, and a **Review Output Format** section. No review checklists and no trailing reference-file index; the Quick Reference is the only file listing.
-- Supporting `.md` reference files are optional; single-file skills are fine. Add one only when it carries depth beyond the principle statements (recipes, code patterns, lookup tables), not to restate SKILL.md in longer form. Link via relative paths from the Quick Reference table.
-- Each rule lives in exactly one skill; other skills point to it by skill name in backticks (e.g. `better-layout`), never via cross-skill relative links.
+- `SKILL.md` がエントリーポイント。YAMLフロントマターには `name`(ディレクトリ名と一致)と `description`(1行の要約、「Use when...」による使用条件の案内、エージェントが照合する「Triggers on ...」キーワードリスト)を持つ。本文の構成: 短い理念段落(1〜2行、隣接トピックを担当する姉妹スキルを名指しする受け渡し文を含む)、参照ファイルへリンクする **Quick Reference** テーブル(参照ファイルがあるスキルのみ)、番号付きの **Core Principles**、**Common Mistakes** テーブル、**Review Output Format** セクション。レビューチェックリストや末尾の参照ファイル索引は置かない。Quick Referenceだけがファイル一覧を兼ねる。
+- 補足の `.md` 参照ファイルは任意であり、単一ファイルのスキルでも問題ない。追加するのは、原則の記述を超える深さ(レシピ、コードパターン、参照テーブルなど)を持つ場合に限り、SKILL.mdを長く言い換えるためではない。Quick Referenceテーブルから相対パスでリンクする。
+- 各ルールはちょうど1つのスキルにのみ存在する。他のスキルからは、バッククォートで囲んだスキル名(例: `better-layout`)で参照し、スキルをまたぐ相対リンクは使わない。
 
-Current skills: `better-interface` (user-invoked cross-discipline review), `better-ui` (interface polish details), `better-typography` (web typography), `better-colors` (OKLCH color space and color usage), `better-accessibility` (accessibility engineering), `better-layout` (layout structure), `better-writing` (UX writing and interface copy).
+現在のスキル: `better-interface`(ユーザーが呼び出す分野横断レビュー)、`better-ui`(インターフェースの磨き込みの詳細)、`better-typography`(Webタイポグラフィ)、`better-colors`(OKLCH色空間と色の使い方)、`better-accessibility`(アクセシビリティエンジニアリング)、`better-layout`(レイアウト構造)、`better-writing`(UXライティングとインターフェースの文言)。
 
-### Rule ownership
+### ルールの所有範囲
 
-| Skill | Owns |
+| スキル | 担当範囲 |
 | --- | --- |
-| `better-interface` | Review orchestration, shared severity, consolidation, coverage, and final output |
-| `better-accessibility` | Semantic HTML, keyboard and focus behavior, accessible names, forms, assistive technology, and accessibility requirements |
-| `better-layout` | Spatial grouping, alignment, spacing, responsive structure, logical CSS properties, and spatial RTL behavior |
-| `better-writing` | Source wording, terminology, voice, tone, labels, errors, and empty-state copy |
-| `better-typography` | Visual text rendering, type systems, font behavior, wrapping mechanics, punctuation, and text-level bidi behavior |
-| `better-colors` | Color notation, palette construction, gamut, rendered-pair contrast measurement, and color remediation |
-| `better-ui` | Optional visual polish: surfaces, icons, and motion aesthetics after the underlying interaction is sound |
+| `better-interface` | レビューの統括、共通の重要度基準、統合、カバレッジ、最終出力 |
+| `better-accessibility` | セマンティックHTML、キーボードとフォーカスの挙動、アクセシブルネーム、フォーム、支援技術、アクセシビリティ要件 |
+| `better-layout` | 空間的なグルーピング、整列、スペーシング、レスポンシブ構造、CSS論理プロパティ、空間的なRTL挙動 |
+| `better-writing` | ソースの文言、用語、ボイス、トーン、ラベル、エラー、空状態のコピー |
+| `better-typography` | テキストの視覚的レンダリング、タイプシステム、フォントの挙動、折り返しの仕組み、約物、テキストレベルの双方向(bidi)挙動 |
+| `better-colors` | 色の表記法、パレット構築、色域、レンダリング後のペアのコントラスト測定、色の是正 |
+| `better-ui` | 任意の視覚的な磨き込み: 基盤となるインタラクションが健全であることを前提にした、サーフェス・アイコン・モーションの美観 |
 
-When a concern crosses domains, keep the rule in the owner above and let other skills name only the handoff or secondary effect. In particular:
+関心事が複数領域にまたがる場合、ルールは上記の担当スキルに置き、他のスキルは受け渡しや副次的な影響のみを言及する。具体的には:
 
-- `better-accessibility` decides when contrast is required and the severity of a failure; `better-colors` owns measuring the rendered pair and changing its colors.
-- `better-accessibility` owns semantic heading structure; `better-typography` owns how heading levels render visually.
-- `better-layout` owns logical CSS properties and spatial mirroring; `better-typography` owns language metadata, punctuation, and mixed-direction text.
-- `better-typography` owns truncation mechanics; `better-layout` owns whether the surrounding layout has room or an expansion affordance; `better-writing` owns the source copy.
-- `better-accessibility` owns reduced-motion requirements; `better-ui` owns the optional animation recipe used when motion is appropriate.
+- `better-accessibility` はコントラストが必要かどうかと違反の重要度を判断し、`better-colors` はレンダリング後のペアの測定と色の変更を担当する。
+- `better-accessibility` はセマンティックな見出し構造を担当し、`better-typography` は見出しレベルの視覚的なレンダリングを担当する。
+- `better-layout` はCSS論理プロパティと空間的なミラーリングを担当し、`better-typography` は言語メタデータ、約物、混在方向テキストを担当する。
+- `better-typography` は切り詰め表示(truncation)の仕組みを担当し、`better-layout` は周囲のレイアウトに余地や展開のアフォーダンスがあるかを担当し、`better-writing` はソースのコピーを担当する。
+- `better-accessibility` はモーション低減の要件を担当し、`better-ui` はモーションが適切な場合に使う任意のアニメーションレシピを担当する。
 
-## Authoring conventions
+## 執筆規約
 
-- Principles are prescriptive and specific: exact CSS properties, exact values (e.g. scale `0.25` → `1`, blur `4px` → `0px`), not vague advice.
-- Match the degree of prescription to the decision: requirements may be unconditional, while design heuristics name the context and escape conditions before giving exact recipe values.
-- Skills instruct agents to match the target project's existing styling system (Tailwind vs. plain CSS vs. CSS-in-JS) rather than impose one.
-- Frontmatter `description` is the discovery surface; when adding or changing a skill's scope, update its trigger keywords accordingly.
-- Skill directory names use the `better-*` prefix; renaming a skill means renaming its directory and frontmatter `name` together.
+- 原則は指示的かつ具体的にする: 曖昧な助言ではなく、正確なCSSプロパティ、正確な値(例: scale `0.25` → `1`、blur `4px` → `0px`)を示す。
+- 指示の強さは決定の性質に合わせる: 要件は無条件でよいが、デザインのヒューリスティックは正確なレシピの値を示す前に、文脈と例外条件を明記する。
+- スキルは、特定のスタイリングシステムを押し付けるのではなく、対象プロジェクトの既存のスタイリングシステム(Tailwindか、素のCSSか、CSS-in-JSか)に合わせるようエージェントに指示する。
+- フロントマターの `description` は発見(ディスカバリー)の窓口である。スキルの範囲を追加・変更する際は、トリガーキーワードもそれに応じて更新すること。
+- スキルのディレクトリ名は `better-*` という接頭辞を使う。スキル名の変更は、ディレクトリとフロントマターの `name` を同時にリネームすることを意味する。

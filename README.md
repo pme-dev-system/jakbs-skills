@@ -4,32 +4,32 @@
 
 [![skills.sh](https://skills.sh/b/jakubkrehel/skills)](https://skills.sh/jakubkrehel/skills)
 
-A collection of agent skills that help with various parts of building a great interface. From animation and UI polish to accessibility and product writing.
+優れたインターフェースを構築するさまざまな側面を支援する、エージェントスキルのコレクション。アニメーションやUIの磨き込みから、アクセシビリティやプロダクトライティングまでを扱う。
 
-## Skills
+## スキル
 
-- [**better-interface**](skills/better-interface/SKILL.md): A user-invoked, cross-discipline interface review that coordinates every skill below.
-- [**better-ui**](skills/better-ui/SKILL.md): Design engineering details that make interfaces feel polished: border radius, shadows, animations and micro-interactions.
-- [**better-typography**](skills/better-typography/SKILL.md): Web typography from choosing fonts to spacing, wrapping and accessibility.
-- [**better-colors**](skills/better-colors/SKILL.md): OKLCH color space: palette generation, contrast, gamut handling and theming.
-- [**better-accessibility**](skills/better-accessibility/SKILL.md): Focus states, keyboard support, ARIA, forms, screen readers, hit areas and motion.
-- [**better-layout**](skills/better-layout/SKILL.md): Layout structure, grouping, alignment, reading order, progressive disclosure and adaptive breakpoints.
-- [**better-writing**](skills/better-writing/SKILL.md): UX writing and interface copy, from button labels to errors, settings and empty states.
+- [**better-interface**](skills/better-interface/SKILL.md): ユーザーが呼び出す、下記すべてのスキルを統括する分野横断的なインターフェースレビュー。
+- [**better-ui**](skills/better-ui/SKILL.md): インターフェースに磨き込まれた印象を与えるデザインエンジニアリングの細部: 角丸、シャドウ、アニメーション、マイクロインタラクション。
+- [**better-typography**](skills/better-typography/SKILL.md): フォント選定から、スペーシング、折り返し、アクセシビリティまでのWebタイポグラフィ。
+- [**better-colors**](skills/better-colors/SKILL.md): OKLCH色空間: パレット生成、コントラスト、色域の扱い、テーマ設定。
+- [**better-accessibility**](skills/better-accessibility/SKILL.md): フォーカス状態、キーボード操作、ARIA、フォーム、スクリーンリーダー、ヒットエリア、モーション。
+- [**better-layout**](skills/better-layout/SKILL.md): レイアウト構造、グルーピング、整列、読み順、プログレッシブディスクロージャー、アダプティブなブレークポイント。
+- [**better-writing**](skills/better-writing/SKILL.md): ボタンラベルからエラー、設定、空状態まで、UXライティングとインターフェースの文言。
 
-## Install
+## インストール
 
-### As a Claude Code plugin
+### Claude Codeプラグインとして
 
-Installs all seven skills together and updates in place. Run these inside Claude Code:
+7つのスキルすべてを一括インストールし、その場で更新する。Claude Code内で以下を実行する:
 
 ```text
 /plugin marketplace add jakubkrehel/skills
 /plugin install interfaces@interfaces
 ```
 
-### With the skills CLI
+### skills CLIを使う
 
-Works in Claude Code, Codex and other agents. You can choose which skills to install or install all of them. `better-interface` coordinates the other six skills, so install the complete collection when you want holistic reviews.
+Claude Code、Codex、その他のエージェントで動作する。インストールするスキルを個別に選ぶことも、すべてインストールすることもできる。`better-interface` は他の6つのスキルを統括するので、包括的なレビューをしたい場合はコレクション全体をインストールする。
 
 ```bash
 npx skills add jakubkrehel/skills
@@ -39,11 +39,11 @@ npx skills add jakubkrehel/skills
 npx skills add jakubkrehel/skills --skill '*'
 ```
 
-## Use
+## 使い方
 
-The default review mode is `full`. Pass `quick` for a shorter review, and add the screen, flow, or feature after the mode.
+デフォルトのレビューモードは `full`。より短いレビューにしたい場合は `quick` を渡し、モードの後に画面・フロー・機能名を追加する。
 
-In Claude Code, as a plugin. Plugin skills are namespaced, so every skill is prefixed with `interfaces:`.
+Claude Codeでプラグインとして使う場合。プラグインのスキルは名前空間化されるため、すべてのスキルに `interfaces:` という接頭辞が付く。
 
 ```text
 /interfaces:better-interface
@@ -51,7 +51,7 @@ In Claude Code, as a plugin. Plugin skills are namespaced, so every skill is pre
 /interfaces:better-interface full checkout flow
 ```
 
-In Claude Code, installed with the skills CLI:
+Claude Codeでskills CLIを使ってインストールした場合:
 
 ```text
 /better-interface
@@ -59,7 +59,7 @@ In Claude Code, installed with the skills CLI:
 /better-interface full checkout flow
 ```
 
-In Codex:
+Codexの場合:
 
 ```text
 $better-interface
@@ -67,4 +67,4 @@ $better-interface quick
 $better-interface full checkout flow
 ```
 
-The prefix only affects skills you invoke by name. The other six skills are picked up automatically from context either way.
+この接頭辞は、名前を指定して呼び出すスキルにのみ影響する。他の6つのスキルは、いずれの場合も文脈から自動的に適用される。
