@@ -1,37 +1,37 @@
 ---
 name: better-interface
 description: >-
-  User-invoked, cross-discipline interface review that coordinates better-accessibility, better-layout, better-writing, better-typography, better-colors, and better-ui. Use when explicitly invoked for a holistic review of a screen, flow, feature, or product interface. Supports quick and full review modes. Triggers on better-interface, full interface review, holistic UI audit, cross-discipline design review, review the whole interface.
+  better-accessibility、better-layout、better-writing、better-typography、better-colors、better-uiを統合する、ユーザーが呼び出す分野横断的インターフェースレビュー。画面・フロー・機能・プロダクトインターフェースの包括的レビューを明示的に呼び出された場合に使用する。quickモードとfullモードのレビューに対応する。トリガーワード: better-interface、フルインターフェースレビュー、包括的UI監査、分野横断デザインレビュー、インターフェース全体のレビュー。
 ---
 
-# Review the interface as one system
+# インターフェースを1つのシステムとしてレビューする
 
-A strong interface is not six independent audits stapled together. Review the whole experience, let each `better-*` skill own its domain rules, then consolidate the evidence into one prioritized verdict.
+優れたインターフェースは、6つの独立した監査をホチキス留めしたものではない。体験全体をレビューし、各 `better-*` スキルにそれぞれの領域のルールを担当させたうえで、その根拠を1つの優先順位付けされた評決に統合する。
 
-This skill owns orchestration only. Accessibility rules belong to `better-accessibility`; structure to `better-layout`; copy to `better-writing`; type to `better-typography`; color to `better-colors`; visual polish and motion to `better-ui`. Never duplicate or override their rules here.
+このスキルはオーケストレーションのみを担当する。アクセシビリティのルールは `better-accessibility` が、構造は `better-layout` が、文言は `better-writing` が、タイプは `better-typography` が、色は `better-colors` が、視覚的な磨き込みとモーションは `better-ui` がそれぞれ担当する。ここでそれらのルールを重複させたり上書きしたりしない。
 
 ## Core Principles
 
-### 1. Resolve Scope and Mode First
+### 1. スコープとモードを最初に確定する
 
-Infer the screen, flow, feature, or repository scope from the request and current workspace. State the resolved scope in the output. Use `full` when no mode is supplied.
+リクエストと現在のワークスペースから、画面・フロー・機能・リポジトリのスコープを推測する。確定したスコープを出力に明記する。モードが指定されない場合は `full` を使用する。
 
 | Mode | Coverage | Finding cap |
 | --- | --- | --- |
-| `quick` | Primary user path and highest-traffic states; report only `HIGH` and `MEDIUM` issues | 5 |
-| `full` | Entire requested scope across all six domain skills, including empty, loading, error, and narrow-width states when present | 15 |
+| `quick` | 主要なユーザーパスと、最もトラフィックの多い状態。`HIGH` と `MEDIUM` の問題のみを報告する | 5 |
+| `full` | 6つのドメインスキルすべてにわたる、リクエストされたスコープ全体。存在する場合は空状態・読み込み中・エラー・幅の狭い状態も含む | 15 |
 
-If the requested scope is too large to inspect credibly, narrow it to the highest-traffic complete flow and state the boundary. Never imply uninspected surfaces were reviewed.
+リクエストされたスコープが大きすぎて確実に検査できない場合は、最もトラフィックの多い完全なフローに絞り込み、その境界を明記する。検査していない範囲をレビュー済みであるかのように示唆しない。
 
-### 2. Recon Before Judgment
+### 2. 判断の前に下調べを行う
 
-Identify the framework, styling system, component library, design tokens, supported viewports, and available preview or test commands. Follow the project's established Tailwind, plain CSS, CSS-in-JS, token, and component conventions.
+フレームワーク、スタイリングシステム、コンポーネントライブラリ、デザイントークン、対応するビューポート、利用可能なプレビューコマンドやテストコマンドを特定する。プロジェクトで確立されている Tailwind、素のCSS、CSS-in-JS、トークン、コンポーネントの規約に従う。
 
-### 3. Use Domain Skills as the Sources of Truth
+### 3. ドメインスキルを信頼できる情報源として使う
 
-Before reviewing, confirm that all six owning skills below are available. Load and apply every available owner. In `quick` mode, inspect all six domains but spend depth only where the primary flow has evidence. In `full` mode, complete each available domain review before consolidation.
+レビューの前に、以下の6つの担当スキルすべてが利用可能であることを確認する。利用可能な担当スキルはすべて読み込んで適用する。`quick` モードでは6つのドメインすべてを検査するが、深く掘り下げるのは主要フローに根拠がある部分のみとする。`full` モードでは、統合の前に利用可能な各ドメインのレビューを完了させる。
 
-Review in this order so foundational failures are not hidden by polish:
+土台となる欠陥が見た目の磨き込みによって隠れないよう、次の順序でレビューする:
 
 1. `better-accessibility`
 2. `better-layout`
@@ -40,99 +40,99 @@ Review in this order so foundational failures are not hidden by polish:
 5. `better-colors`
 6. `better-ui`
 
-This skill owns the final response. When a domain skill is loaded through `better-interface`, apply its principles and references but ignore its standalone **Review Output Format**. Use the consolidated format, shared severity, and finding cap in this file instead.
+このスキルが最終的な回答を担当する。ドメインスキルが `better-interface` を通じて読み込まれた場合、その原則と参照ファイルは適用するが、そのスキル単体の **Review Output Format** は無視する。代わりに、このファイルにある統合フォーマット、共通の重要度、指摘事項の上限を使用する。
 
-If an owning skill is unavailable, mark that domain `Not reviewed`, name the missing skill, and continue with the remaining domains. Do not recreate its rules from memory, substitute a neighboring skill, or claim holistic coverage.
+担当スキルが利用できない場合は、そのドメインを `Not reviewed` として明記し、不足しているスキル名を挙げたうえで、残りのドメインのレビューを続ける。そのルールを記憶から再現したり、近縁のスキルで代用したり、包括的なカバレッジを主張したりしない。
 
-When two skills appear to cover the same issue, assign it to the skill that owns the underlying rule and mention secondary effects in the **Why** cell. Report it once.
+2つのスキルが同じ問題を扱っているように見える場合は、根本のルールを担当するスキルにその問題を割り当て、副次的な影響は **Why** セルに記載する。その問題は1回だけ報告する。
 
-### 4. Require Evidence
+### 4. 根拠を必須とする
 
-Every finding cites `path/to/file:line` and shows the current implementation. If the review artifact has no source files, cite the exact screen and component. Do not report a code-level finding from visual appearance alone or a visual finding from source code alone when runtime behavior determines the result.
+すべての指摘事項は `path/to/file:line` を引用し、現在の実装を示す。レビュー対象の成果物にソースファイルがない場合は、正確な画面とコンポーネントを引用する。見た目だけでコードレベルの指摘をしたり、実行時の挙動が結果を左右する場合にソースコードだけで視覚的な指摘をしたりしない。
 
-### 5. Rank by User Impact
+### 5. ユーザーへの影響でランク付けする
 
-Use one shared severity scale:
+共通の重要度スケールを1つ使用する:
 
-- `HIGH`: blocks a task, misleads the user, hides content or controls, causes data-loss risk, or creates a repeated systemic failure.
-- `MEDIUM`: meaningfully harms comprehension, efficiency, adaptability, or consistency.
-- `LOW`: isolated polish with limited task impact. Include only in `full` mode.
+- `HIGH`: タスクをブロックする、ユーザーを誤解させる、コンテンツやコントロールを隠す、データ損失のリスクを引き起こす、または繰り返し発生するシステム的な失敗を生む。
+- `MEDIUM`: 理解のしやすさ、効率、適応性、一貫性のいずれかを大きく損なう。
+- `LOW`: タスクへの影響が限定的な、局所的な磨き込み。`full` モードでのみ含める。
 
-Within a severity, rank by reach and leverage. A token or shared-component fix outranks the same symptom in one leaf component.
+同じ重要度の中では、影響範囲とレバレッジでランク付けする。トークンや共有コンポーネントの修正は、同じ症状が単一の末端コンポーネントにある場合よりも優先度が高い。
 
-### 6. Consolidate Systemic Findings
+### 6. システム的な指摘事項を統合する
 
-One root cause is one finding. List every confirmed location in the same row rather than producing a row per occurrence. Do not pad the report to reach the finding cap; a short review or no findings is a valid result.
+1つの根本原因は1つの指摘事項とする。発生箇所ごとに行を作るのではなく、確認済みのすべての場所を同じ行に列挙する。指摘事項の上限に到達させるために報告を水増ししない。短いレビューや指摘事項なしという結果も正当な結果である。
 
-### 7. Make Restraint Visible
+### 7. 抑制した判断を可視化する
 
-Record candidates considered but deliberately rejected. A candidate is rejected when the owning skill permits the current implementation, evidence is insufficient, the project convention is intentional, or the proposed change would add complexity without user benefit.
+検討したが意図的に却下した候補を記録する。候補が却下されるのは、担当スキルが現在の実装を許容している場合、根拠が不十分な場合、プロジェクトの規約が意図的なものである場合、または提案する変更がユーザーの利益なしに複雑さだけを増す場合である。
 
-### 8. Verify What Can Be Verified
+### 8. 検証できるものは検証する
 
-Run safe, relevant checks available in the project. Inspect the rendered interface when runtime behavior or visual judgment matters. Report the exact command or interaction and observed result. If a check cannot be run, label it **Not verified** and state what remains; never convert a verification gap into a finding.
+プロジェクトで利用可能な、安全で関連性のあるチェックを実行する。実行時の挙動や視覚的な判断が重要な場合は、レンダリングされたインターフェースを検査する。実行した正確なコマンドやインタラクションと、観測された結果を報告する。チェックを実行できない場合は **未検証** と明記し、何が残っているかを述べる。検証できていないことを指摘事項に変換しない。
 
-### 9. Review Without Mutating by Default
+### 9. デフォルトでは変更せずにレビューする
 
-Treat a review request as read-only. Do not edit source code unless the user also asks to implement the findings. When implementation is requested, preserve the consolidated report as the change scope and re-run the relevant verification afterward.
+レビュー依頼は読み取り専用として扱う。ユーザーが指摘事項の実装も依頼していない限り、ソースコードを編集しない。実装が依頼された場合は、統合したレポートを変更範囲として維持し、その後関連する検証を再実行する。
 
 ## Common Mistakes
 
 | Mistake | Fix |
 | --- | --- |
-| Six disconnected domain reports | Consolidate into one ranked findings table |
-| Same issue reported by multiple skills | Assign it to the skill that owns the underlying rule |
-| Finding with no exact location | Cite `path/to/file:line` and the current implementation |
-| Visual claim inferred only from source | Inspect the rendered state or mark it not verified |
-| Unlimited low-impact polish | Respect the mode cap; omit `LOW` findings in `quick` |
-| Silent gaps in coverage | Show which domains and states were actually inspected |
-| Missing owning skill silently treated as covered | Mark the domain `Not reviewed` and name the unavailable skill |
-| No rejected candidates | Include the required considered-but-rejected table |
-| Review silently edits code | Stay read-only unless implementation was requested |
-| “Approve” with pending actionable findings | Use `Needs changes` or `Block` |
+| 6つのつながりのないドメインレポート | 1つの優先順位付けされた指摘事項テーブルに統合する |
+| 同じ問題が複数のスキルによって報告される | 根本のルールを担当するスキルに割り当てる |
+| 正確な場所のない指摘事項 | `path/to/file:line` と現在の実装を引用する |
+| ソースコードだけから推測した視覚的な主張 | レンダリングされた状態を検査するか、未検証と明記する |
+| 無制限の低影響な磨き込み | モードの上限を守る。`quick` では `LOW` の指摘事項を省く |
+| カバレッジの見えない欠落 | 実際に検査したドメインと状態を示す |
+| 担当スキルの欠落を暗黙にカバー済みとして扱う | そのドメインを `Not reviewed` と明記し、利用できないスキル名を挙げる |
+| 却下した候補がない | 必須の「検討したが却下」テーブルを含める |
+| レビューが黙ってコードを編集する | 実装が依頼されない限り読み取り専用を保つ |
+| 対応が必要な指摘事項が残っているのに「Approve」 | `Needs changes` または `Block` を使う |
 
 ## Review Output Format
 
-Always use the following sections.
+常に次のセクションを使用する。
 
-### Scope and Coverage
+### スコープとカバレッジ
 
-State the mode, exact scope, stack and styling conventions, and any review boundary. Then show coverage:
+モード、正確なスコープ、スタックとスタイリングの規約、レビューの境界を明記する。続けてカバレッジを示す:
 
 | Domain | Evidence inspected | Result |
 | --- | --- | --- |
-| Accessibility | Files, components, states, or checks | Findings count or `Clear` |
+| Accessibility | ファイル、コンポーネント、状態、またはチェック内容 | 指摘件数または `Clear` |
 
-Include all six domains. `Clear` means inspected with no actionable finding; `Not reviewed` must explain why.
+6つのドメインすべてを含める。`Clear` は検査した結果、対応が必要な指摘事項がなかったことを意味する。`Not reviewed` の場合は理由を必ず説明する。
 
-### Findings
+### 指摘事項
 
-Use one table ordered by severity, then reach and leverage:
+重要度、次に影響範囲とレバレッジの順に並べた1つのテーブルを使用する:
 
 | # | Severity | Domain | Location | Before | After | Why |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | HIGH | Accessibility | `src/Dialog.tsx:42` | `<button><XIcon /></button>` | Add `aria-label="Close"` and hide the icon from the accessibility tree | The icon-only control has no accessible name |
+| 1 | HIGH | アクセシビリティ | `src/Dialog.tsx:42` | `<button><XIcon /></button>` | `aria-label="Close"` を追加し、アイコンをアクセシビリティツリーから隠す | アイコンのみのコントロールにアクセシブルネームがない |
 
-Each row is one root cause. The **Domain** value is the owning skill without the `better-` prefix. Respect the mode's finding cap. If there are no findings, omit the table and state "No actionable interface findings."
+各行は1つの根本原因を表す。**Domain** の値は `better-` プレフィックスを除いた担当スキル名である。モードの指摘事項の上限を守る。指摘事項がない場合は、テーブルを省略し「対応が必要なインターフェースの指摘事項はありません」と述べる。
 
-### Considered but Rejected
+### 検討したが却下した項目
 
-Include 1–3 candidates in `quick` mode and 2–5 in `full` mode:
+`quick` モードでは1〜3件、`full` モードでは2〜5件の候補を含める:
 
 | Location | Candidate | Rejected because |
 | --- | --- | --- |
-| `src/Card.tsx:28` | Increase the shadow | Existing depth matches the shared surface token; changing one card would reduce consistency |
+| `src/Card.tsx:28` | シャドウを強くする | 既存の深さは共有のサーフェストークンと一致している。1枚のカードだけ変更すると一貫性が下がる |
 
-These are real candidates inspected during the review, not invented filler. If the scope genuinely contains fewer borderline candidates, include the ones that exist and say so.
+これらはレビュー中に実際に検査した候補であり、でっち上げた埋め草ではない。スコープ内に境界的な候補が実際に少ない場合は、実在するものだけを含め、その旨を述べる。
 
-### Verification
+### 検証
 
-List each check or interaction, the exact command or steps, and the observed result. Separate checks that passed from checks marked **Not verified**.
+実行した各チェックやインタラクション、正確なコマンドや手順、観測された結果を列挙する。合格したチェックと **未検証** と明記されたチェックを分けて示す。
 
-### Verdict
+### 評決
 
-End with exactly one:
+最後に、次のいずれか1つで締めくくる:
 
-- `Block` — one or more `HIGH` findings remain.
-- `Needs changes` — only `MEDIUM` or `LOW` findings remain.
-- `Approve` — no actionable findings remain and the claimed coverage was verified.
+- `Block` — 1件以上の `HIGH` の指摘事項が残っている場合。
+- `Needs changes` — `MEDIUM` または `LOW` の指摘事項のみが残っている場合。
+- `Approve` — 対応が必要な指摘事項が残っておらず、主張したカバレッジが検証されている場合。

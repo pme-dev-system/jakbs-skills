@@ -1,145 +1,145 @@
 ---
 name: better-writing
 description: >-
-  UX writing and interface copy, from voice and button labels to error messages and empty states. Use when writing or reviewing any user-facing text: button and link labels, form errors, placeholders, settings labels, onboarding flows, notifications, or empty states. Triggers on UX writing, microcopy, interface copy, product copy, copywriting, button labels, link text, error messages, empty states, placeholder text, settings labels, capitalization, title case, sentence case, voice and tone.
+  UXライティングとインターフェースの文言。ボイスやボタンラベルから、エラーメッセージ、空状態まで扱う。ボタンやリンクのラベル、フォームのエラー、プレースホルダー、設定のラベル、オンボーディングフロー、通知、空状態など、ユーザー向けテキストを書く、またはレビューする際に使用する。トリガーワード: UXライティング、マイクロコピー、インターフェースコピー、プロダクトコピー、コピーライティング、ボタンラベル、リンクテキスト、エラーメッセージ、空状態、プレースホルダーテキスト、設定のラベル、大文字化、タイトルケース、センテンスケース、ボイス&トーン。
 ---
 
-# Writing that disappears into the interface
+# インターフェースに溶け込むライティング
 
-Clear and brief beats clever, consistency beats variety, and the best error message is the interaction redesigned so the error can't happen. Apply these principles when writing or reviewing any user-facing text.
+明快さと簡潔さは、気の利いた表現に勝る。一貫性は多様性に勝る。そして最良のエラーメッセージとは、そもそもエラーが起こり得ないように再設計されたインタラクションである。ユーザー向けのテキストを書く、またはレビューする際は、これらの原則を適用する。
 
-How copy renders (capitalization via `text-transform`, truncation, smart punctuation) is covered by the `better-typography` skill; error markup and announcements (`aria-invalid`, live regions) by the `better-accessibility` skill; room for translated strings by the `better-layout` skill.
+コピーがどのようにレンダリングされるか(`text-transform` による大文字化、切り詰め表示、スマート約物)は `better-typography` スキルが、エラーのマークアップと通知(`aria-invalid`、ライブリージョン)は `better-accessibility` スキルが、翻訳後の文字列のための余白は `better-layout` スキルがそれぞれ担当する。
 
 ## Core Principles
 
-### 1. Recon the Existing Voice
+### 1. 既存のボイスを下調べする
 
-Before writing or reviewing, inspect nearby interface copy, the product's terminology, localization conventions, and any voice or content style guide. Preserve intentional brand character when it remains clear and appropriate to the stakes. Treat a difference from generic plain language as a finding only when it creates inconsistency, ambiguity, translation risk, or an inappropriate tone.
+書く、またはレビューする前に、近くのインターフェースコピー、プロダクトの用語、ローカライゼーションの規約、ボイスやコンテンツのスタイルガイドを確認する。意図的なブランドらしさは、明確であり、かつその場面の重要度にふさわしい限り保持する。一般的な平易な言葉遣いとの違いは、それが一貫性の欠如、曖昧さ、翻訳リスク、または不適切なトーンを生む場合に限り、指摘事項として扱う。
 
-### 2. One Voice, Flexible Tone
+### 2. ボイスは1つ、トーンは柔軟に
 
-The product has one voice, established by its existing system rather than invented during a local edit. Keep terms consistent: if it's "Archive" in the menu, it isn't "Move to storage" in the toast. Tone flexes with the stakes:
+プロダクトのボイスは1つであり、それはローカルな編集の際に新しく作り出すものではなく、既存のシステムによって確立されているものである。用語は一貫させる。メニューで「アーカイブ」なら、トーストでは「ストレージに移動」にはしない。トーンは場面の重要度に応じて柔軟に変える:
 
 | Context | Tone |
 | --- | --- |
-| Success, onboarding, empty states | Warm, can be light |
-| Routine actions, settings | Neutral, minimal |
-| Errors, destructive confirmations | Calm, plain, zero playfulness |
-| Data loss, security | Serious, explicit |
+| 成功、オンボーディング、空状態 | 温かみがあり、軽やかでもよい |
+| 日常的な操作、設定 | ニュートラルで最小限 |
+| エラー、破壊的な操作の確認 | 落ち着いていて簡素。遊び心はゼロ |
+| データ損失、セキュリティ | 深刻で明示的 |
 
-### 3. Address the Reader Directly
+### 3. 読み手に直接語りかける
 
-In instructional interface copy, address the reader directly as "you" rather than "the user." Avoid “we” in errors when it creates ambiguity or reads as deflection: prefer “Unable to load content” over “We're having trouble loading this content.” Preserve an established first-person brand voice in low-stakes contexts when it remains clear. Use possessives sparingly (“Favorites” over “Your Favorites”) and never switch perspective accidentally.
+説明的なインターフェースコピーでは、読み手を「ユーザー」ではなく直接「あなた」として扱う。エラーメッセージにおいて、曖昧さを生んだり責任回避のように読めたりする場合は「私たち」を避ける。「このコンテンツの読み込みに問題が発生しております」よりも「コンテンツを読み込めません」を優先する。重要度の低い場面では、明確さが保たれている限り、確立された一人称のブランドボイスを保持する。所有格は控えめに使う(「あなたのお気に入り」ではなく「お気に入り」)。視点をうっかり切り替えないようにする。
 
-### 4. Plain Words Over Clever Ones
+### 4. 気の利いた言葉より平易な言葉
 
-Choose easily understood words and delete every word that isn't needed. No idioms, colloquialisms, or humor that won't translate. Skip unnecessary gender: "Subscribers can post recipes", not "each subscriber can post his or her recipes". Match the input device: "tap" on touch, "click" with a pointer, "select" when both are possible. Never build sentences by concatenating fragments around variables (`"You have " + n + " new messages"`); word order changes per language, so use full templated strings with proper pluralization.
+簡単に理解できる言葉を選び、不要な単語はすべて削る。翻訳できない慣用句、口語表現、ユーモアは使わない。不要な性別表現は避ける。"Subscribers can post recipes"であって、"each subscriber can post his or her recipes"ではない。入力デバイスに合わせる: タッチには「タップ」、ポインターには「クリック」、両方に対応する場合は「選択」を使う。変数の前後にテキスト断片を連結して文を組み立てない(`"You have " + n + " new messages"`)。語順は言語によって変わるため、適切な複数形処理を伴う完全なテンプレート文字列を使う。
 
-### 5. Verb-First Buttons
+### 5. 動詞から始まるボタン
 
-Button labels start with a verb naming the specific action: "Send", "Save draft", "Delete project". Never "OK!", "Let's go!", or bare "Yes"/"No" on consequential actions. Confirmation buttons repeat the consequence so the dialog is answerable without reading the body: "Delete this project?" offers `Delete project` and `Cancel`, not `Yes` and `No`.
+ボタンのラベルは、具体的な操作を表す動詞から始める:「送信」「下書きを保存」「プロジェクトを削除」。重要な操作に対して「OK!」「はじめよう!」や、裸の「はい」/「いいえ」は使わない。確認ボタンは、本文を読まなくても答えられるよう結果を繰り返す。「このプロジェクトを削除しますか?」には `Delete project` と `Cancel` を用意し、`Yes` と `No` にはしない。
 
-### 6. Consistent Flow Vocabulary
+### 6. フロー全体で語彙を統一する
 
-Multi-step flows use one vocabulary: "Get Started" to enter, "Continue" or "Next" (pick one) to advance, "Done" to finish. Alternating synonyms across steps makes users wonder if the buttons do different things.
+複数ステップのフローでは語彙を1つに統一する。開始には「はじめる」、次に進むには「続ける」か「次へ」のどちらか一方、完了には「完了」を使う。ステップごとに同義語を切り替えると、ユーザーはボタンの機能が違うのではないかと勘繰ってしまう。
 
-### 7. Links Describe Their Destination
+### 7. リンクは遷移先を説明する
 
-Link text makes sense out of context; screen-reader users navigate by a list of the page's links. "Read the billing docs", never "Click here" (which also fails the device-verb rule on touch), and never a bare "Learn more" when several appear on one page. Suffix each: "Learn more about exports".
+リンクテキストは文脈から切り離しても意味が通るようにする。スクリーンリーダーのユーザーは、ページ内のリンクの一覧をたどって操作するためである。「ここをクリック」ではなく「請求に関するドキュメントを読む」を使う(「ここをクリック」はタッチ操作でのデバイス動詞のルールにも反する)。また、1つのページに複数のリンクがある場合、裸の「詳しく見る」は使わない。それぞれに補足を付ける:「エクスポートについて詳しく見る」。
 
-### 8. One Capitalization Policy
+### 8. 大文字化ルールは1つに統一する
 
-Pick title case or sentence case per element type (all buttons, all headings) and apply it consistently; sentence case is the safer default: calmer, no per-word case rules, localizes cleanly. "Save Changes" beside "Discard changes" reads as sloppiness.
+要素タイプ(すべてのボタン、すべての見出しなど)ごとにタイトルケースかセンテンスケースのどちらかを選び、一貫して適用する。センテンスケースの方が安全なデフォルトである。落ち着いて見え、単語ごとの大文字小文字ルールが不要で、ローカライズもきれいに通る。"Save Changes"の隣に"Discard changes"があると、雑な印象を与える。
 
-### 9. Settings Describe the ON State
+### 9. 設定はON状態を説明する
 
-Label a toggle for what happens when it's on: "Send read receipts", and users infer the off state. Never label the negative ("Don't send read receipts"), which turns the toggle into a double negative. Link directly to a referenced setting instead of describing the path to it: a "Notification settings" link, not "Go to Settings > Notifications > Email".
+トグルには、オンにしたときに何が起こるかをラベルにする。「既読通知を送信する」とすれば、ユーザーはオフの状態を自然に推測できる。否定形でラベルを付けない(「既読通知を送信しない」)。これはトグルを二重否定にしてしまう。参照先の設定への経路を説明する代わりに、その設定へ直接リンクする。「設定 > 通知 > メール に移動」ではなく「通知設定」というリンクにする。
 
-### 10. Errors Say How to Fix, Next to Where It Broke
+### 10. エラーは直し方を、壊れた場所のそばに示す
 
-An error is an instruction, adjacent to the failing field:
+エラーは、失敗したフィールドのすぐそばに置かれた指示である:
 
 | Bad | Good |
 | --- | --- |
-| That password is too short | Choose a password with at least 8 characters |
-| Invalid name | Use only letters for your name |
-| Oops! Something went wrong. | Unable to save. Check your connection and try again. |
+| そのパスワードは短すぎます | 8文字以上のパスワードを設定してください |
+| 名前が無効です | 名前には文字のみを使用してください |
+| おっと!何かがうまくいきませんでした。 | 保存できません。接続を確認して、もう一度お試しください。 |
 
-No blame, no "oops", no exclamation marks. Phrase hints positively ("Use only letters", not "Don't use numbers or symbols") and show them before the mistake, not after. If the same error keeps firing for many users, redesign the interaction instead of rewording it.
+非難しない、「おっと」と言わない、感嘆符を使わない。ヒントは肯定形で示す(「数字や記号は使わないでください」ではなく「文字のみを使用してください」)。そして、間違えた後ではなく、間違える前に表示する。同じエラーが多くのユーザーに繰り返し発生する場合は、文言を直すのではなくインタラクションを再設計する。
 
-### 11. Empty States Point Forward
+### 11. 空状態は次の一歩を示す
 
-An empty state says what this place is and how to fill it, with one clear next action:
+空状態は、ここが何の場所で、どう埋めればよいかを、明確な次の1つのアクションとともに伝える:
 
 ```html
-<!-- Bad: a shrug -->
+<!-- 悪い例: 投げやりな一言 -->
 <p>No results.</p>
 
-<!-- Good: orientation plus a next step -->
+<!-- 良い例: 状況説明と次のステップ -->
 <p class="font-medium">No projects yet</p>
 <p class="text-sm text-zinc-500">Projects keep your tasks and files together.</p>
 <button class="mt-4">Create a project</button>
 ```
 
-Search and filter empty states name the query and offer an exit: "No results for 'quarterly'. Clear filters". Never park crucial persistent information in an empty state; it disappears the moment content exists.
+検索やフィルターの空状態では、クエリ名を示し、抜け出す手段を提供する:「"四半期"の検索結果はありません。フィルターを解除」。重要な恒常的情報を空状態に置き去りにしない。コンテンツができた瞬間にその情報は消えてしまう。
 
-### 12. Placeholders Are Examples, Not Labels
+### 12. プレースホルダーは例であってラベルではない
 
-Placeholders show the expected format (`name@example.com`, `DD/MM/YYYY`). A placeholder is never the field's only label: it vanishes on input, and every field keeps a visible label.
+プレースホルダーは想定される形式を示す(`name@example.com`、`DD/MM/YYYY`)。プレースホルダーがフィールドの唯一のラベルになることは決してない。入力すると消えてしまうため、すべてのフィールドに目に見えるラベルを必ず用意する。
 
 ## Common Mistakes
 
 | Mistake | Fix |
 | --- | --- |
-| Local rewrite ignores the product's established terminology or voice | Inspect nearby copy and the style guide before proposing a change |
-| "The user" in instructional interface copy | Address the reader directly as "you" |
-| "We're having trouble…" obscures responsibility or recovery | Use a direct status and next step: "Unable to load content" |
-| `OK` / `Yes` confirming a destructive dialog | Repeat the consequence: "Delete project" |
-| "Continue" on step 2, "Next" on step 3 | One flow vocabulary throughout |
-| "Click here" or bare "Learn more" link | Describe the destination: "Read the billing docs" |
-| "Save Changes" beside "Discard changes" | One capitalization policy per element type |
-| "Don't send read receipts" toggle | Label the ON state: "Send read receipts" |
-| "Oops! Something went wrong." | Say what to do, next to the failing field |
-| "No results." as the whole empty state | Orient and point forward with a next action |
-| Placeholder doing the label's job | Visible label; placeholder shows the format |
-| `"You have " + n + " messages"` | Full templated strings with pluralization |
+| ローカルな書き直しが、プロダクトで確立された用語やボイスを無視している | 変更を提案する前に、近くのコピーとスタイルガイドを確認する |
+| 指示的なインターフェースコピーにおける「ユーザー」という表現 | 読み手を直接「あなた」と呼びかける |
+| 「問題が発生しております…」が責任の所在や復旧方法をあいまいにする | 直接的な状態と次の一歩を示す:「コンテンツを読み込めません」 |
+| `OK` / `Yes` が破壊的な操作の確認ダイアログに使われている | 結果を繰り返す:「プロジェクトを削除」 |
+| ステップ2で「続ける」、ステップ3で「次へ」 | フロー全体で語彙を1つに統一する |
+| 「ここをクリック」や裸の「詳しく見る」リンク | 遷移先を説明する:「請求に関するドキュメントを読む」 |
+| "Save Changes"の隣に"Discard changes"がある | 要素タイプごとに大文字化ルールを1つに統一する |
+| 「既読通知を送信しない」というトグル | ON状態をラベルにする:「既読通知を送信する」 |
+| 「おっと!何かがうまくいきませんでした。」 | 失敗したフィールドのそばに、次にすべきことを示す |
+| 空状態全体が「検索結果はありません。」だけになっている | 状況を説明し、次のアクションで先を示す |
+| プレースホルダーがラベルの役割を担ってしまっている | 目に見えるラベルを用意し、プレースホルダーは形式のみを示す |
+| `"You have " + n + " messages"` | 複数形処理を伴う完全なテンプレート文字列 |
 
 ## Review Output Format
 
-Use this format only when the user asks for a standalone writing review. When `better-interface` orchestrates the review, provide domain evidence and findings to that skill and let its output format, severity scale, consolidation rules, cap, and verdict take precedence.
+このフォーマットは、ユーザーが単独のライティングレビューを求めた場合にのみ使用する。`better-interface` がレビューを統括する場合は、ドメインの根拠と指摘事項をそのスキルに提供し、そのスキルの出力フォーマット、重要度スケール、統合ルール、上限、評決を優先させる。
 
-Present the standalone review in two parts.
+単独レビューは2つのパートで示す。
 
-### Findings
+### 指摘事項
 
-Group all confirmed findings by principle. Use a markdown table with **Severity**, **Location**, **Before**, **After**, and **Why** columns. Never use separate "Before:" / "After:" lines.
+確認済みの指摘事項はすべて原則ごとにグループ化する。**Severity**、**Location**、**Before**、**After**、**Why** の列を持つMarkdownテーブルを使用する。「Before:」「After:」のように別々の行に分ける形式は使わない。
 
-- **Severity**: `HIGH` misleads users, obscures a consequence, or prevents recovery; `MEDIUM` makes a task harder to understand; `LOW` is isolated voice or consistency polish.
-- **Location**: cite `path/to/file:line`. If the artifact has no source files, cite the exact screen and component instead.
-- **Before / After**: quote the current copy and its complete replacement.
-- **Why**: name the violated principle and explain the comprehension or trust cost.
+- **Severity**: `HIGH` はユーザーを誤解させる、結果を分かりにくくする、または回復を妨げるもの。`MEDIUM` はタスクの理解を難しくするもの。`LOW` は局所的なボイスや一貫性の磨き込み。
+- **Location**: `path/to/file:line` を引用する。成果物にソースファイルがない場合は、代わりに正確な画面とコンポーネントを引用する。
+- **Before / After**: 現在のコピーと、その完全な置き換え案を引用する。
+- **Why**: 違反している原則を挙げ、理解のしやすさや信頼にどのようなコストが生じるかを説明する。
 
-Consolidate a repeated systemic issue into one row and list every affected location. Omit principles with no findings.
+繰り返し発生するシステム的な問題は1行に統合し、影響を受けるすべての場所を列挙する。指摘事項のない原則は省略する。
 
-### Example
+### 例
 
-#### Errors say how to fix
+#### エラーは直し方を示す
 | Severity | Location | Before | After | Why |
 | --- | --- | --- | --- | --- |
-| MEDIUM | `src/PasswordField.tsx:36` | "Invalid password" | "Choose a password with at least 8 characters" | The error must say how to fix the problem |
-| HIGH | `src/Editor.tsx:81` | "We couldn't process your request" toast | Inline "Unable to save. Check your connection and try again." | The current message neither locates the failure nor offers recovery |
+| MEDIUM | `src/PasswordField.tsx:36` | "無効なパスワード" | "8文字以上のパスワードを設定してください" | エラーは問題の直し方を示さなければならない |
+| HIGH | `src/Editor.tsx:81` | "リクエストを処理できませんでした"というトースト通知 | インラインで"保存できません。接続を確認して、もう一度お試しください。" | 現在のメッセージは、失敗箇所を示さず、回復手段も提供していない |
 
-#### Verb-first buttons
+#### 動詞から始まるボタン
 | Severity | Location | Before | After | Why |
 | --- | --- | --- | --- | --- |
-| HIGH | `src/DeleteDialog.tsx:29` | "OK" on the delete confirmation | "Delete project" | A consequential action must repeat the consequence |
-| MEDIUM | `src/Signup.tsx:54` | "Let's go!" | "Create account" | The label must name the action |
+| HIGH | `src/DeleteDialog.tsx:29` | 削除確認の"OK" | "プロジェクトを削除" | 重要な操作は結果を繰り返さなければならない |
+| MEDIUM | `src/Signup.tsx:54` | "はじめよう!" | "アカウントを作成" | ラベルは操作内容を明示しなければならない |
 
-### Verification and Verdict
+### 検証と評決
 
-After the findings:
+指摘事項の後に:
 
-1. **Verification**: list the exact checks run and their observed results, including the complete flow, variable interpolation, pluralization, and narrow-width wrapping when applicable. If a check was not run, state what still needs verification.
-2. **Verdict**: `Block` if any `HIGH` finding remains, `Needs changes` if only `MEDIUM` or `LOW` findings remain, and `Approve` only when no actionable findings remain.
+1. **検証**: 実行した正確なチェックと観測された結果を列挙する。該当する場合は、完全なフロー、変数の埋め込み、複数形処理、幅の狭い場合の折り返しを含める。チェックを実行していない場合は、まだ検証が必要な内容を述べる。
+2. **評決**: `HIGH` の指摘事項が1件でも残っていれば `Block`、`MEDIUM` または `LOW` の指摘事項のみが残っていれば `Needs changes`、対応が必要な指摘事項が残っていない場合に限り `Approve`。
 
-When there are no findings, omit the tables, state "No actionable writing findings", report verification, and end with `Approve`.
+指摘事項がない場合は、テーブルを省略し「対応が必要なライティングの指摘事項はありません」と述べ、検証結果を報告したうえで `Approve` で締めくくる。

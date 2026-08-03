@@ -1,75 +1,75 @@
-# Grouping & Alignment
+# グルーピングと整列
 
-How spacing, shapes, shared edges, and ordering communicate what belongs together and what matters most.
+スペーシング、形状、共通の基準線、並び順が、何が一緒に属し、何が重要かをどう伝えるか。
 
-## Group with Space, Not Lines
+## 線ではなくスペースでグルーピングする
 
-Three tools create grouping, in order of preference:
+グルーピングを生み出す手段は3つあり、優先順位は次の通り。
 
-1. **Negative space**: the default. Related items sit close; unrelated items sit far apart.
-2. **Background shapes**: a card or filled container, when a group needs to read as one unit (a selectable row, a draggable card).
-3. **Separator lines**: last resort, for dense data where space would cost too much (tables, long settings lists).
+1. **ネガティブスペース**：デフォルトの手段。関連する項目は近くに、無関係な項目は離して配置する。
+2. **背景形状**：グループを1つのまとまりとして読ませる必要がある場合（選択可能な行、ドラッグ可能なカードなど）のカードや塗りつぶしコンテナ。
+3. **区切り線**：最終手段。スペースを使うコストが高すぎる密なデータ（テーブル、長い設定リストなど）向け。
 
-The structural rule: the gap between groups must be at least 2× the gap within a group. If items inside a group are `8px` apart, groups need `16px`+ between them, otherwise the eye can't tell where one group ends.
+構造上のルール：グループ間のギャップは、グループ内のギャップの少なくとも2倍にする。グループ内の項目が `8px` 間隔なら、グループ間には `16px` 以上必要。そうしないと、目で1つのグループがどこで終わるか判別できない。
 
 ```css
-/* Good: spacing alone communicates the grouping */
+/* 良い例: スペーシングだけでグルーピングを伝える */
 .field-group { display: flex; flex-direction: column; gap: 8px; }
 .form { display: flex; flex-direction: column; gap: 24px; }
 
-/* Bad: uniform spacing plus lines to compensate */
+/* 悪い例: 均一なスペーシングに加えて線で補っている */
 .form > * { margin-bottom: 12px; border-bottom: 1px solid var(--separator); }
 ```
 
 ```html
-<!-- Good: Tailwind -->
+<!-- 良い例: Tailwind -->
 <div class="space-y-6">
   <div class="space-y-2">…field group…</div>
   <div class="space-y-2">…field group…</div>
 </div>
 ```
 
-When a separator is genuinely needed, keep it quiet: hairline width, low contrast, and never combined with a large gap (the gap already did the job).
+区切り線が本当に必要な場合は、控えめに保つ。極細幅、低コントラストにし、大きなギャップと組み合わせることは絶対にしない（ギャップだけですでに役目を果たしている）。
 
-## Keep Controls Distinct from Content
+## コントロールをコンテンツと明確に区別する
 
-Interactive elements need a visual signal that they're interactive: a background, a border, an underline, or placement in a consistent control zone (toolbar, footer row). A control styled identically to static text is invisible.
+インタラクティブな要素には、インタラクティブであることを示す視覚的なシグナルが必要。背景、ボーダー、下線、または一貫したコントロールゾーン（ツールバー、フッター行）への配置などがそれにあたる。静的テキストと同一のスタイルのコントロールは見えないも同然。
 
 ```html
-<!-- Bad: action looks exactly like the description text next to it -->
+<!-- 悪い例: アクションが隣の説明テキストと全く同じに見える -->
 <p class="text-zinc-600">Your trial ends soon. Upgrade now</p>
 
-<!-- Good: the action reads as an action -->
+<!-- 良い例: アクションがアクションとして読める -->
 <p class="text-zinc-600">Your trial ends soon.</p>
 <button class="font-medium text-blue-600">Upgrade now</button>
 ```
 
-The inverse also holds: don't give static elements control styling. A non-clickable badge shaped exactly like the buttons beside it collects dead clicks.
+逆もまた然り：静的な要素にコントロールのスタイリングを与えない。隣のボタンと全く同じ形のクリックできないバッジは、無駄なクリックを集めてしまう。
 
-## Align to Shared Edges
+## 共通の基準線に整列する
 
-Pick a small set of alignment edges and put everything on them; the eye tracks straight edges to scan content.
+整列の基準線を少数に絞り、すべての要素をそこに揃える。目はまっすぐな基準線を追ってコンテンツを走査する。
 
-- Every stray edge (an icon 2px off the text edge, a card padded differently from its neighbor) reads as noise even when nobody can name the problem.
-- Use one consistent project spacing step to express hierarchy; `16px` is a useful default when no scale exists, and deeper nesting repeats the same step.
-- Numbers in tables right-align to the trailing edge (see `better-typography` for tabular figures); text left-aligns to the leading edge.
+- ずれた基準線（テキストの端から2pxずれたアイコン、隣のカードとパディングが違うカードなど）は、誰も問題を言語化できなくても、ノイズとして読まれる。
+- 階層を表現するには、プロジェクトで一貫したスペーシングステップを1つ使う。スケールが存在しない場合は `16px` が有用なデフォルトであり、ネストが深くなっても同じステップを繰り返す。
+- テーブル内の数値は末尾側の端に右揃えする（tabular figures については `better-typography` を参照）。テキストは先頭側の端に左揃えする。
 
 ```css
-/* Good: one shared leading edge, one indent step */
+/* 良い例: 共通の先頭側の端が1つ、インデントステップが1つ */
 .section { padding-inline: 24px; }
 .section .child { margin-inline-start: 16px; }
 
-/* Bad: three unrelated leading edges in one column */
+/* 悪い例: 1つのカラムに無関係な先頭側の端が3つ */
 .header { padding-inline-start: 20px; }
 .list-item { padding-inline-start: 14px; }
 .footer { padding-inline-start: 24px; }
 ```
 
-## Logical Properties, Not Physical
+## 物理プロパティではなく論理プロパティ
 
-Express direction-dependent horizontal position as leading/trailing so the layout mirrors automatically under `dir="rtl"`:
+方向に依存する水平方向の位置は先頭側/末尾側として表現し、`dir="rtl"` の下でレイアウトが自動的にミラーリングされるようにする：
 
-| Physical (avoid) | Logical (use) |
+| 物理プロパティ（避ける） | 論理プロパティ（使う） |
 | --- | --- |
 | `margin-left` | `margin-inline-start` |
 | `padding-right` | `padding-inline-end` |
@@ -78,33 +78,33 @@ Express direction-dependent horizontal position as leading/trailing so the layou
 | `border-right` | `border-inline-end` |
 
 ```html
-<!-- Good: Tailwind logical utilities -->
+<!-- 良い例: Tailwind の論理プロパティ用ユーティリティ -->
 <div class="ms-4 pe-6 text-start">…</div>
 
-<!-- Bad: breaks in RTL -->
+<!-- 悪い例: RTL で崩れる -->
 <div class="ml-4 pr-6 text-left">…</div>
 ```
 
-Reserve physical properties for things that genuinely refer to physical screen sides regardless of language, e.g. positioning relative to a device notch, or an element that must match a physical gesture direction.
+物理プロパティは、言語に関係なく本当に画面の物理的な側を指すものだけに使う。例えば、デバイスのノッチを基準にした位置づけや、物理的なジェスチャー方向に合わせる必要がある要素など。
 
-When the arrangement of elements encodes progression (star ratings, step indicators, progress bars), the sequence mirrors in RTL: stars fill from the trailing side. Flexbox and grid with logical properties mirror automatically; hand-positioned elements don't. Digit order inside numbers never reverses; that and other bidi text rules live in the `better-typography` skill.
+要素の並びが進行度を表す場合（星評価、ステップインジケーター、プログレスバー）、その順序は RTL でミラーリングされる。星は末尾側から塗りつぶされる。論理プロパティを使った Flexbox と grid は自動的にミラーリングされるが、手動配置された要素はそうならない。数値内の桁の順序は決して反転しない。これと他の双方向テキストのルールは `better-typography` スキルが扱う。
 
-## Order by Importance
+## 重要度で並べる
 
-Readers scan top-to-bottom and leading-to-trailing. Place content accordingly:
+読み手は上から下へ、先頭から末尾へとスキャンする。それに応じてコンテンツを配置する：
 
-- The most important information sits near the top and the leading edge; the further down and trailing something sits, the less attention it gets.
-- Give essential information room. Don't bury the one number the user came for under rows of secondary detail; push secondary content into collapsed sections, tabs, or detail views.
-- Within a row, the identifying content (name, title) leads; metadata and actions trail.
+- 最も重要な情報は上部と先頭側の端の近くに置く。下、あるいは末尾側に位置するほど、注目度は下がる。
+- 不可欠な情報にはスペースを与える。ユーザーが求めてやってきた1つの数値を、二次的な詳細の行の下に埋もれさせない。二次的なコンテンツは折りたたみセクション、タブ、詳細ビューへ追い出す。
+- 行の中では、識別情報（名前、タイトル）を先頭に置き、メタデータとアクションは末尾に置く。
 
 ```html
-<!-- Good: primary fact first, detail demoted -->
+<!-- 良い例: 主要な情報を先に、詳細は後ろに下げる -->
 <div>
   <p class="text-2xl font-semibold">$4,320.00</p>
   <p class="text-sm text-zinc-500">Available balance</p>
 </div>
 
-<!-- Bad: the key fact is buried below the fold of the card -->
+<!-- 悪い例: 重要な情報がカードのファーストビューの外に埋もれている -->
 <div>
   <p class="text-sm">Account 4402 · Opened 2019 · Standard tier</p>
   <p class="text-sm">Last statement: June 30</p>
@@ -112,12 +112,12 @@ Readers scan top-to-bottom and leading-to-trailing. Place content accordingly:
 </div>
 ```
 
-Think in **leading/trailing**, not left/right: combined with logical properties, the same hierarchy mirrors correctly in RTL locales.
+**先頭/末尾**で考え、左右では考えない。論理プロパティと組み合わせれば、同じ階層構造が RTL ロケールでも正しくミラーリングされる。
 
-## Don't Overload the Entry Point
+## 入口に情報を詰め込みすぎない
 
-The first screenful is a table of contents, not the whole book. If everything is prominent, nothing is:
+最初の画面は目次であって、本全体ではない。すべてが目立てば、何も目立たなくなる：
 
-- One primary action per view (see `better-colors` for how color enforces this).
-- Group secondary actions behind a menu once they exceed two or three.
-- Prefer a short view that links deeper over a long view that shows everything at level one.
+- 1つのビューにつきプライマリアクションは1つ（色がこれをどう強調するかは `better-colors` を参照）。
+- 二次的なアクションが2つか3つを超えたら、メニューの裏にまとめる。
+- すべてを第一階層に表示する長いビューよりも、深い階層にリンクする短いビューを優先する。

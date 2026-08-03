@@ -1,27 +1,27 @@
-# Spacing & Adaptivity
+# スペーシングとアダプティブ性
 
-Space between controls, margins against the viewport, hinting at off-screen content, and layouts that survive resizing and translation.
+コントロール間のスペース、ビューポートに対するマージン、画面外のコンテンツを示唆すること、そしてリサイズや翻訳に耐えるレイアウト。
 
-## Breathing Room Between Targets
+## ターゲット間に十分な余白を確保する
 
-Controls placed too close together get mis-tapped and read as one unit. When the project has no established density scale, use these starting points:
+近すぎる位置に配置されたコントロールは誤タップされ、1つのまとまりとして読まれてしまう。プロジェクトに確立された密度スケールがない場合は、以下を起点とする：
 
-| Between | Starting point |
+| 対象 | 起点 |
 | --- | --- |
-| Adjacent bordered/filled controls (buttons, inputs) | `12px` |
-| Around borderless controls (text buttons, icon buttons) | `24px` |
-| Unrelated control groups | `24px`+ (2× the intra-group gap) |
+| 隣接するボーダー付き／塗りつぶしコントロール（ボタン、入力欄） | `12px` |
+| ボーダーのないコントロールの周り（テキストボタン、アイコンボタン） | `24px` |
+| 無関係なコントロールグループ | `24px` 以上（グループ内ギャップの2倍） |
 
-Borderless controls usually need more clearance because nothing marks where one target ends and the next begins; the space itself is the boundary. Compact professional tools may use less when the hit areas remain distinct and do not overlap. Preserve an established, usable density instead of expanding controls solely to match these values.
+ボーダーのないコントロールは通常より多くのクリアランスが必要になる。1つのターゲットがどこで終わり、次がどこで始まるかを示すものが何もなく、スペース自体が境界になるため。コンパクトなプロフェッショナル向けツールでは、ヒットエリアが重ならず区別できる限り、これより狭くしてもよい。これらの数値に合わせるためだけにコントロールを拡大するのではなく、確立された使いやすい密度を維持する。
 
 ```html
-<!-- Good: bordered buttons at 12px, icon buttons given room -->
+<!-- 良い例: ボーダー付きボタンは12px間隔、アイコンボタンには余裕を持たせる -->
 <div class="flex gap-3">
   <button class="rounded-lg border px-4 py-2">Cancel</button>
   <button class="rounded-lg bg-blue-600 px-4 py-2 text-white">Save</button>
 </div>
 
-<!-- Bad: three borderless icon buttons packed at 4px -->
+<!-- 悪い例: ボーダーのないアイコンボタン3つが4px間隔で詰め込まれている -->
 <div class="flex gap-1">
   <button><TrashIcon /></button>
   <button><ArchiveIcon /></button>
@@ -29,21 +29,21 @@ Borderless controls usually need more clearance because nothing marks where one 
 </div>
 ```
 
-WCAG target-size requirements, larger usability targets, and pseudo-element expansion are covered by the `better-accessibility` skill; these clearances are in addition, so expanded hit areas never overlap.
+WCAG のターゲットサイズ要件、より大きなユーザビリティターゲット、疑似要素によるヒットエリア拡張は `better-accessibility` スキルが扱う。ここでのクリアランスはそれに加えて適用するものであり、拡張されたヒットエリアが重ならないようにする。
 
-## Inset Buttons from the Edges
+## ボタンは端からインセットする
 
-In content layouts, buttons pressed accidentally against the viewport can look like system chrome and clip against curved corners or gesture zones. Keep them inside the layout margins. Edge-to-edge actions remain valid when they intentionally are application/platform chrome and account for safe areas:
+コンテンツレイアウトでは、誤ってビューポートに接するボタンはシステムUIのように見えてしまい、丸められたコーナーやジェスチャーゾーンでクリッピングされることがある。ボタンはレイアウトマージンの内側に収める。edge-to-edge のアクションは、意図的にアプリケーション／プラットフォームのクロームであり、セーフエリアを考慮している場合に限り有効なままとなる：
 
 ```css
-/* Good: inset action bar */
+/* 良い例: インセットされたアクションバー */
 .action-bar {
   padding-inline: 16px;
   padding-bottom: calc(16px + env(safe-area-inset-bottom));
 }
 .action-bar button { width: 100%; border-radius: 12px; }
 
-/* Bad: button glued to all three edges */
+/* 悪い例: ボタンが3辺すべてに張り付いている */
 .action-bar button {
   width: 100vw;
   border-radius: 0;
@@ -52,17 +52,17 @@ In content layouts, buttons pressed accidentally against the viewport can look l
 }
 ```
 
-Start near `16px` inline margin on mobile when the project has no layout token; the button can still span the full content width inside those margins.
+プロジェクトにレイアウトトークンがない場合、モバイルでは inline 方向のマージン `16px` 前後を起点とする。ボタンはそのマージンの内側でコンテンツ幅いっぱいに広げることができる。
 
-## Progressive Disclosure Needs an Affordance
+## プログレッシブディスクロージャーにはアフォーダンスが必要
 
-Hiding complexity is good; hiding it without a cue is a trap. Every piece of off-screen or collapsed content needs a visible hint that it exists. Preserve the product's established scroll indicator or disclosure pattern; use the recipes below when no clear cue exists:
+複雑さを隠すこと自体は良いが、合図なしに隠すのは罠になる。画面外や折りたたまれたコンテンツには、それが存在するという目に見えるヒントが必要。プロダクトで確立されたスクロールインジケーターや開閉パターンがあればそれを維持し、明確な合図がない場合は以下のレシピを使う：
 
-- **Peeking items.** In a horizontal scroller or carousel, size items so the next one peeks `16–32px` past the container edge. A row of cards that ends exactly at the edge looks complete, and nobody scrolls it.
-- **Disclosure controls.** Collapsed sections get a chevron or "Show more" control; the label states what's hidden ("Show 12 more results"), not just "More".
-- **Truncation cues.** Clamped text shows an ellipsis and a way to expand; see `better-typography` for truncation mechanics.
+- **はみ出すアイテム。** 水平スクローラーやカルーセルでは、次のアイテムがコンテナの端から `16–32px` はみ出すようにアイテムのサイズを決める。端でぴったり終わるカードの行は完結して見えてしまい、誰もスクロールしない。
+- **開閉コントロール。** 折りたたまれたセクションにはシェブロンまたは「もっと見る」タイプのコントロールを付ける。ラベルには、単に「もっと見る」ではなく、「あと12件の結果を表示」のように隠れている内容を明示する。
+- **切り詰めの合図。** クランプされたテキストには省略記号と展開する手段を表示する。切り詰めの仕組みについては `better-typography` を参照。
 
-The peeking-scroller recipe: the container's padding creates the peek, and snap points stay on the content edge.
+はみ出しスクローラーのレシピ：コンテナのパディングがはみ出しを作り、スナップポイントはコンテンツの端に置く。
 
 ```css
 .scroller {
@@ -74,28 +74,28 @@ The peeking-scroller recipe: the container's padding creates the peek, and snap 
   scroll-snap-type: x mandatory;
 }
 .scroller > * {
-  flex: 0 0 calc(100% - 48px - 24px); /* container minus margins minus peek */
+  flex: 0 0 calc(100% - 48px - 24px); /* コンテナからマージンとはみ出し分を引く */
   scroll-snap-align: start;
 }
 ```
 
 ```html
-<!-- Tailwind: the 80% width keeps the next card's leading 16-32px visible -->
+<!-- Tailwind: 幅80%にすることで次のカードの先頭16-32pxが見える状態を保つ -->
 <div class="flex gap-3 overflow-x-auto px-6 [scroll-padding-inline:1.5rem] snap-x snap-mandatory">
   <div class="w-[80%] shrink-0 snap-start">…</div>
   <div class="w-[80%] shrink-0 snap-start">…</div>
 </div>
 ```
 
-## Content Bleeds, Controls Float
+## コンテンツはブリードし、コントロールはフロートする
 
-The two layers behave differently at the edges:
+この2つのレイヤーは端での振る舞いが異なる：
 
-- **Content layer**: backgrounds, hero media, and scrollable lists extend to the viewport edges.
-- **Control layer**: text and controls stay inside the layout margins and safe areas, floating above the content.
+- **コンテンツ層**：背景、ヒーローメディア、スクロール可能なリストはビューポートの端まで広がる。
+- **コントロール層**：テキストとコントロールはレイアウトマージンとセーフエリアの内側にとどまり、コンテンツの上にフロートする。
 
 ```css
-/* Good: full-bleed media inside a constrained article */
+/* 良い例: 幅を制限した記事内の full-bleed メディア */
 .article {
   display: grid;
   grid-template-columns: 1fr min(65ch, calc(100% - 48px)) 1fr;
@@ -104,7 +104,7 @@ The two layers behave differently at the edges:
 .article > .full-bleed { grid-column: 1 / -1; }
 ```
 
-Sticky headers and floating action buttons account for safe areas:
+スティッキーヘッダーやフローティングアクションボタンはセーフエリアを考慮する：
 
 ```css
 .fab {
@@ -114,46 +114,46 @@ Sticky headers and floating action buttons account for safe areas:
 }
 ```
 
-## Hold Structure Until It Breaks
+## 崩れるまで構造を保持する
 
-Breakpoints belong to the content, not the device catalog:
+ブレークポイントはデバイスのカタログではなく、コンテンツに属する：
 
-- Break where the layout actually stops fitting (when the sidebar squeezes the content below its minimum measure, when the card grid drops below a usable column width), not at `768px` because a preset says so.
-- Collapse late. A layout that keeps its expanded structure as long as it genuinely fits stays stable and familiar; premature collapsing throws away space users paid for.
-- Prefer **container queries** for components: a card should adapt to the column it's in, not to the viewport.
+- レイアウトが実際に収まらなくなる箇所でブレークする（サイドバーがコンテンツを最小幅未満まで圧迫するとき、カードグリッドが使用可能なカラム幅を下回るときなど）。プリセットがそう言っているからという理由で `768px` にはしない。
+- 折りたたみは遅らせる。本当に収まる限り展開された構造を維持するレイアウトは、安定していて見慣れたものであり続ける。早すぎる折りたたみは、ユーザーが対価を払ったスペースを無駄にする。
+- コンポーネントには**コンテナクエリ**を優先する。カードはビューポートではなく、自身が置かれているカラムに適応すべき。
 
 ```css
-/* Good: component adapts to its container */
+/* 良い例: コンポーネントが自身のコンテナに適応する */
 .card-list { container-type: inline-size; }
 @container (max-width: 400px) {
   .card { grid-template-columns: 1fr; }
 }
 
-/* Bad: viewport media query breaks the card inside a narrow sidebar */
+/* 悪い例: ビューポートのメディアクエリが狭いサイドバー内のカードを壊す */
 @media (max-width: 768px) {
   .card { grid-template-columns: 1fr; }
 }
 ```
 
-Test order: the smallest supported size and the largest first (those break first), then the sizes in between.
+テスト順序：サポートする最小サイズと最大サイズを最初に（それらが最初に崩れるため）、その後に中間のサイズをテストする。
 
-## Plan for Growth and Clipping
+## 増加とクリッピングを見越して設計する
 
-Layouts fail in two directions: content grows, and viewports shrink.
+レイアウトは2つの方向で破綻する：コンテンツが増加する方向と、ビューポートが縮小する方向。
 
-**String expansion varies substantially by language and source-string length.** Do not rely on one universal percentage. Rules:
+**文字列の増加量は言語や元の文字列長によって大きく異なる。** 一律のパーセンテージに頼らない。ルール：
 
-- No fixed widths sized to English labels; use `max-width` plus wrapping.
-- No fixed heights on text containers; use `min-height` if a floor is needed.
-- Buttons size themselves from their label (`padding-inline`), never a hardcoded width.
-- Test with pseudo-localization or a long-string locale before shipping.
+- 英語のラベルに合わせた固定幅を使わない。`max-width` と折り返しを使う。
+- テキストコンテナに固定の高さを使わない。下限が必要な場合は `min-height` を使う。
+- ボタンは自身のラベルからサイズを決める（`padding-inline`）。ハードコードされた幅は絶対に使わない。
+- 出荷前に疑似ローカライゼーションまたは長い文字列のロケールでテストする。
 
 ```css
-/* Good: label defines the size */
+/* 良い例: ラベルがサイズを決める */
 .button { padding-inline: 16px; white-space: nowrap; }
 
-/* Bad: German will overflow or truncate */
+/* 悪い例: ドイツ語ではオーバーフローするか切り詰められる */
 .button { width: 96px; overflow: hidden; }
 ```
 
-**Clipping:** never park critical actions where they can be cut off: the bottom edge of a resizable pane, below the fold of a fixed-height modal, behind an expanding keyboard. Keep primary actions in stable chrome: a sticky footer with safe-area padding, or the top of the view. If a modal's content scrolls, its action row doesn't.
+**クリッピング：** 重要なアクションは、切り取られる可能性がある場所には絶対に置かない。リサイズ可能なペインの下端、固定高さのモーダルのファーストビューの外、展開するキーボードの裏側など。プライマリアクションは安定したクロームの中に保つ：セーフエリアのパディングを備えたスティッキーフッター、またはビューの上部。モーダルのコンテンツがスクロールする場合でも、そのアクション行はスクロールさせない。

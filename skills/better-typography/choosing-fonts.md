@@ -1,64 +1,64 @@
-# Choosing fonts
+# フォント選定
 
-Choosing a typeface, the right file format and understanding why fonts look the way they do.
+書体の選定、適切なファイル形式、そしてフォントがそのように見える理由を理解する。
 
-## Choosing a typeface
+## 書体の選定
 
-Font families set the tone before the specific font does.
+フォントファミリーは、個々のフォント以前にトーンを決定づける。
 
 | Category | Traits | Use for |
 | --- | --- | --- |
-| Serif | Small strokes at the ends of letters guide the eye along a line | Long passages, editorial reading |
-| Sans-serif | Clean, even shapes that stay crisp at small sizes | Default for most interfaces (Helvetica, Inter, Geist) |
-| Monospace | Every glyph the same width so columns line up | Code, tables, tabular data |
-| Display | Drawn for large headlines | Marketing headlines, hero text |
-| Script | Mimics handwriting | Rare, decorative moments |
+| セリフ | 文字の端にある小さなストロークが、目を行に沿って導く | 長文、エディトリアルな読み物 |
+| サンセリフ | 小さいサイズでも鮮明さを保つ、クリーンで均一な形状 | ほとんどのインターフェースのデフォルト（Helvetica、Inter、Geist） |
+| モノスペース | すべてのグリフが同じ幅で、カラムが揃う | コード、テーブル、表形式データ |
+| ディスプレイ | 大きな見出し向けにデザインされている | マーケティングの見出し、ヒーローテキスト |
+| スクリプト | 手書き文字を模したもの | 稀に使う装飾的な場面 |
 
-CSS exposes `cursive` and `fantasy` keywords for the last two categories.
+CSSは、最後の2カテゴリに対して`cursive`と`fantasy`のキーワードを公開している。
 
-"Display" in a font's name does not make it a display font. Fonts like SF Pro and Heldane ship a `Display` variant for large sizes and a `Text` variant for smaller sizes. Use the variant that matches the size you are setting.
+フォント名に"Display"と入っていても、それがディスプレイフォントであるとは限らない。SF ProやHeldaneのようなフォントは、大きいサイズ向けの`Display`バリアントと、小さいサイズ向けの`Text`バリアントを提供する。設定するサイズに合ったバリアントを使う。
 
-### Rules
+### ルール
 
-- Fewer fonts is usually better. Rarely use more than three. Marketing pages can be more expressive than apps.
-- The same applies to sizes and weights. They define hierarchy, but overusing them hurts readability quickly.
-- Pair for contrast, not similarity. A serif headline with a sans body looks like a deliberate display/reading split. Two near-identical sans-serifs look like a mistake.
-- Thin weights are display-only. Below `18px`, stay at weight `400`+; Ultralight/Thin/Light (`100`–`300`) strokes disappear at text sizes and on low-DPI screens. Reserve them for `28px`+ display text, and even there check they hold up against the background.
+- フォントは少ないほうが通常はよい。3種類を超えて使うことは滅多にない。マーケティングページはアプリよりも表現豊かであってよい。
+- 同じことがサイズとウェイトにも当てはまる。それらは階層を定義するが、使いすぎるとすぐに可読性を損なう。
+- 組み合わせは類似ではなくコントラストのために行う。セリフの見出しとサンセリフの本文は、意図的なディスプレイ/リーディングの使い分けに見える。ほぼ同一の2つのサンセリフはミスに見える。
+- 細いウェイトはディスプレイ専用である。`18px`未満ではウェイト`400`以上を維持する。Ultralight/Thin/Light（`100`–`300`）のストロークはテキストサイズや低DPI画面では消えてしまう。これらは`28px`以上のディスプレイテキスト向けに取っておき、そこでも背景に対して視認できるか確認する。
 
-## Font family scope
+## フォントファミリーの適用範囲
 
-Applying or reviewing typography never requires a new typeface. Use the product's existing type system unless the task explicitly asks for a type change, and do not introduce a paid or proprietary face just to satisfy a review checklist. Rendering details like font smoothing, text wrapping and tabular numbers do not override the project's chosen font family.
+タイポグラフィの適用やレビューにおいて、新しい書体が必要になることはない。タスクが明示的にフォントの変更を求めていない限り、プロダクトの既存のタイプシステムを使う。レビューのチェックリストを満たすためだけに有料フォントや独自フォントを持ち込まない。font smoothing、テキストの折り返し、tabular numbersのようなレンダリングの詳細は、プロジェクトが選んだフォントファミリーを上書きしない。
 
-When a type change is asked for: a system-native macOS/iOS feel comes from the system stack; a commercial face such as Helvetica Now is a brand decision and keeps a practical fallback stack.
+フォント変更が求められた場合: システムネイティブなmacOS/iOSの雰囲気はシステムスタックから得られる。Helvetica Nowのような商用フォントはブランドの意思決定であり、実用的なフォールバックスタックを保持する。
 
 ```css
-/* System-native macOS/iOS feel */
+/* システムネイティブなmacOS/iOSの雰囲気 */
 html {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* Commercial brand face with safe fallbacks */
+/* 安全なフォールバックを備えた商用ブランドフォント */
 html {
   font-family: "Helvetica Now", "Helvetica Neue", Arial, sans-serif;
 }
 ```
 
-## Formats
+## フォーマット
 
 | Format | Notes |
 | --- | --- |
-| `.woff2` | Brotli compression, broadly supported. Use this on the web. |
-| `.woff` | Older compression. Fallback only for very old browsers. |
-| `.ttf` / `.otf` | Raw formats, no web compression, larger files. Desktop only unless there is no other option. |
+| `.woff2` | Brotli圧縮、幅広くサポートされている。Webではこれを使う。 |
+| `.woff` | 古い圧縮方式。非常に古いブラウザ向けのフォールバックにすぎない。 |
+| `.ttf` / `.otf` | 生の形式で、Web圧縮がなくファイルサイズが大きい。他に選択肢がない場合を除き、デスクトップ専用。 |
 
-## Anatomy of a typeface
+## 書体の構造
 
 | Term | Meaning |
 | --- | --- |
-| x-height | Height of a lowercase `x` |
-| Cap height | Height of uppercase letters |
-| Baseline | The invisible line letters sit on |
-| Ascender | Part of a letter rising above the x-height |
-| Descender | Part dropping below the baseline |
+| x-height | 小文字`x`の高さ |
+| Cap height | 大文字の高さ |
+| Baseline | 文字が乗る見えない線 |
+| Ascender | x-heightより上に伸びる文字の部分 |
+| Descender | ベースラインより下に伸びる部分 |
 
-These measurements are why two fonts at the same `font-size` can look like different sizes. A font with a large x-height looks bigger.
+こうした計測値があるからこそ、同じ`font-size`の2つのフォントが異なるサイズに見えることがある。x-heightが大きいフォントは、より大きく見える。

@@ -1,114 +1,114 @@
 ---
 name: better-layout
-description: Layout structure for web interfaces, from grouping and alignment to reading order, progressive disclosure, and adaptive breakpoints. Use when structuring a page or component, spacing or aligning controls, deciding what collapses at small sizes, handling RTL layout direction, or reviewing frontend code for layout. Triggers on layout, spacing, alignment, grouping, negative space, whitespace, visual hierarchy, reading order, progressive disclosure, breakpoints, responsive layout, container queries, safe area, full-bleed, edge-to-edge, layout margins, RTL layout, logical properties.
+description: グルーピングと整列から読み順、プログレッシブディスクロージャー、アダプティブなブレークポイントまで、Webインターフェースのレイアウト構造を扱う。ページやコンポーネントの構造を組み立てるとき、コントロールの間隔や整列を調整するとき、小さいサイズで何を折りたたむか決めるとき、RTLレイアウトの方向を扱うとき、レイアウトに関するフロントエンドコードをレビューするときに使う。Triggers on レイアウト, スペーシング, 整列, グルーピング, ネガティブスペース, ホワイトスペース, 視覚的階層, 読み順, プログレッシブディスクロージャー, ブレークポイント, レスポンシブレイアウト, コンテナクエリ, セーフエリア, full-bleed, edge-to-edge, レイアウトマージン, RTLレイアウト, 論理プロパティ.
 ---
 
-# Layout that communicates structure
+# 構造を伝えるレイアウト
 
-Layout communicates before a single word is read: position, spacing, and alignment carry hierarchy on their own, and generous space beats decoration. A good layout also survives stress: resize it, translate it, mirror it for RTL, and it should still hold together. Apply these principles when building or reviewing UI code, and express every change in the project's existing styling system (Tailwind, plain CSS, CSS-in-JS); never introduce a second styling approach.
+レイアウトは一言も読まれる前から伝わる。位置、間隔、整列だけで階層を伝えられ、余白を十分に取ることは装飾に勝る。優れたレイアウトはストレスにも耐える。リサイズしても、翻訳しても、RTL用にミラーリングしても、構造が崩れない。UIコードを構築またはレビューする際はこれらの原則を適用し、変更はすべてプロジェクトの既存のスタイリングシステム（Tailwind、素のCSS、CSS-in-JS）で表現する。第二のスタイリング手法を持ち込まない。
 
-Hit-area sizes and focus behavior are covered by the `better-accessibility` skill; visual polish (radius, shadows, animation) by the `better-ui` skill; line length and text spacing by the `better-typography` skill.
+ヒットエリアのサイズとフォーカスの挙動は `better-accessibility` スキルが、視覚的な仕上げ（角丸、シャドウ、アニメーション）は `better-ui` スキルが、行の長さとテキストの間隔は `better-typography` スキルが扱う。
 
-Treat the numeric values below as starting points for interfaces without an established density or spacing system. Preserve deliberate platform chrome, compact professional tools, and project tokens when they remain usable under hit-area, zoom, localization, and viewport stress tests.
+以下の数値は、確立された密度やスペーシングシステムを持たないインターフェースの出発点として扱う。意図的なプラットフォームクローム、コンパクトなプロフェッショナル向けツール、プロジェクトのトークンは、ヒットエリア、ズーム、ローカライゼーション、ビューポートのストレステストの下で使用可能であり続ける限り維持する。
 
 ## Quick Reference
 
-| Category | When to Use |
+| カテゴリ | 使う場面 |
 | --- | --- |
-| [Grouping & Alignment](grouping-and-alignment.md) | Space vs separators, alignment edges, logical properties, importance ordering |
-| [Spacing & Adaptivity](spacing-and-adaptivity.md) | Spacing between targets, layout margins, progressive disclosure, full-bleed content, breakpoints, i18n growth |
+| [グルーピングと整列](grouping-and-alignment.md) | スペースと区切り線の使い分け、整列の基準線、論理プロパティ、重要度による並び順 |
+| [スペーシングとアダプティブ性](spacing-and-adaptivity.md) | ターゲット間のスペーシング、レイアウトマージン、プログレッシブディスクロージャー、full-bleedコンテンツ、ブレークポイント、i18nによる文字列増加 |
 
 ## Core Principles
 
-### 1. Group with Space, Not Lines
+### 1. 線ではなくスペースでグルーピングする
 
-Negative space is the primary grouping tool; background shapes second; separator lines last, only where space alone can't carry the structure. The gap between groups must be at least 2× the gap within a group (`8px` intra-group → `16px`+ inter-group), or the grouping reads as noise.
+ネガティブスペースが第一のグルーピング手段であり、背景形状が次点、区切り線はスペースだけでは構造を伝えきれない場合の最終手段とする。グループ間のギャップはグループ内のギャップの2倍以上にする（グループ内 `8px` → グループ間 `16px` 以上）。そうしないとグルーピングがノイズとして読まれる。
 
-### 2. Keep Controls Distinct from Content
+### 2. コントロールをコンテンツと明確に区別する
 
-Interactive elements must look interactive: a background shape, a border, or a consistent placement zone. Never style a control identically to adjacent static text.
+インタラクティブな要素はインタラクティブに見えなければならない。背景形状、ボーダー、または一貫した配置ゾーンを与える。コントロールを隣接する静的テキストと同一のスタイルにしない。
 
-### 3. Align to Shared Edges
+### 3. 共通の基準線に整列する
 
-Pick alignment edges and stick to them; every stray edge reads as noise. Use one project spacing step for each level of subordination (`16px` is a useful default). Use logical properties (`padding-inline-start`, `margin-inline-end`) for direction-dependent layout; reserve physical left/right for genuinely physical geometry.
+整列の基準線を決めたら、それを一貫して使う。ずれた基準線はすべてノイズとして読まれる。従属レベルごとにプロジェクトのスペーシングステップを1つ使う（`16px` が有用なデフォルト）。方向に依存するレイアウトには論理プロパティ（`padding-inline-start`、`margin-inline-end`）を使い、物理的な左右は本当に物理的なジオメトリのためだけに取っておく。
 
-### 4. Order by Importance
+### 4. 重要度で並べる
 
-The most important content sits near the top and the leading edge; reading order flows top-to-bottom, leading-to-trailing. Think in leading/trailing, not left/right.
+最も重要なコンテンツは上部と先頭側の端に置く。読み順は上から下、先頭から末尾へと流れる。左右ではなく先頭/末尾で考える。
 
-### 5. Hint at Hidden Content
+### 5. 隠れたコンテンツの存在をヒントで示す
 
-Progressive disclosure needs a visible affordance. Use the project's established cue; without one, let the next item peek `16–32px` past the scroll edge or show a disclosure control. Content hidden with zero cue may as well not exist.
+プログレッシブディスクロージャーには目に見えるアフォーダンスが必要。プロジェクトで確立された合図があればそれを使い、なければ次のアイテムをスクロール端から `16–32px` はみ出させるか、開閉コントロールを表示する。合図が皆無のまま隠されたコンテンツは、存在しないのも同然。
 
-### 6. Breathing Room Between Targets
+### 6. ターゲット間に十分な余白を確保する
 
-Without an established density system, start with `12px` between adjacent bordered or filled controls and `24px` of clearance around borderless text- and icon-only controls. Compact layouts may use less when `better-accessibility` hit areas do not overlap and the controls remain visually distinct.
+確立された密度システムがない場合、隣接するボーダー付き／塗りつぶしコントロール間は `12px`、ボーダーのないテキストのみ／アイコンのみのコントロール周りは `24px` のクリアランスを起点とする。コンパクトなレイアウトでは、`better-accessibility` のヒットエリアが重ならず、コントロールが視覚的に区別できる限り、これより狭くしてもよい。
 
-### 7. Inset Buttons from the Edges
+### 7. ボタンは端からインセットする
 
-In content layouts, keep full-width buttons inside the layout margins (start near `16px` inline on mobile) with a visible radius. Edge-to-edge actions are acceptable when they intentionally follow established platform or application chrome, account for safe areas, and remain distinguishable from system UI.
+コンテンツレイアウトでは、全幅ボタンをレイアウトマージンの内側に収め（モバイルでは inline 方向に `16px` 前後を起点とする）、視認できる半径（radius）を付ける。edge-to-edge のアクションは、確立されたプラットフォームやアプリケーションのクロームに意図的に従い、セーフエリアを考慮し、システムUIと区別できる場合に限り許容される。
 
-### 8. Content Bleeds, Controls Float
+### 8. コンテンツはブリードし、コントロールはフロートする
 
-Backgrounds and media extend to the viewport edges; controls and text stay inside the layout margins and safe areas (`env(safe-area-inset-*)`). Sticky chrome floats above the content layer, it doesn't dam it.
+背景とメディアはビューポートの端まで広げる。コントロールとテキストはレイアウトマージンとセーフエリア（`env(safe-area-inset-*)`）の内側にとどめる。スティッキーなクロームはコンテンツ層の上にフロートするものであり、それをせき止めるものではない。
 
-### 9. Hold Structure Until It Breaks
+### 9. 崩れるまで構造を保持する
 
-Breakpoints come from the content, not device presets. Keep the expanded layout as long as it genuinely fits and collapse late; prefer container queries for component-level adaptation. Test the smallest and largest sizes first.
+ブレークポイントはデバイスのプリセットではなくコンテンツから決める。展開されたレイアウトは本当に収まる限り維持し、折りたたみは遅らせる。コンポーネントレベルの適応にはコンテナクエリを優先する。最小サイズと最大サイズを最初にテストする。
 
-### 10. Plan for Growth and Clipping
+### 10. 増加とクリッピングを見越して設計する
 
-Plan for substantial and language-dependent string growth rather than relying on a universal percentage: no fixed widths or heights on text containers, and let rows wrap. Never park critical actions where resizing or scrolling clips them; keep them reachable in the normal flow or stable chrome appropriate to the product.
+一律のパーセンテージに頼るのではなく、言語によって大きく異なる文字列の増加を見越して設計する。テキストコンテナに固定の幅や高さを設けず、行を折り返させる。重要なアクションは、リサイズやスクロールでクリッピングされる位置に置かない。通常のフロー内、またはプロダクトに適した安定したクロームの中で、常に到達可能にする。
 
 ## Common Mistakes
 
-| Mistake | Fix |
+| 誤り | 修正 |
 | --- | --- |
-| Separator line where spacing would do | Remove the line, double the gap between groups |
-| `margin-left` / `padding-right` in a localizable layout | `margin-inline-start` / `padding-inline-end` |
-| Content-layout button accidentally touches the viewport | Inset within the project margins; preserve intentional platform chrome |
-| Carousel/scroller that looks complete | Let the next item peek `16–32px` past the edge |
-| Adjacent controls merge or expanded hit areas overlap | Increase the gap using the project scale; use `12px`/`24px` as starting points |
-| Breakpoints at 768/1024 because they're the defaults | Break where the content actually stops fitting |
-| Fixed-width text container sized to one language | `max-width` + wrapping; test pseudo-localization and representative locales |
-| Primary action at the clip-prone bottom of a pane | Sticky positioning or stable chrome with safe-area padding |
+| スペースで十分な箇所に区切り線を使う | 線を削除し、グループ間のギャップを2倍にする |
+| ローカライズ対応レイアウトで `margin-left` / `padding-right` を使う | `margin-inline-start` / `padding-inline-end` にする |
+| コンテンツレイアウトのボタンが誤ってビューポートに接する | プロジェクトのマージン内にインセットする。意図的なプラットフォームクロームは維持する |
+| 完結して見えるカルーセル／スクローラー | 次のアイテムを端から `16–32px` はみ出させる |
+| 隣接するコントロールが結合する、または拡張されたヒットエリアが重なる | プロジェクトのスケールを使ってギャップを広げる。`12px`/`24px` を起点とする |
+| デフォルトだからという理由で 768/1024 にブレークポイントを設定する | コンテンツが実際に収まらなくなる箇所でブレークする |
+| 1つの言語に合わせて幅を固定したテキストコンテナ | `max-width` ＋折り返しにする。疑似ローカライゼーションと代表的なロケールでテストする |
+| クリッピングされやすいペイン下部にあるプライマリアクション | スティッキー配置、またはセーフエリアのパディングを備えた安定したクロームにする |
 
 ## Review Output Format
 
-Use this format only when the user asks for a standalone layout review. When `better-interface` orchestrates the review, provide domain evidence and findings to that skill and let its output format, severity scale, consolidation rules, cap, and verdict take precedence.
+このフォーマットは、ユーザーが単独のレイアウトレビューを求めた場合にのみ使う。`better-interface` がレビューをオーケストレーションする場合は、そのスキルにドメインのエビデンスと所見を提供し、そちらの出力フォーマット、重要度スケール、統合ルール、上限、判定を優先させる。
 
-Present the standalone review in two parts.
+単独レビューは2つのパートで提示する。
 
-### Findings
+### 所見
 
-Group all confirmed findings by principle. Use a markdown table with **Severity**, **Location**, **Before**, **After**, and **Why** columns. Never use separate "Before:" / "After:" lines.
+確認済みの所見はすべて原則ごとにグループ化する。**Severity**、**Location**、**Before**、**After**、**Why** の列を持つ Markdown テーブルを使う。「Before:」「After:」を別々の行に分けて書くことは絶対にしない。
 
-- **Severity**: `HIGH` blocks content or an action at a supported viewport; `MEDIUM` harms hierarchy, reading order, or adaptability; `LOW` is isolated alignment or spacing polish.
-- **Location**: cite `path/to/file:line`. If the artifact has no source files, cite the exact screen and component instead.
-- **Before / After**: show the current layout and an actionable replacement.
-- **Why**: name the violated principle and its effect on comprehension or adaptability.
+- **Severity**：`HIGH` はサポート対象のビューポートでコンテンツやアクションをブロックする。`MEDIUM` は階層、読み順、適応性を損なう。`LOW` は整列やスペーシングの局所的な微調整。
+- **Location**：`path/to/file:line` を引用する。アーティファクトにソースファイルがない場合は、代わりに具体的な画面とコンポーネントを引用する。
+- **Before／After**：現在のレイアウトと、実行可能な置き換え案を示す。
+- **Why**：違反している原則と、それが理解しやすさや適応性に与える影響を明示する。
 
-Consolidate a repeated systemic issue into one row and list every affected location. Omit principles with no findings.
+繰り返し発生するシステム的な問題は1行に統合し、影響を受けるすべての場所を列挙する。所見がない原則は省略する。
 
-### Example
+### 例
 
-#### Group with space, not lines
+#### 線ではなくスペースでグルーピングする
 | Severity | Location | Before | After | Why |
 | --- | --- | --- | --- | --- |
-| LOW | `src/Settings.tsx:41` | `border-b` on every settings row | Remove borders; use `space-y-2` within groups and `space-y-8` between groups | Spacing communicates grouping with less visual noise |
-| LOW | `src/ProfileForm.tsx:58` | `<hr>` between form sections | Replace with `mt-10` on each section heading | Section hierarchy should not depend on repeated rules |
+| LOW | `src/Settings.tsx:41` | 各設定行に `border-b` | ボーダーを削除し、グループ内は `space-y-2`、グループ間は `space-y-8` を使う | スペーシングは視覚的ノイズを抑えつつグルーピングを伝える |
+| LOW | `src/ProfileForm.tsx:58` | フォームセクション間に `<hr>` | 各セクション見出しに `mt-10` を使う形に置き換える | セクションの階層は繰り返しの罫線に依存すべきではない |
 
-#### Align to shared edges
+#### 共通の基準線に整列する
 | Severity | Location | Before | After | Why |
 | --- | --- | --- | --- | --- |
-| LOW | `src/Card.tsx:24` | Card text at `pl-4`, card icon at `pl-3` | Align both to the same `pl-4` edge | Shared edges create a legible structure |
-| MEDIUM | `src/Nav.css:19` | `margin-left: 16px` | `margin-inline-start: 16px` | Physical properties break direction-aware layouts |
+| LOW | `src/Card.tsx:24` | カードのテキストは `pl-4`、カードのアイコンは `pl-3` | 両方を同じ `pl-4` の基準線に揃える | 共通の基準線は判読しやすい構造を生む |
+| MEDIUM | `src/Nav.css:19` | `margin-left: 16px` | `margin-inline-start: 16px` | 物理プロパティは方向を考慮したレイアウトを壊す |
 
-### Verification and Verdict
+### 検証と判定
 
-After the findings:
+所見の後に：
 
-1. **Verification**: list the exact checks run and their observed results across the relevant viewport widths, reading order, zoom, and RTL state. If a check was not run, state what still needs verification.
-2. **Verdict**: `Block` if any `HIGH` finding remains, `Needs changes` if only `MEDIUM` or `LOW` findings remain, and `Approve` only when no actionable findings remain.
+1. **検証**：関連するビューポート幅、読み順、ズーム、RTL状態にわたって実行した正確なチェックと、その観測結果を列挙する。実行していないチェックがあれば、まだ検証が必要な内容を明記する。
+2. **判定**：`HIGH` の所見が1つでも残っていれば `Block`、`MEDIUM` または `LOW` の所見のみが残っていれば `Needs changes`、実行可能な所見が一切残っていない場合のみ `Approve`。
 
-When there are no findings, omit the tables, state "No actionable layout findings", report verification, and end with `Approve`.
+所見が一切ない場合は、テーブルを省略し、「レイアウトに関する実行可能な所見はない」と記載し、検証結果を報告し、`Approve` で締めくくる。

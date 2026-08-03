@@ -1,58 +1,58 @@
-# Wrapping and punctuation
+# 折り返しと約物
 
-Where lines start, where they end, where they break and which characters they use.
+行がどこで始まり、どこで終わり、どこで折り返され、どの文字を使うか。
 
-## Measure (line length)
+## measure（行の長さ）
 
-Long lines make it harder for the eye to find the start of the next line. For long-form text, aim for 60–75 characters per line.
+行が長いと、目が次の行の始まりを見つけにくくなる。長文テキストでは、1行あたり60〜75文字を目安にする。
 
-Any unit works. `65ch` measures characters directly (one `ch` is the width of the `0` in the current font), but a pixel or rem cap is just as good: at a `16px` body size the 60–75 character range lands roughly between `560px` and `680px` depending on the font, so Tailwind's `max-w-xl` (`576px`) or `max-w-2xl` (`672px`) fit. What matters is that a cap exists and the resulting line length sits in range; recheck it if the body font size changes.
+単位は何でもよい。`65ch`は文字数を直接測る（1`ch`は現在のフォントにおける`0`の幅である）が、pxやremでの上限も同様に有効である。`16px`の本文サイズでは、60〜75文字の範囲はフォントにもよるがおおよそ`560px`から`680px`の間に収まるため、Tailwindの`max-w-xl`（`576px`）や`max-w-2xl`（`672px`）が適合する。重要なのは上限が存在し、結果として得られる行の長さがその範囲に収まっていることである。本文のフォントサイズが変わった場合は再確認する。
 
-## Alignment
+## 配置
 
-`text-align` controls where each line starts and ends. `text-align: justify` stretches spaces until both edges line up; it can work in specific editorial layouts but avoid it in most interfaces.
+`text-align`は各行がどこで始まりどこで終わるかを制御する。`text-align: justify`は両端が揃うまでスペースを引き伸ばす。特定のエディトリアルレイアウトでは機能することがあるが、ほとんどのインターフェースでは避ける。
 
-## Wrapping
+## 折り返し
 
 | Property | Use |
 | --- | --- |
-| `text-wrap: balance` | Distributes text evenly across multiple lines |
-| `text-wrap: pretty` | Avoids leaving a single short word on the final line |
-| `overflow-wrap: break-word` | Lets long words, links and IDs break before escaping the container |
-| `white-space: nowrap` | Keeps labels and badges on one line where a break looks broken |
+| `text-wrap: balance` | テキストを複数行に均等に分配する |
+| `text-wrap: pretty` | 最終行に短い単語1つだけが残るのを避ける |
+| `overflow-wrap: break-word` | 長い単語、リンク、IDがコンテナからはみ出す前に改行できるようにする |
+| `white-space: nowrap` | 改行が不自然に見えるラベルやバッジを1行に保つ |
 
-Use `balance` on headings and `pretty` on descriptions; combined they give the best outcome. Skip both in long-form text: browsers ignore `balance` past a few lines anyway, and evening out a whole paragraph wastes space and makes it harder to read.
+見出しには`balance`を、説明文には`pretty`を使う。組み合わせることで最良の結果が得られる。長文テキストではどちらも使わない。ブラウザはいずれにせよ数行を超えると`balance`を無視するし、段落全体を均等化すると余白が無駄になり読みにくくなる。
 
-## Truncation
+## 切り詰め表示(truncation)
 
-- Single line: `text-overflow: ellipsis`, which needs `overflow: hidden` and `white-space: nowrap`.
-- Multiple lines: `line-clamp` allows any number of lines before the ellipsis.
+- 1行の場合: `text-overflow: ellipsis`。これには`overflow: hidden`と`white-space: nowrap`が必要。
+- 複数行の場合: `line-clamp`により、省略記号の前に任意の行数を許容できる。
 
-Truncation hides content. If the missing text matters, make the full value available elsewhere (tooltip or expanded view).
+切り詰め表示(truncation)はコンテンツを隠す。失われたテキストが重要であれば、完全な値を別の場所（ツールチップや展開表示）で利用できるようにする。
 
-## Case
+## 大文字小文字
 
-`text-transform` changes how case appears without changing the underlying text. Write copy naturally and control presentation with CSS, so changing presentation never requires rewriting copy.
+`text-transform`は、元となるテキストを変更することなく、大文字小文字の見え方を変える。コピーは自然な形で書き、表示はCSSで制御することで、表示の変更がコピーの書き直しを必要としないようにする。
 
-## Smart punctuation
+## スマート約物
 
-Keyboard characters are not always the best characters:
+キーボードで入力できる文字が、常に最良の文字とは限らない。
 
 | Instead of | Use |
 | --- | --- |
-| Straight quotes `"..."` | Curly quotes that curve around the text (keep straight quotes in code) |
-| Hyphen in ranges | En dash: `2010–2020` |
-| Two hyphens for an aside | Em dash character |
-| Three periods `...` | The single ellipsis character `…` |
-| Regular space in `16 px` | `&nbsp;` so the value never breaks apart |
-| Uncontrolled word breaks | `&shy;` to mark where a word may break |
+| ストレートクォート `"..."` | テキストを囲むように曲がるカーリークォート（コード内はストレートクォートのまま） |
+| 範囲内のハイフン | エンダッシュ: `2010–2020` |
+| 挿入句のための2つのハイフン | エムダッシュ文字 |
+| 3つのピリオド `...` | 単一のellipsis文字 `…` |
+| `16 px`内の通常のスペース | 値が分断されないよう`&nbsp;`を使う |
+| 制御されていない単語の改行 | 単語の改行位置を示す`&shy;` |
 
-## Internationalization
+## 国際化
 
-- Set the `lang` attribute so browsers choose the right quotes, hyphenation and pronunciation.
-- Set `dir` at the document or content boundary where direction changes. Spatial mirroring and the logical-property table live in `better-layout`.
+- ブラウザが正しい引用符、ハイフネーション、発音を選択できるよう、`lang`属性を設定する。
+- 方向が変わる文書やコンテンツの境界で`dir`を設定する。空間的なミラーリングと論理プロパティの一覧は`better-layout`にある。
 
-Two refinements for mixed-direction text:
+双方向テキスト(bidi)混在に関する2つの補足。
 
-- **Long paragraphs align by their own language.** A one- or two-line snippet follows the surrounding UI's direction, but a paragraph of three or more lines aligns to its own script's direction: an English paragraph stays start-aligned LTR even inside an RTL interface. `text-align: start` with the correct `lang`/`dir` on the paragraph element handles this.
-- **Never reverse digits.** Numbers keep their digit order in every direction: a phone number or "541" reads identically in RTL. Browsers handle this via the Unicode bidi algorithm; don't fight it with manual reordering, and wrap mixed number/text values in `<bdi>` if adjacent RTL text disturbs them.
+- **長い段落は、自身の言語に合わせて配置する。** 1〜2行のスニペットは周囲のUIの方向に従うが、3行以上の段落は自身のスクリプトの方向に合わせる。英語の段落は、RTLインターフェースの中であっても、start揃えのLTRのままである。段落要素に正しい`lang`/`dir`を伴う`text-align: start`が、これを処理する。
+- **数字を反転させない。** 数字はどの方向でも桁の並び順を保つ。電話番号や"541"はRTLでも同じように読める。ブラウザはUnicode双方向アルゴリズムを通じてこれを処理する。手動での並べ替えでそれに逆らわず、隣接するRTLテキストが数字を乱す場合は、数字とテキストが混在する値を`<bdi>`で囲む。

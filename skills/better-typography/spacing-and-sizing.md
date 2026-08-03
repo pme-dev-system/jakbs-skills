@@ -1,19 +1,19 @@
-# Spacing and sizing
+# 間隔とサイズ
 
-A sensible scale and comfortable spacing do more for typography than any effect.
+適切なスケールと快適な間隔は、どんな効果よりもタイポグラフィに貢献する。
 
-## Units
+## 単位
 
 | Unit | Behavior |
 | --- | --- |
-| `px` | Fixed |
-| `em` | Scales with the current font size |
-| `rem` | Scales with the root font size |
-| `%` on `font-size` | Relative to the parent's font size, behaves like `em` |
+| `px` | 固定 |
+| `em` | 現在のフォントサイズに応じてスケールする |
+| `rem` | ルートのフォントサイズに応じてスケールする |
+| `font-size`に対する`%` | 親のフォントサイズに対する相対値で、`em`と同様に振る舞う |
 
-## Type scale
+## タイプスケール
 
-A small set of predefined sizes used across a product, deviated from as little as possible. Hard-coding sizes without a system breaks down at scale.
+プロダクト全体で使われる、あらかじめ定義された少数のサイズセット。そこからの逸脱は最小限にする。体系のないハードコードされたサイズは、規模が大きくなると破綻する。
 
 ```css
 :root {
@@ -25,25 +25,25 @@ A small set of predefined sizes used across a product, deviated from as little a
 }
 ```
 
-There are many existing scales to pick from, or define a custom one. The Tailwind type scale (`text-xs` through `text-9xl`, each class pairing a size with a matching line height) is a solid ready-made choice.
+既存のスケールから選ぶこともできるし、独自のものを定義することもできる。Tailwindのタイプスケール（`text-xs`から`text-9xl`まで、各クラスがサイズと対応するline-heightを組み合わせている）は、既製の選択肢として十分に堅実である。
 
-For solo projects the default names work fine as long as there are clear rules for where each size is used. On a team, give sizes semantic names: `text-sm` tells you the size but not the use; `text-body-sm` keeps sizes consistent with clear usage rules.
+個人プロジェクトでは、各サイズをどこで使うかについて明確なルールがある限り、デフォルトの名前で問題ない。チームでは、サイズにセマンティックな名前を付ける。`text-sm`はサイズを伝えるが用途は伝えない。`text-body-sm`は、明確な使用ルールとともにサイズの一貫性を保つ。
 
-A role-based scale pairs each size with its line-height and weight, so a role is one decision instead of three. A solid starting point for a product interface:
+役割ベースのスケールは、各サイズにline-heightとウェイトを組み合わせるため、役割の決定が3つではなく1つで済む。プロダクトインターフェースにおける堅実な出発点は次の通り。
 
 | Role | Size | Line-height | Weight |
 | --- | --- | --- | --- |
-| Display | `2.25rem` (36px) | `1.1` | `600` |
-| Title | `1.5rem` (24px) | `1.2` | `600` |
-| Heading | `1.125rem` (18px) | `1.3` | `600` |
-| Body | `1rem` (16px) | `1.5` | `400` |
-| Caption | `0.8125rem` (13px) | `1.4` | `400` |
+| ディスプレイ | `2.25rem` (36px) | `1.1` | `600` |
+| タイトル | `1.5rem` (24px) | `1.2` | `600` |
+| 見出し | `1.125rem` (18px) | `1.3` | `600` |
+| 本文 | `1rem` (16px) | `1.5` | `400` |
+| キャプション | `0.8125rem` (13px) | `1.4` | `400` |
 
-Emphasis within a role is one weight step up (`400` → `500`), not a size change.
+役割内での強調は、サイズの変更ではなく、ウェイトを1段階上げること（`400` → `500`）で行う。
 
-## Heading hierarchy
+## 見出し階層
 
-Assign each heading level to a descending step of the scale, so hierarchy comes from the scale instead of one-off sizes:
+各見出しレベルをスケールの降順のステップに割り当て、階層がその場限りのサイズではなくスケールから生まれるようにする。
 
 ```css
 h1 { font-size: var(--text-2xl); }
@@ -51,22 +51,22 @@ h2 { font-size: var(--text-xl); }
 h3 { font-size: var(--text-lg); }
 ```
 
-In Tailwind the same mapping is utility classes per level (`text-2xl`, `text-xl`, `text-lg`), typically centralized in a component or `@layer base` rather than repeated inline.
+Tailwindでは、同じマッピングをレベルごとのユーティリティクラス（`text-2xl`、`text-xl`、`text-lg`）で行い、通常はインラインで繰り返すのではなく、コンポーネントや`@layer base`に集約する。
 
-When reviewing a page, compare the computed size of headings within each semantic section: a child that accidentally renders more prominently than its parent breaks the visual hierarchy. Deep levels may share a size when the scale runs out of comfortable steps, as long as weight or letter-spacing keeps them distinct. A heading should not be smaller than body text unless it is deliberately a label-style overline.
+ページをレビューする際は、各セマンティックセクション内の見出しの計算後のサイズを比較する。子要素が誤って親要素より目立つようにレンダリングされると、視覚的階層が崩れる。スケールに快適なステップが残っていない場合、深いレベルは同じサイズを共有してもよい。ただし、ウェイトやletter-spacingによって区別が保たれていることが条件である。見出しは、意図的にラベル風のオーバーラインとして使われている場合を除き、本文テキストより小さくてはならない。
 
-Heading semantics and outline quality belong to `better-accessibility`. Pick the element from the document structure, then use this skill to make that structure visually legible; never pick a heading element for its browser-default size.
+見出しのセマンティクスとアウトラインの品質は`better-accessibility`が扱う。まず文書構造から要素を選び、その構造を視覚的に読み取りやすくするために本スキルを使う。ブラウザのデフォルトサイズを理由に見出し要素を選んではならない。
 
-## Kerning and letter-spacing
+## カーニングとletter-spacing
 
-- **Kerning** adjusts specific pairs like `AV` or `Ye`. It is built into the font and browsers apply it automatically. Only switch it off deliberately with `font-kerning: none`.
-- **`letter-spacing`** adds the same space between every character:
-  - Large headings often look better slightly negative.
-  - Small uppercase labels need a little positive spacing so letters do not feel crowded.
-  - Body copy needs neither.
+- **カーニング**は`AV`や`Ye`のような特定のペアを調整する。フォントに組み込まれており、ブラウザが自動的に適用する。意図的にオフにする場合のみ`font-kerning: none`を使う。
+- **`letter-spacing`**は、すべての文字間に同じ間隔を追加する。
+  - 大きな見出しは、わずかに負の値のほうがよく見えることが多い。
+  - 小さな大文字ラベルは、文字が窮屈に見えないよう、わずかに正の間隔が必要。
+  - 本文はどちらも必要としない。
 
 ```css
-/* Good */
+/* 良い例 */
 .display-heading {
   letter-spacing: -0.02em;
 }
@@ -81,46 +81,46 @@ Heading semantics and outline quality belong to `better-accessibility`. Pick the
 
 | Text | Value |
 | --- | --- |
-| Headings | ~`1.1` |
-| Body copy | `1.5`–`1.6` |
+| 見出し | ~`1.1` |
+| 本文 | `1.5`–`1.6` |
 
-Prefer unitless values: they scale with the font size, fixed values like `line-height: 24px` do not. Tailwind's `leading-snug`, `leading-normal` and `leading-relaxed` are sensible defaults that rarely need overriding.
+単位なしの値を優先する。フォントサイズに応じてスケールするが、`line-height: 24px`のような固定値はスケールしない。Tailwindの`leading-snug`、`leading-normal`、`leading-relaxed`は、上書きする必要が滅多にない適切なデフォルトである。
 
-Tight line-height is for short text. Anything that wraps to three or more lines needs at least `1.4`, even in height-constrained places like list rows and cards: a tightly-leaded paragraph is harder to read than a taller row is to fit.
+タイトなline-heightは短いテキスト向けである。3行以上に折り返されるものは、リストの行やカードのような高さが制約された場所であっても、少なくとも`1.4`が必要。行送りの詰まった段落は、行を高くして収めることよりも読みにくくなる。
 
 ```css
-/* Bad: card description at heading leading */
+/* 悪い例: 見出し用のline-heightをカード説明文に使っている */
 .card-description { line-height: 1.1; }
 
-/* Good: it wraps to 3 lines, so it reads as body text */
+/* 良い例: 3行に折り返されるため、本文として扱う */
 .card-description { line-height: 1.4; }
 ```
 
-## Text trimming with text-box
+## text-boxによるテキストのトリミング
 
-Fonts reserve space above and below the letters, which is why text sits slightly too low in buttons and badges. `text-box` trims it. Two parts: which edges to trim (`trim-both`, `trim-start`, `trim-end`) and where:
+フォントは文字の上下に余白を確保しているため、ボタンやバッジの中でテキストがわずかに低い位置に見えてしまう。`text-box`はこれをトリムする。2つの要素で構成される。どの端をトリムするか（`trim-both`、`trim-start`、`trim-end`）と、どこをトリムするか。
 
 | Keyword | Trims at |
 | --- | --- |
-| `cap` | The cap height (top) |
-| `alphabetic` | The baseline (bottom) |
-| `text` | The font's own text edge, keeping room for descenders |
+| `cap` | Cap height（上部） |
+| `alphabetic` | ベースライン（下部） |
+| `text` | フォント自身のテキストエッジ。ディセンダー用の余白を残す |
 
 ```css
-/* trim top and bottom */
+/* 上下をトリム */
 .badge {
   text-box: trim-both cap alphabetic;
 }
 
-/* trim only the top */
+/* 上のみトリム */
 .heading {
   text-box: trim-start cap;
 }
 
-/* trim only the bottom */
+/* 下のみトリム */
 .label {
   text-box: trim-end alphabetic;
 }
 ```
 
-Supported in Chromium (133+) and Safari (18.2+), not yet Firefox; treat it as progressive enhancement, where unsupported browsers keep the default leading.
+Chromium（133以降）とSafari（18.2以降）でサポートされているが、Firefoxはまだ未対応。プログレッシブエンハンスメントとして扱い、非対応ブラウザではデフォルトの行送りのままにしておく。

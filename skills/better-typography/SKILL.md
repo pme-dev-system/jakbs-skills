@@ -1,171 +1,171 @@
 ---
 name: better-typography
-description: Web typography from choosing fonts to spacing, wrapping and accessibility. Use when picking or pairing typefaces, configuring variable fonts or OpenType features, setting up a type scale, checking heading hierarchy, styling text in components, truncating text, styling underlines, selection, placeholders or carets, or reviewing frontend code for typography. Triggers on typography, fonts, font formats, woff2, variable fonts, font-weight, opentype, font-feature-settings, letter-spacing, line-height, type scale, heading hierarchy, heading levels, tabular numbers, text-wrap, truncation, line clamp, underlines, text-decoration, text selection, iOS input zoom, font smoothing, text contrast, measure, line length, text-box, smart punctuation, drop cap.
+description: フォント選定から間隔、折り返し、アクセシビリティまでのWebタイポグラフィ。書体の選定やフォントの組み合わせ、可変フォントやOpenType機能の設定、タイプスケールの構築、見出し階層の確認、コンポーネント内テキストのスタイリング、テキストの切り詰め表示(truncation)、アンダーライン・セレクション・プレースホルダー・キャレットのスタイリング、あるいはタイポグラフィ観点でのフロントエンドコードのレビューを行う際に使用する。以下のキーワードで発火する: タイポグラフィ, フォント, フォント形式, woff2, 可変フォント, font-weight, opentype, font-feature-settings, letter-spacing, line-height, タイプスケール, 見出し階層, 見出しレベル, tabular numbers, text-wrap, 切り詰め表示(truncation), line clamp, アンダーライン, text-decoration, テキスト選択, iOS input zoom, font smoothing, テキストコントラスト, measure, 行の長さ, text-box, スマート約物, ドロップキャップ。
 ---
 
-# Great typography
+# 優れたタイポグラフィ
 
-Good typography is mostly restraint. A sensible scale, comfortable spacing and enough contrast beat any clever effect. A label, a table cell, a marketing headline and an article paragraph should not share one set of rules. Apply these principles when building or reviewing anything with text in it.
+優れたタイポグラフィとは、大部分が抑制である。適切なスケール、快適な間隔、十分なコントラストは、どんな凝った効果にも勝る。ラベル、テーブルセル、マーケティングの見出し、記事の段落が同じルールを共有すべきではない。テキストを含むものを構築またはレビューする際は、これらの原則を適用する。
 
-When reviewing, read the page instead of scanning the code: squint to check the hierarchy holds, read one full paragraph for comfort, and resize the viewport to catch bad wrapping, widows and truncation at real content lengths.
+レビュー時は、コードを流し読みするのではなくページを読む。目を細めて階層が保たれているか確認し、快適さを確かめるために段落を1つ通して読み、実際のコンテンツ長での不適切な折り返し・ウィドウ・切り詰め表示(truncation)を捉えるためにビューポートをリサイズする。
 
-The words themselves (button labels, error messages, empty states) are covered by the `better-writing` skill; semantic heading structure by `better-accessibility`; spatial RTL layout and logical CSS properties by `better-layout`; rendered-pair contrast measurement and color remediation by `better-colors`. This skill owns how text renders, wraps, and behaves in mixed-direction content.
+文言そのもの（ボタンラベル、エラーメッセージ、空状態）は`better-writing`スキルが扱う。セマンティックな見出し構造は`better-accessibility`が、空間的なRTLレイアウトと論理CSSプロパティは`better-layout`が、レンダリングされたペアのコントラスト測定と色の是正は`better-colors`が扱う。本スキルは、テキストがどのようにレンダリングされ、折り返され、双方向テキスト(bidi)混在コンテンツの中でどう振る舞うかを扱う。
 
-**Match the project's styling system.** Before suggesting or writing any fix, check how the codebase styles things and express every change in that system: Tailwind utilities in a Tailwind project, plain declarations in CSS, CSS Modules, styled-components or StyleX. The [cheat sheet](css-cheat-sheet.md) maps each declaration to its Tailwind equivalent. Never introduce a second styling approach just to apply a typography fix.
+**プロジェクトのスタイリングシステムに合わせる。** 修正を提案・記述する前に、コードベースがどのようにスタイリングされているかを確認し、その体系の中であらゆる変更を表現する。Tailwindプロジェクトなら Tailwind ユーティリティ、CSS、CSS Modules、styled-components や StyleX なら通常の宣言を使う。[チートシート](css-cheat-sheet.md)は各宣言をTailwindの等価な表現に対応付けている。タイポグラフィの修正を適用するためだけに、2つ目のスタイリング手法を持ち込まない。
 
 ## Quick Reference
 
 | Category | When to use | Reference |
 | --- | --- | --- |
-| Choosing fonts | Font categories, pairing, formats, typeface anatomy | [choosing-fonts.md](choosing-fonts.md) |
-| Variable fonts & OpenType | Axes, weights, tabular numbers, stylistic sets | [variable-fonts-and-opentype.md](variable-fonts-and-opentype.md) |
-| Spacing & sizing | Type scale, heading hierarchy, line-height, letter-spacing, text trimming | [spacing-and-sizing.md](spacing-and-sizing.md) |
-| Wrapping & punctuation | Measure, wrapping, truncation, smart punctuation, RTL | [wrapping-and-punctuation.md](wrapping-and-punctuation.md) |
-| Details & accessibility | Underlines, selection, forms, decorative text, contrast | [details-and-accessibility.md](details-and-accessibility.md) |
-| CSS cheat sheet | Quick lookup of every property covered, with Tailwind equivalents | [css-cheat-sheet.md](css-cheat-sheet.md) |
+| フォント選定 | フォントのカテゴリ、フォントの組み合わせ、フォーマット、書体の構造 | [choosing-fonts.md](choosing-fonts.md) |
+| 可変フォントとOpenType | 軸、ウェイト、tabular numbers、stylistic sets | [variable-fonts-and-opentype.md](variable-fonts-and-opentype.md) |
+| 間隔とサイズ | タイプスケール、見出し階層、line-height、letter-spacing、テキストのトリミング | [spacing-and-sizing.md](spacing-and-sizing.md) |
+| 折り返しと約物 | measure、折り返し、切り詰め表示(truncation)、スマート約物、RTL | [wrapping-and-punctuation.md](wrapping-and-punctuation.md) |
+| 細部とアクセシビリティ | アンダーライン、セレクション、フォーム、装飾テキスト、コントラスト | [details-and-accessibility.md](details-and-accessibility.md) |
+| CSSチートシート | 扱うすべてのプロパティのクイックリファレンス、Tailwindの等価表現付き | [css-cheat-sheet.md](css-cheat-sheet.md) |
 
 ## Core Principles
 
-### 1. Serve the Right Format
+### 1. 適切なフォーマットを提供する
 
-Use `.woff2` (Brotli compression, broadly supported) on the web. `.woff` is a fallback only for very old browsers; `.ttf` and `.otf` are raw desktop formats with no web compression. How the files are loaded is the project's own concern, this skill does not prescribe it.
+Webでは`.woff2`（Brotli圧縮、幅広くサポートされている）を使用する。`.woff`は非常に古いブラウザ向けのフォールバックにすぎない。`.ttf`と`.otf`はWeb圧縮のない生のデスクトップ形式である。ファイルの読み込み方法はプロジェクト自身の関心事であり、本スキルはそれを規定しない。
 
-### 2. Properties Over Raw Tags
+### 2. 生のタグよりプロパティを優先する
 
-When a CSS property exists, use it. `font-weight: 650` instead of `font-variation-settings: "wght" 650`, `font-optical-sizing: auto` instead of `"opsz"`, `font-variant-numeric: tabular-nums` instead of `font-feature-settings: "tnum" 1`. Properties keep working when a non-variable fallback renders. Reserve the raw-tag properties for custom axes (`"GRAD" 80`) and niche features (`"ss01" 1`) that have no property of their own.
+CSSプロパティが存在する場合はそれを使う。`font-variation-settings: "wght" 650`ではなく`font-weight: 650`、`"opsz"`ではなく`font-optical-sizing: auto`、`font-feature-settings: "tnum" 1`ではなく`font-variant-numeric: tabular-nums`を使う。プロパティは、可変フォントでないフォールバックがレンダリングされた場合でも機能し続ける。生のタグによる指定は、専用のプロパティを持たないカスタム軸（`"GRAD" 80`）やニッチな機能（`"ss01" 1`）のために取っておく。
 
-### 3. Load Intended Weights and Styles
+### 3. 意図したウェイトとスタイルを読み込む
 
-Browsers may synthesize a requested weight or style that the active family does not provide. Prefer loading the faces the design actually uses. Set `font-synthesis: none` only after verifying that every required bold, italic, small-cap, superscript, and subscript form remains visually distinct across the complete fallback stack; disabling synthesis is not a diagnostic and must not erase emphasis.
+ブラウザは、アクティブなフォントファミリーが提供していないウェイトやスタイルをリクエストされた場合、それを合成することがある。デザインが実際に使用しているフェイスを読み込むことを優先する。すべてのbold、italic、small-cap、上付き文字、下付き文字の字形が、フォールバックスタック全体にわたって視覚的に区別できることを検証した後に限り、`font-synthesis: none`を設定する。合成の無効化は診断手段ではなく、強調を消してしまってはならない。
 
-### 4. Fewer Fonts, Sizes and Weights
+### 4. フォント・サイズ・ウェイトは少なく
 
-Rarely use more than three fonts. Weight and size define hierarchy, but overusing them hurts readability quickly. Pair for contrast, not similarity: a serif headline with a sans body reads as deliberate, two near-identical sans-serifs read as a mistake. Below `18px`, stay at weight `400`+; weights under `300` are display-only (`28px`+), they disappear at text sizes.
+フォントは3種類を超えて使うことは滅多にない。ウェイトとサイズは階層を定義するが、使いすぎるとすぐに可読性を損なう。組み合わせは類似ではなくコントラストのために行う。セリフの見出しとサンセリフの本文は意図的に見えるが、ほぼ同一の2つのサンセリフはミスに見える。`18px`未満ではウェイト`400`以上を維持する。`300`未満のウェイトはディスプレイ専用（`28px`以上）であり、テキストサイズでは消えてしまう。
 
-### 5. Use a Type Scale with Semantic Names
+### 5. セマンティックな名前を持つタイプスケールを使う
 
-Define a small set of sizes and deviate from it as little as possible. Hard-coded sizes without a system break down at scale. For solo projects, default names like `text-sm` work fine as long as the usage rules are clear. On a team, name sizes by use (`text-body-sm`), not by size, so the rules stay consistent.
+少数のサイズセットを定義し、そこからの逸脱を最小限にする。体系のないハードコードされたサイズは、規模が大きくなると破綻する。個人プロジェクトでは、使用ルールが明確である限り`text-sm`のようなデフォルトの名前でも問題ない。チームでは、サイズではなく用途でサイズに名前を付ける（`text-body-sm`）ことで、ルールの一貫性を保つ。
 
-### 6. Heading Sizes Descend with Level
+### 6. 見出しサイズはレベルに応じて小さくする
 
-Within a coherent page hierarchy, map heading levels to descending steps of the type scale: a visually subordinate heading should not accidentally overpower its parent. Adjacent levels may share a size toward the small end of the scale as long as weight or spacing keeps them distinct. Pick semantic heading elements according to `better-accessibility`; this skill controls only their visual treatment.
+一貫したページ階層の中では、見出しレベルをタイプスケールの降順のステップに対応付ける。視覚的に下位の見出しが、誤って親の見出しより強く見えてはならない。隣接するレベルは、ウェイトや間隔で区別が保たれる限り、スケールの小さい側で同じサイズを共有してもよい。セマンティックな見出し要素の選定は`better-accessibility`に従う。本スキルはその視覚的な扱いのみを制御する。
 
-### 7. Line-Height by Role
+### 7. 役割に応じたline-height
 
-Headings tighter, around `1.1`. Body copy `1.5` to `1.6`. Prefer unitless values so line-height scales with the font size; fixed values like `24px` do not. Tight line-height is for short text: anything that wraps to three or more lines needs at least `1.4`, even in height-constrained rows.
+見出しはよりタイトに、`1.1`前後。本文は`1.5`から`1.6`。line-heightがフォントサイズに応じてスケールするよう、単位なしの値を優先する。`24px`のような固定値はスケールしない。タイトなline-heightは短いテキスト向けである。3行以上に折り返されるものは、高さが制約された行であっても、少なくとも`1.4`が必要。
 
-### 8. Letter-Spacing by Size
+### 8. サイズに応じたletter-spacing
 
-Large headings often look better with slightly negative letter-spacing. Small uppercase labels need a little positive letter-spacing so letters do not feel crowded. Body copy at reading sizes needs neither.
+大きな見出しは、わずかに負のletter-spacingを付けるとよく見えることが多い。小さな大文字ラベルは、文字が窮屈に見えないよう、わずかに正のletter-spacingが必要。読み取りサイズの本文はどちらも必要としない。
 
-### 9. Cap the Measure
+### 9. measureに上限を設ける
 
-Long lines make it hard for the eye to find the next line. Cap long-form text around 60–75 characters per line. Any unit works: `65ch` measures characters directly, and a pixel or rem cap is just as good: at a `16px` body size the range lands roughly between `560px` and `680px` depending on the font, so Tailwind's `max-w-xl` or `max-w-2xl` fit. What matters is that a cap exists and the resulting line length sits in range.
+行が長いと、目が次の行を見つけにくくなる。長文テキストは1行あたり60〜75文字前後に上限を設ける。単位は何でもよい。`65ch`は文字数を直接測るが、pxやremでの上限も同様に有効である。`16px`の本文サイズでは、フォントにもよるがこの範囲はおおよそ`560px`から`680px`の間に収まるため、Tailwindの`max-w-xl`や`max-w-2xl`が適合する。重要なのは上限が存在し、結果として得られる行の長さがその範囲に収まっていることである。
 
-### 10. Wrap Deliberately
+### 10. 意図的に折り返す
 
-`text-wrap: balance` distributes text evenly across lines: use it on headings. `text-wrap: pretty` avoids leaving a single short word on the final line: use it on descriptions. Skip both in long-form text: browsers ignore `balance` past a few lines anyway, and evening out a whole paragraph wastes space and makes it harder to read. `overflow-wrap: break-word` where long words, links or IDs could escape the container. `white-space: nowrap` on labels and badges where a line break looks broken.
+`text-wrap: balance`はテキストを複数行に均等に分配する。見出しに使う。`text-wrap: pretty`は最終行に短い単語1つだけが残るのを避ける。説明文に使う。長文テキストではどちらも使わない。ブラウザはいずれにせよ数行を超えると`balance`を無視するし、段落全体を均等化すると余白が無駄になり読みにくくなる。長い単語、リンク、IDがコンテナからはみ出す可能性がある場所には`overflow-wrap: break-word`を使う。改行が不自然に見えるラベルやバッジには`white-space: nowrap`を使う。
 
-### 11. Tabular Numbers on Changing Values
+### 11. 変化する値にはtabular numbersを使う
 
-Digits have different widths by default, so timers, counters and prices shift layout as they update. Apply `font-variant-numeric: tabular-nums` to any value that changes.
+数字はデフォルトでは幅が異なるため、タイマー、カウンター、価格は更新のたびにレイアウトがずれる。変化する値には`font-variant-numeric: tabular-nums`を適用する。
 
-### 12. Truncate Without Losing Content
+### 12. コンテンツを失わずに切り詰め表示(truncation)する
 
-Single line: `text-overflow: ellipsis` with `overflow: hidden` and `white-space: nowrap`. Multiple lines: `line-clamp`. Truncation hides content, so if the missing text matters, keep the full value reachable in a tooltip or expanded view.
+1行の場合: `overflow: hidden`と`white-space: nowrap`を伴う`text-overflow: ellipsis`。複数行の場合: `line-clamp`。切り詰め表示(truncation)はコンテンツを隠すため、失われたテキストが重要であれば、ツールチップや展開表示で完全な値にアクセスできるようにしておく。
 
-### 13. Write Copy Naturally, Style with CSS
+### 13. コピーは自然な形で書き、CSSでスタイルする
 
-Store text in natural case and control presentation with `text-transform`, so redesigns never require rewriting copy. Use smart punctuation: curly quotes in prose (straight quotes in code), an en dash for ranges like `2010–2020`, an em dash to set off a thought, the single ellipsis character, `&nbsp;` to keep values like `16 px` together and `&shy;` to control where long words may break.
+テキストは自然な大文字小文字の形で保存し、表示は`text-transform`で制御する。こうすることで、再デザインの際にコピーを書き直す必要が生じない。スマート約物を使う。文中ではカーリークォート（コード中はストレートクォートのまま）、`2010–2020`のような範囲にはエンダッシュ、考えを区切るにはエムダッシュ、単一のellipsis文字、`16 px`のような値をまとめておくには`&nbsp;`、長い単語の改行位置を制御するには`&shy;`を使う。
 
-### 14. Underlines from the Font
+### 14. フォントに由来するアンダーライン
 
-Default underlines sit wherever the browser decides. Pull position and thickness from the font's own metrics with `text-underline-position: from-font` and `text-decoration-thickness: from-font`, or tune manually with `text-decoration-thickness`, `text-underline-offset` and `text-decoration-skip-ink`. `text-decoration-style` draws the line dotted, dashed or wavy; a dotted underline is a common hint that a word carries extra information, like an abbreviation or a defined term. Unless the only thing animating is a color change, build the underline as a separate element instead of using `text-decoration`: color is the only part of a real underline that animates reliably.
+デフォルトのアンダーラインは、ブラウザが決めた位置に配置される。`text-underline-position: from-font`と`text-decoration-thickness: from-font`を使い、フォント自身のメトリクスから位置と太さを取得するか、`text-decoration-thickness`、`text-underline-offset`、`text-decoration-skip-ink`で手動調整する。`text-decoration-style`は線をdotted、dashed、wavyで描画する。dottedのアンダーラインは、略語や定義済み用語のように、単語が追加情報を持っていることを示す一般的なヒントである。アニメーションさせるのが色の変化だけでない限り、`text-decoration`を使う代わりにアンダーラインを別要素として構築する。実際のアンダーラインで確実にアニメーションできる部分は色だけである。
 
-### 15. Inputs at 16px on Mobile
+### 15. モバイルではinputを16pxにする
 
-iOS Safari zooms the whole page when an input's text is smaller than `16px`. Keep input text at `16px` on mobile viewports (`text-base sm:text-sm`). Avoid the `maximum-scale=1` viewport meta: Safari ignores it for pinch zoom, but every other browser honors it and blocks zooming, which fails WCAG.
+iOS Safariは、inputのテキストが`16px`より小さい場合にページ全体をズームする。モバイルのビューポートではinputのテキストを`16px`に保つ（`text-base sm:text-sm`）。`maximum-scale=1`のviewport metaは避ける。Safariはピンチズームに対してこれを無視するが、他のすべてのブラウザはこれを尊重してズームをブロックしてしまい、WCAGに違反する。
 
-### 16. Size and Contrast Floors
+### 16. サイズとコントラストの下限
 
-Start long-form body text near the browser default of `16px`, then judge it in the actual typeface, measure, platform, and product density. UI text can go smaller: `14px` is a useful starting point for inputs and menus (inputs still need `16px` on mobile, see principle 15), `13px` for captions, rarely below `12px`. When text appears low-contrast, use `better-colors` to measure the rendered pair and `better-accessibility` to classify the requirement; do not change colors unless asked.
+長文の本文テキストは、ブラウザのデフォルトである`16px`前後から始め、実際の書体、measure、プラットフォーム、プロダクトの密度に照らして判断する。UIテキストはより小さくてもよい。`14px`はinputやメニューの出発点として有用（inputはモバイルでは依然`16px`が必要、原則15を参照）、`13px`はキャプション向け、`12px`を下回ることは滅多にない。テキストが低コントラストに見える場合は、`better-colors`でレンダリングされたペアを測定し、`better-accessibility`で要件を分類する。指示がない限り色は変更しない。
 
-### 17. Font Smoothing on the Root
+### 17. ルートでのフォントスムージング
 
-On macOS text renders heavier than intended. Apply `-webkit-font-smoothing: antialiased` and `-moz-osx-font-smoothing: grayscale` (both covered by Tailwind's `antialiased`) once on the root layout so they cover all text.
+macOSでは、テキストは意図より太くレンダリングされる。`-webkit-font-smoothing: antialiased`と`-moz-osx-font-smoothing: grayscale`（どちらもTailwindの`antialiased`でカバーされる）を、すべてのテキストに適用されるようルートレイアウトで一度だけ設定する。
 
-### 18. Language and Bidi Behavior
+### 18. 言語とbidiの挙動
 
-Set `lang` so browsers and assistive technology choose the right pronunciation, quotes, and hyphenation. Set `dir` at the document or content boundary where direction changes, preserve digit order, and use `<bdi>` for isolated mixed-direction values when needed. Spatial mirroring and logical CSS properties belong to `better-layout`.
+ブラウザや支援技術が正しい発音、引用符、ハイフネーションを選択できるよう、`lang`を設定する。方向が変わる文書やコンテンツの境界で`dir`を設定し、数字の並び順を保持し、必要に応じて孤立させたい双方向テキスト(bidi)混在の値には`<bdi>`を使う。空間的なミラーリングと論理CSSプロパティは`better-layout`が扱う。
 
-### 19. Keep Useful Text Selectable
+### 19. 有用なテキストは選択可能にしておく
 
-`::selection` can carry brand into the reading experience when the selected combination stays legible. Keep text selectable by default. Use `user-select: none` only on a specific draggable or gesture-driven surface where accidental selection demonstrably interferes with the interaction; never disable selection across the interface or merely because a button label can be highlighted.
+`::selection`は、選択された組み合わせが可読なままであれば、読書体験にブランドを持ち込むことができる。テキストはデフォルトで選択可能にしておく。`user-select: none`は、誤選択がインタラクションを明確に妨げる特定のドラッグ操作やジェスチャー操作の対象にのみ使う。インターフェース全体で選択を無効化したり、ボタンラベルがハイライトされ得るというだけの理由で無効化してはならない。
 
 ## Common Mistakes
 
 | Mistake | Fix |
 | --- | --- |
-| `.ttf`/`.otf` served on the web | Convert to `.woff2` |
-| `font-variation-settings: "wght"` for weight | `font-weight` (works with non-variable fallbacks) |
+| `.ttf`/`.otf`をWebで配信している | `.woff2`に変換する |
+| ウェイトに`font-variation-settings: "wght"`を使っている | `font-weight`（可変フォントでないフォールバックでも機能する） |
 | `font-feature-settings: "tnum" 1` | `font-variant-numeric: tabular-nums` |
-| Synthesized face differs from the intended design | Load the required face; disable only the verified synthesis mode without erasing emphasis |
-| Hard-coded one-off font sizes | Use the type scale |
-| Child heading visually overpowers its parent | Map that section's hierarchy to descending scale steps |
-| Heading element picked for its default size | Choose semantics with `better-accessibility`, then set the visual size in CSS |
-| `line-height: 24px` on scalable text | Unitless value (`1.5`) |
-| Full-width paragraphs | Cap around 60–75 characters per line |
-| Orphan on the last line of a paragraph | `text-wrap: pretty` |
-| Lopsided two-line heading | `text-wrap: balance` |
-| Numbers cause layout shift | `tabular-nums` |
-| Truncated text with no way to read it | Tooltip or expanded view for the full value |
-| `UPPERCASE` typed into copy | Natural case + `text-transform` |
-| Justified text in an interface | `text-align: start`; reserve justify for specific editorial layouts |
-| Underline cuts through descenders | `text-decoration-skip-ink: auto`, `from-font` metrics |
-| Inputs below `16px` zoom on iOS | `text-base sm:text-sm` |
-| Root layout omits font smoothing | Apply `antialiased` once at the root |
-| Mixed-direction value renders in the wrong order | Set the correct `lang`/`dir`; isolate the value with `<bdi>` when needed |
-| Selection disabled across application chrome | Restore selection; suppress it only on a specific interaction that conflicts with dragging or gestures |
-| Extra-info hint with no visual cue | Dotted underline via `text-decoration-style: dotted` |
-| Thin/Light weight on `14px` UI text | Weight `400`+ below `18px`; thin weights are display-only |
-| `leading-none` on a three-line card description | At least `1.4` on any text that wraps to 3+ lines |
+| 合成された書体が意図したデザインと異なる | 必要な書体を読み込む。強調を消さないことを検証した合成モードのみを無効化する |
+| その場限りのハードコードされたフォントサイズ | タイプスケールを使う |
+| 子見出しが視覚的に親見出しより目立ってしまう | そのセクションの階層をスケールの降順ステップに対応付ける |
+| デフォルトのサイズを理由に見出し要素を選んでいる | `better-accessibility`でセマンティクスを選び、視覚的なサイズはCSSで設定する |
+| スケーラブルなテキストに`line-height: 24px`を使っている | 単位なしの値（`1.5`） |
+| フル幅の段落 | 1行あたり60〜75文字前後に上限を設ける |
+| 段落の最終行に生じるオーファン | `text-wrap: pretty` |
+| 不均衡な2行見出し | `text-wrap: balance` |
+| 数字がレイアウトシフトを引き起こす | `tabular-nums` |
+| 読む手段のない切り詰め表示(truncation)されたテキスト | 完全な値のためのツールチップまたは展開表示 |
+| コピーに`UPPERCASE`が直接入力されている | 自然な大文字小文字 + `text-transform` |
+| インターフェース内のjustifyされたテキスト | `text-align: start`。justifyは特定のエディトリアルレイアウト向けに取っておく |
+| アンダーラインがディセンダーを貫いてしまう | `text-decoration-skip-ink: auto`、`from-font`メトリクス |
+| `16px`未満のinputがiOSでズームしてしまう | `text-base sm:text-sm` |
+| ルートレイアウトにフォントスムージングがない | ルートで`antialiased`を一度適用する |
+| 双方向テキスト(bidi)混在の値が誤った順序でレンダリングされる | 正しい`lang`/`dir`を設定する。必要に応じて`<bdi>`で値を分離する |
+| アプリケーションのクローム全体でセレクションが無効化されている | セレクションを復元する。ドラッグやジェスチャーと衝突する特定のインタラクションでのみ抑制する |
+| 視覚的な手がかりのない追加情報のヒント | `text-decoration-style: dotted`によるアンダーライン |
+| `14px`のUIテキストにThin/Lightウェイトを使っている | `18px`未満ではウェイト`400`以上。細いウェイトはディスプレイ専用 |
+| 3行のカード説明文に`leading-none`を使っている | 3行以上に折り返されるテキストには少なくとも`1.4` |
 
 ## Review Output Format
 
-Use this format only when the user asks for a standalone typography review. When `better-interface` orchestrates the review, provide domain evidence and findings to that skill and let its output format, severity scale, consolidation rules, cap, and verdict take precedence.
+このフォーマットは、ユーザーが独立したタイポグラフィレビューを求めた場合にのみ使用する。`better-interface`がレビューをオーケストレーションする場合は、ドメインのエビデンスと所見をそのスキルに提供し、そのスキルの出力フォーマット、深刻度スケール、統合ルール、上限、判定を優先させる。
 
-Present the standalone review in two parts.
+独立したレビューは2つの部分で提示する。
 
-### Findings
+### 所見
 
-Group all confirmed findings by principle. Use a markdown table with **Severity**, **Location**, **Before**, **After**, and **Why** columns. Never use separate "Before:" / "After:" lines.
+確認されたすべての所見を原則ごとにグループ化する。**Severity**、**Location**、**Before**、**After**、**Why**の列を持つmarkdownテーブルを使う。別々の"Before:" / "After:"行は使わない。
 
-- **Severity**: `HIGH` makes text unreadable, unavailable, or structurally misleading; `MEDIUM` harms hierarchy, wrapping, or scanning; `LOW` is isolated typographic polish.
-- **Location**: cite `path/to/file:line`. If the artifact has no source files, cite the exact screen and component instead.
-- **Before / After**: show the current typography and an actionable replacement.
-- **Why**: name the violated principle and its effect on readability or hierarchy.
+- **Severity**: `HIGH`はテキストを判読不能、利用不能、または構造的に誤解を招くものにする。`MEDIUM`は階層、折り返し、スキャン性を損なう。`LOW`は局所的なタイポグラフィの仕上げの問題である。
+- **Location**: `path/to/file:line`の形式で引用する。アーティファクトにソースファイルがない場合は、代わりに正確な画面とコンポーネントを引用する。
+- **Before / After**: 現在のタイポグラフィと、実行可能な置き換え案を示す。
+- **Why**: 違反した原則と、可読性または階層への影響を明記する。
 
-Consolidate a repeated systemic issue into one row and list every affected location. Omit principles with no findings.
+繰り返し発生する構造的な問題は1行に統合し、影響を受けるすべての場所を列挙する。所見のない原則は省略する。
 
-### Example
+### 例
 
 #### Tabular numbers
 | Severity | Location | Before | After | Why |
 | --- | --- | --- | --- | --- |
-| MEDIUM | `src/Price.tsx:17` | `<span>{price}</span>` on a live price | `<span className="tabular-nums">{price}</span>` | Proportional digits cause changing values to shift |
-| LOW | `src/numbers.css:8` | `font-feature-settings: "tnum" 1` | `font-variant-numeric: tabular-nums` | The high-level property preserves fallback behavior |
+| MEDIUM | `src/Price.tsx:17` | `<span>{price}</span>`を実際の価格に使用 | `<span className="tabular-nums">{price}</span>` | プロポーショナルな数字は、変化する値がずれる原因になる |
+| LOW | `src/numbers.css:8` | `font-feature-settings: "tnum" 1` | `font-variant-numeric: tabular-nums` | 高レベルのプロパティはフォールバックの挙動を保つ |
 
-#### Line-height and measure
+#### line-heightとmeasure
 | Severity | Location | Before | After | Why |
 | --- | --- | --- | --- | --- |
-| MEDIUM | `src/Article.tsx:33` | `leading-none` on a body paragraph | `leading-normal` (`1.5`–`1.6`) | Wrapped body text needs enough vertical separation |
-| MEDIUM | `src/article.css:12` | Full-width article column | `max-width` near 65 characters at `16px` | Long measures make lines hard to track |
+| MEDIUM | `src/Article.tsx:33` | `leading-none`を本文段落に使用 | `leading-normal`（`1.5`–`1.6`） | 折り返された本文テキストには十分な垂直方向の間隔が必要 |
+| MEDIUM | `src/article.css:12` | フル幅の記事カラム | `16px`で65文字前後の`max-width` | measureが長いと行を目で追いにくくなる |
 
-### Verification and Verdict
+### 検証と判定
 
-After the findings:
+所見の後に以下を記載する。
 
-1. **Verification**: list the exact checks run and their observed results, including wrapping, hierarchy, text resizing, font loading, and dynamic-value stability when applicable. If a check was not run, state what still needs verification.
-2. **Verdict**: `Block` if any `HIGH` finding remains, `Needs changes` if only `MEDIUM` or `LOW` findings remain, and `Approve` only when no actionable findings remain.
+1. **検証**: 折り返し、階層、テキストのリサイズ、フォントの読み込み、該当する場合は動的な値の安定性を含め、実行した正確なチェックとその観測結果を列挙する。チェックを実行していない場合は、まだ何を検証する必要があるかを述べる。
+2. **判定**: `HIGH`の所見が1つでも残っていれば`Block`、`MEDIUM`または`LOW`の所見のみが残っていれば`Needs changes`、実行可能な所見が残っていない場合に限り`Approve`とする。
 
-When there are no findings, omit the tables, state "No actionable typography findings", report verification, and end with `Approve`.
+所見がない場合は、テーブルを省略し、「実行可能なタイポグラフィの所見なし」と記載し、検証結果を報告し、`Approve`で締めくくる。

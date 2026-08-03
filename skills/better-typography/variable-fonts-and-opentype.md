@@ -1,105 +1,105 @@
-# Variable fonts and OpenType
+# 可変フォントとOpenType
 
-What a font file can do beyond drawing letters, and how to reach those abilities from CSS.
+フォントファイルが文字を描く以上に何ができるか、そしてCSSからそれらの機能にどうアクセスするか。
 
-## Static vs variable
+## 静的フォント vs 可変フォント
 
-- **Static font:** one weight and one style per file. Regular + medium + bold = three files.
-- **Variable font:** an entire range in one file. Any value in the range works, e.g. `font-weight: 589`.
+- **静的フォント:** 1ファイルにつき1つのウェイトと1つのスタイル。Regular + medium + bold = 3ファイル。
+- **可変フォント:** 1ファイルに全体の範囲を収める。範囲内のどの値でも機能する。例: `font-weight: 589`。
 
-A variable font is not automatically better. One or two weights: static files can be smaller. Several weights, optical sizes or custom axes: a variable font usually makes more sense.
+可変フォントが自動的に優れているわけではない。ウェイトが1つか2つだけなら、静的ファイルのほうが小さくできる。複数のウェイト、オプティカルサイズ、カスタム軸がある場合は、通常は可変フォントのほうが理にかなっている。
 
-## Load intended weights and styles
+## 意図したウェイトとスタイルを読み込む
 
-When you use a weight or style the active family does not provide, the browser may synthesize it. Prefer loading the faces the design actually uses. Disable synthesis only after verifying the complete fallback stack and every semantic emphasis state; `none` disables weight, style, small-cap, superscript, and subscript synthesis together and can erase distinctions when the real face is unavailable.
+アクティブなフォントファミリーが提供していないウェイトやスタイルを使用すると、ブラウザがそれを合成することがある。デザインが実際に使用している書体を読み込むことを優先する。合成の無効化は、フォールバックスタック全体とすべてのセマンティックな強調状態を検証した後にのみ行う。`none`はウェイト、スタイル、small-cap、上付き文字、下付き文字の合成をまとめて無効化するため、実際の書体が利用できない場合に区別を消してしまうことがある。
 
 ```css
 .brand-wordmark {
-  /* Safe only after this isolated treatment is verified */
+  /* この個別の処理が検証された場合にのみ安全 */
   font-synthesis: none;
 }
 ```
 
-For body and interface text, keep synthesis enabled unless a verified font setup supplies every requested form. If only one mode is unwanted, use the specific longhand (`font-synthesis-weight`, `font-synthesis-style`, and related properties) instead of the blanket shorthand.
+本文やインターフェースのテキストでは、検証済みのフォント設定が要求されたすべての書体を提供している場合を除き、合成を有効なままにしておく。特定のモードだけを無効にしたい場合は、一括のショートハンドではなく、個別のロングハンド（`font-synthesis-weight`、`font-synthesis-style`など関連プロパティ）を使う。
 
-## Axes
+## 軸
 
-Variable-font controls, each with a four-letter tag. A font only supports the axes its designer included.
+可変フォントの制御項目で、それぞれ4文字のタグを持つ。フォントは、デザイナーが含めた軸のみをサポートする。
 
 | Axis | Tag | Controls |
 | --- | --- | --- |
-| Weight | `wght` | Stroke thickness (like `font-weight`) |
-| Optical size | `opsz` | Details and spacing tuned for the display size |
-| Width | `wdth` | Glyph width |
-| Slant | `slnt` | Slant angle |
-| Custom | e.g. `GRAD` (Roboto Flex) | Whatever the designer built |
+| ウェイト | `wght` | ストロークの太さ（`font-weight`に相当） |
+| オプティカルサイズ | `opsz` | 表示サイズに合わせて調整された詳細と間隔 |
+| 幅 | `wdth` | グリフの幅 |
+| 傾斜 | `slnt` | 傾斜角度 |
+| カスタム | 例: `GRAD`（Roboto Flex） | デザイナーが実装した任意のもの |
 
-Inter's variable file exposes only `wght` and `opsz`.
+Interの可変フォントファイルは`wght`と`opsz`のみを公開している。
 
-Optical sizes predate variable fonts and many fonts still ship them as separate files: Heldane Text is sturdier and more spaced for reading sizes, Heldane Display has finer details for large sizes.
+オプティカルサイズは可変フォントより前から存在しており、多くのフォントは今でも別ファイルとして提供している。Heldane Textは読み取りサイズ向けにより頑丈で間隔が広く、Heldane Displayは大きいサイズ向けに、より繊細なディテールを持つ。
 
-## Properties over axis tags
+## 軸タグよりプロパティを優先する
 
-When a property exists, use it. `font-weight` keeps working when a non-variable fallback renders; `font-variation-settings` silently does nothing. Save the raw tags for custom axes with no property of their own:
+プロパティが存在する場合はそれを使う。`font-weight`は、可変フォントでないフォールバックがレンダリングされても機能し続けるが、`font-variation-settings`は黙って何もしない。生のタグは、専用のプロパティを持たないカスタム軸のために取っておく。
 
 ```css
-/* Good: common axes use the properties */
+/* 良い例: 一般的な軸にはプロパティを使う */
 .heading {
   font-weight: 650;
   font-optical-sizing: auto;
 }
 
-/* Good: custom axis with no property of its own */
+/* 良い例: 専用のプロパティを持たないカスタム軸 */
 .heading-grade {
   font-variation-settings: "GRAD" 80;
 }
 
-/* Bad: weight via raw tag breaks on fallback fonts */
+/* 悪い例: 生のタグによるウェイト指定はフォールバックフォントで崩れる */
 .heading {
   font-variation-settings: "wght" 650;
 }
 ```
 
-## OpenType features
+## OpenType機能
 
-OpenType is the standard behind almost every modern font. Features are extra built-in options and, unlike axes, they work the same on static and variable fonts. A font only ships the features its designer included.
+OpenTypeは、ほぼすべての現代のフォントの背後にある標準規格である。機能（features）はビルトインの追加オプションであり、軸とは異なり、静的フォントと可変フォントの両方で同じように機能する。フォントは、デザイナーが含めた機能のみを提供する。
 
 | Tag | Feature |
 | --- | --- |
-| `tnum` | Tabular numbers: every digit the same width |
-| `zero` | Slashed zero: `0` distinct from `O` |
-| `liga` | Ligatures: joins pairs like "fi" into one shape |
-| `ss01`–`ss20` | Stylistic sets (numbered slots) |
-| `cv01`–`cv99` | Character variants (numbered slots) |
+| `tnum` | tabular numbers: すべての数字が同じ幅 |
+| `zero` | slashed zero: `0`と`O`を区別する |
+| `liga` | ligatures（合字）: "fi"のようなペアを1つの形に結合する |
+| `ss01`–`ss20` | stylistic sets（番号付きスロット） |
+| `cv01`–`cv99` | character variants（番号付きスロット） |
 
-Same rule as axes: prefer the `font-variant-*` properties, reserve `font-feature-settings` for tags with no property:
+軸と同じルール。`font-variant-*`のプロパティを優先し、`font-feature-settings`は専用のプロパティを持たないタグのために取っておく。
 
 ```css
-/* Good: common features use the properties */
+/* 良い例: 一般的な機能にはプロパティを使う */
 .price {
   font-variant-numeric: tabular-nums;
 }
 
-/* Good: slashed zero via the property too */
+/* 良い例: slashed zeroもプロパティ経由で */
 .id {
   font-variant-numeric: slashed-zero;
 }
 
-/* Good: niche feature with no property of its own */
+/* 良い例: 専用のプロパティを持たないニッチな機能 */
 .logo {
   font-feature-settings: "ss01" 1;
 }
 ```
 
-Tabular numbers matter for changing values: without them each digit has a different width and the layout shifts as values update.
+tabular numbersは、変化する値にとって重要である。これがないと、各数字が異なる幅を持つため、値が更新されるたびにレイアウトがずれる。
 
-## Small caps, superscripts, subscripts
+## スモールキャップ、上付き文字、下付き文字
 
-- **Small capitals:** uppercase letters drawn at a smaller size. Enable real ones with `font-variant-caps`.
-- **Superscripts** sit above the normal line (the 2 in x²), **subscripts** below it (H₂O). Enable proper glyphs with `font-variant-position`.
+- **スモールキャピタル:** より小さいサイズで描かれる大文字。`font-variant-caps`で本物のスモールキャピタルを有効にする。
+- **上付き文字**は通常の行より上に位置し（x²の2）、**下付き文字**はその下に位置する（H₂O）。`font-variant-position`で適切なグリフを有効にする。
 
-Both require the font to include the glyphs.
+どちらも、フォントがそのグリフを含んでいる必要がある。
 
-## Stylistic sets and character variants
+## Stylistic setsとcharacter variants
 
-`ss01` = stylistic set, slot 01. `cv11` = character variant, slot 11. What each slot does differs font to font, which is why they are numbered, not named. Check the font's docs. In Inter, `ss01` switches to open digits and `cv11` swaps in a single-story `a`.
+`ss01` = stylistic set、スロット01。`cv11` = character variant、スロット11。各スロットが何を行うかはフォントごとに異なるため、名前ではなく番号が振られている。フォントのドキュメントを確認する。Interでは、`ss01`はopen digitsに切り替わり、`cv11`はシングルストーリーの`a`に置き換わる。

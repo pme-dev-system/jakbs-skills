@@ -1,10 +1,10 @@
-# Details and accessibility
+# 細部とアクセシビリティ
 
-Underlines, selection, forms, decorative text and the floors that keep everything readable.
+アンダーライン、セレクション、フォーム、装飾テキスト、そしてすべてを読みやすく保つための下限値。
 
-## Underlines
+## アンダーライン
 
-Default underline position is browser-determined: sometimes too close, cutting through descenders or too thin. Pull position and thickness from the font's own metrics:
+デフォルトのアンダーラインの位置はブラウザが決定する。近すぎてディセンダーを貫いてしまったり、細すぎたりすることがある。フォント自身のメトリクスから位置と太さを取得する。
 
 ```css
 a {
@@ -13,7 +13,7 @@ a {
 }
 ```
 
-The line does not have to be solid. `text-decoration-style` can draw it dotted, dashed or wavy. A dotted underline is a common hint that a word carries extra information, like an abbreviation or a defined term:
+線は実線である必要はない。`text-decoration-style`はdotted、dashed、wavyで線を描画できる。dottedのアンダーラインは、略語や定義済み用語のように、単語が追加情報を持っていることを示す一般的なヒントである。
 
 ```css
 abbr {
@@ -21,7 +21,7 @@ abbr {
 }
 ```
 
-Or tune manually:
+あるいは手動で調整する。
 
 ```css
 a {
@@ -37,61 +37,61 @@ a:hover {
 }
 ```
 
-Unless the only thing animating is a color change, build the underline as a custom element instead of using `text-decoration`: color is the only part of a real underline that animates reliably. Animate the custom element however the effect requires.
+アニメーションさせるのが色の変化だけでない限り、`text-decoration`を使う代わりにアンダーラインをカスタム要素として構築する。実際のアンダーラインで確実にアニメーションできる部分は色だけである。カスタム要素は、必要な効果に応じて自由にアニメーションさせる。
 
-## Selection
+## セレクション
 
-- `::selection` changes the background and color of selected text; a subtle way to embed brand. Keep the combination legible.
-- Keep text selectable by default, including application chrome; users copy labels, identifiers, errors, and values in ways the designer may not predict.
-- Use `user-select: none` only on a specific draggable or gesture-driven surface where accidental selection conflicts with the interaction. Do not apply it globally or solely to imitate native chrome.
-- `::target-text` styles the phrase a shared link scrolls to.
-- The Custom Highlight API styles ranges you pick yourself, like search matches, without extra markup.
+- `::selection`は選択されたテキストの背景と色を変更する。ブランドをさりげなく組み込む方法である。組み合わせは可読性を保つ。
+- アプリケーションのクロームを含め、テキストはデフォルトで選択可能にしておく。ユーザーは、デザイナーが予測しない方法でラベル、識別子、エラー、値をコピーする。
+- `user-select: none`は、誤ったセレクションがインタラクションと衝突する特定のドラッグ操作やジェスチャー操作の対象にのみ使う。グローバルに適用したり、ネイティブのクロームを模倣するためだけに適用したりしない。
+- `::target-text`は、共有リンクがスクロールする先のフレーズをスタイルする。
+- Custom Highlight APIは、検索結果のマッチのように自分で選んだ範囲を、追加のマークアップなしでスタイルする。
 
-## Forms and editable text
+## フォームと編集可能なテキスト
 
-- `::placeholder` styles the hint in an empty field.
-- `caret-color` colors the blinking insertion bar. Color is about as far as caret styling goes: a fully custom caret is very difficult to build and usually not worth it unless a very specific effect calls for it.
+- `::placeholder`は空のフィールド内のヒントをスタイルする。
+- `caret-color`は点滅する挿入バーの色を変える。キャレットのスタイリングとして可能なのは、ほぼ色の変更までである。完全にカスタムなキャレットの構築は非常に難しく、よほど特定の効果が必要な場合を除き、通常は割に合わない。
 
-### iOS input zoom
+### iOSのinputズーム
 
-Focusing an input with text smaller than `16px` zooms the whole page (an accessibility feature: `16px` is the web default and Safari treats smaller as too hard to read while typing).
+`16px`より小さいテキストのinputにフォーカスすると、ページ全体がズームされる（これはアクセシビリティ機能である。`16px`はWebのデフォルトであり、Safariはそれより小さいと入力中に読みづらいとみなす）。
 
 ```tsx
-// Good: 16px on mobile, smaller from the sm breakpoint up
+// Good: モバイルでは16px、smブレークポイント以上ではより小さく
 <input className="text-base sm:text-sm" type="email" />
 ```
 
-Avoid the `maximum-scale=1` viewport meta as a fix: Safari ignores the cap for pinch zoom, but every other browser honors it and restricts pinch zoom, which fails WCAG 1.4.4. The responsive input size solves the zoom with no accessibility cost.
+対処法として`maximum-scale=1`のviewport metaを使うのは避ける。Safariはピンチズームに対してこの上限を無視するが、他のすべてのブラウザはこれを尊重してピンチズームを制限してしまい、WCAG 1.4.4に違反する。レスポンシブなinputサイズであれば、アクセシビリティを犠牲にすることなくズームの問題を解決できる。
 
-## Decorative text
+## 装飾的なテキスト
 
 | Property | Effect |
 | --- | --- |
-| `::first-letter` | Drop cap, widely supported |
-| `::first-line` | Styles only the first line |
-| `initial-letter` | Sizes the drop cap; limited support, no Firefox yet |
-| `background-clip: text` | Clips a background or gradient to the letter shapes |
-| `-webkit-text-stroke` | Outlines the letters; works across modern browsers despite the prefix |
-| `text-shadow` | Like `box-shadow` but follows the character shapes |
+| `::first-letter` | ドロップキャップ、幅広くサポートされている |
+| `::first-line` | 最初の行のみをスタイルする |
+| `initial-letter` | ドロップキャップのサイズを指定する。サポートは限定的で、Firefoxはまだ未対応 |
+| `background-clip: text` | 背景やグラデーションを文字の形にクリップする |
+| `-webkit-text-stroke` | 文字にアウトラインを付ける。プレフィックスが付いているが、モダンブラウザ全般で動作する |
+| `text-shadow` | `box-shadow`に似ているが、文字の形状に沿う |
 
-If a text stroke draws lines inside the letters, that is the font: the stroke traces every contour and variable fonts usually keep overlapping shapes unmerged. Static fonts do not have this issue.
+テキストストロークが文字の内側にも線を描いてしまう場合、それはフォント側の問題である。ストロークはすべての輪郭をなぞり、可変フォントは通常、重なり合う形状を結合せずに保持している。静的フォントにはこの問題はない。
 
-## Sizes
+## サイズ
 
-Typography must survive the reader changing it: zoom, a larger browser font size, overridden line height or letter spacing.
+タイポグラフィは、読者がそれを変更しても機能し続けなければならない。ズーム、より大きなブラウザのフォントサイズ、上書きされたline-heightやletter-spacingなど。
 
 | Text | Size |
 | --- | --- |
-| Long-form body starting point | Around `16px`, verified in the actual typeface and measure |
-| Inputs and menus starting point | Around `14px` |
-| Captions | `13px` |
-| Floor | Rarely below `12px` |
+| 長文本文の出発点 | 実際の書体とmeasureで検証した`16px`前後 |
+| inputとメニューの出発点 | `14px`前後 |
+| キャプション | `13px` |
+| 下限 | `12px`を下回ることは滅多にない |
 
-When text appears low-contrast, use `better-colors` to measure the rendered foreground/background pair and `better-accessibility` to classify the applicable requirement. Changing the project's colors remains a design decision unless the user asks for remediation.
+テキストが低コントラストに見える場合は、`better-colors`でレンダリングされた前景/背景のペアを測定し、`better-accessibility`で該当する要件を分類する。ユーザーが是正を求めない限り、プロジェクトの色を変更するかどうかはデザイン上の判断のままである。
 
-## Font smoothing
+## フォントスムージング
 
-On macOS text renders heavier than intended. Apply font smoothing once on the root layout so it covers all text. Tailwind's `antialiased` sets both properties:
+macOSでは、テキストは意図より太くレンダリングされる。すべてのテキストに適用されるよう、ルートレイアウトでフォントスムージングを一度適用する。Tailwindの`antialiased`は両方のプロパティを設定する。
 
 ```css
 html {
