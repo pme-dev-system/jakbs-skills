@@ -1,15 +1,15 @@
-# Motion and Zoom
+# モーションとズーム
 
-`prefers-reduced-motion`, zoom and reflow, and unit choices that respect user settings.
+`prefers-reduced-motion`、ズームとリフロー、ユーザー設定を尊重する単位選択。
 
 ## prefers-reduced-motion
 
-Make motion opt-in: wrap animations in `@media (prefers-reduced-motion: no-preference)` so users who asked for reduced motion get the static version by default, instead of you chasing every animation with an override.
+モーションをオプトインにする: アニメーションを`@media (prefers-reduced-motion: no-preference)`でラップし、モーション低減を求めたユーザーにはデフォルトで静的なバージョンが表示されるようにする。個々のアニメーションを追いかけてオーバーライドする必要はなくなる。
 
 ```css
-/* Good: motion is opt-in */
+/* 良い例: モーションはオプトイン */
 .card {
-  /* static styles */
+  /* 静的なスタイル */
 }
 @media (prefers-reduced-motion: no-preference) {
   .card {
@@ -19,11 +19,11 @@ Make motion opt-in: wrap animations in `@media (prefers-reduced-motion: no-prefe
 ```
 
 ```tsx
-// Tailwind: motion-safe / motion-reduce variants
+// Tailwind: motion-safe / motion-reduceバリアント
 <div className="motion-safe:transition-transform motion-safe:hover:-translate-y-1" />
 ```
 
-For an existing codebase where opt-in isn't feasible, the global kill switch is the fallback:
+オプトインが現実的でない既存のコードベースでは、グローバルなキルスイッチがフォールバックになる:
 
 ```css
 @media (prefers-reduced-motion: reduce) {
@@ -36,44 +36,44 @@ For an existing codebase where opt-in isn't feasible, the global kill switch is 
 }
 ```
 
-`0.01ms` rather than `none` so `animationend`/`transitionend` events still fire and JS that waits on them doesn't hang.
+`none`ではなく`0.01ms`を使うのは、`animationend`/`transitionend`イベントが引き続き発火し、それを待つJSがハングしないようにするためである。
 
-### What to disable vs reduce
+### 無効にするものと低減するものの違い
 
-Reduced motion means reduced, not eliminated: it targets vestibular triggers, not feedback.
+モーション低減とは低減であって、完全な排除ではない。対象となるのは前庭系のトリガーであり、フィードバックではない。
 
-| Disable entirely | Replace | Keep |
+| 完全に無効化 | 置き換え | 維持 |
 | --- | --- | --- |
-| Parallax scrolling | Slide/scale/zoom transitions → opacity crossfade | Loading spinners and progress |
-| Autoplaying video, GIFs, looping decoration | Smooth scrolling → instant jump | Instant state changes (hover color, focus ring) |
-| Spinning, large-scale movement across the screen | Auto-rotating carousels → start paused | Brief functional feedback (button press) |
+| パララックススクロール | スライド/スケール/ズームのトランジション → 不透明度のクロスフェード | ローディングスピナーと進捗表示 |
+| 自動再生される動画、GIF、ループする装飾 | スムーズスクロール → 瞬時のジャンプ | 瞬時の状態変化(ホバーの色、フォーカスリング) |
+| 画面全体を回転・大移動する動き | 自動回転するカルーセル → 一時停止した状態で開始 | 短い機能的フィードバック(ボタンの押下) |
 
-Animations must be interruptible and driven by user input; nothing should autoplay or refuse to stop. Under reduced motion, carousels start paused.
+アニメーションは中断可能で、ユーザー入力によって駆動されなければならない。自動再生されたり、停止を拒んだりするものがあってはならない。モーション低減時には、カルーセルは一時停止した状態で開始する。
 
-## Autoplay and timed UI
+## autoplayとタイマー式UI
 
-Motion the user didn't ask for, and UI that acts on its own schedule:
+ユーザーが求めていないモーションと、自らのスケジュールで動作するUI:
 
-- **No autoplaying media without visible controls** (WCAG 2.2.2): anything that moves, blinks or updates automatically for more than 5 seconds needs a visible pause/stop control. Muted looping hero videos included.
-- **Prefer explicit dismissal over timers.** Auto-dismissing toasts are acceptable only for low-stakes confirmations; anything containing an action, an error, or information the user may need to act on stays until dismissed. If a toast must time out, 5 seconds is the floor, and hovering or focusing it pauses the timer.
-- **Never put critical information only in a timed element.** A vanished toast with the only link to an undo action is data loss on a schedule.
+- **可視のコントロールなしにメディアを自動再生しない**(WCAG 2.2.2): 5秒を超えて自動的に動く、点滅する、更新されるものには、可視の一時停止/停止コントロールが必要である。ミュートされたループのヒーロー動画も含む。
+- **タイマーより明示的な閉じる操作を優先する。** 自動的に消えるトーストは、リスクの低い確認にのみ許容される。アクション、エラー、またはユーザーが対応する必要がある可能性のある情報を含むものは、閉じられるまで表示し続ける。トーストがタイムアウトする必要がある場合、5秒を下限とし、ホバーまたはフォーカスするとタイマーを一時停止する。
+- **重要な情報をタイマー付きの要素だけに置くことは決してしない。** 元に戻すアクションへの唯一のリンクが消えたトーストにしかない場合、それはスケジュール通りに起こるデータ損失である。
 
-## Zoom and reflow
+## ズームとリフロー
 
-- **200% zoom** (WCAG 1.4.4): all content and functionality must survive text scaled to 200%. Never block zoom: no `user-scalable=no`, no `maximum-scale=1`. Safari ignores the cap but every other browser enforces it.
-- **Reflow at 320px** (WCAG 1.4.10): at 400% zoom on a 1280px viewport (equivalent to a 320px viewport) the page must work with vertical scrolling only: no two-dimensional scrolling except for genuinely 2D content (tables, maps, code blocks), which scroll inside their own container.
+- **200%ズーム**(WCAG 1.4.4): すべてのコンテンツと機能は、テキストが200%に拡大されても機能し続けなければならない。ズームを決してブロックしない: `user-scalable=no`も`maximum-scale=1`も使わない。Safariはこの上限を無視するが、他のすべてのブラウザは適用する。
+- **320pxでのリフロー**(WCAG 1.4.10): 1280pxのビューポートで400%ズームした場合(320pxのビューポートに相当)、ページは垂直スクロールのみで機能しなければならない。表、地図、コードブロックのような本質的に2次元なコンテンツを除き、二次元スクロールがあってはならない。これらは自身のコンテナ内でスクロールする。
 
-Fixed heights are what break under zoom: use `min-height` on anything containing text and let containers grow.
+ズーム時に破綻するのは固定の高さである: テキストを含むものには`min-height`を使い、コンテナを伸長させる。
 
-### rem vs px
+### remとpx
 
-Respect how the codebase is set up: if the project sizes in `px` (or an established Tailwind scale), stay consistent with it; don't introduce mixed units into someone else's system. Where you do have the choice (new code, or a codebase already on `rem`), `rem` respects the user's base font size and `px` ignores it:
+コードベースの設定方法を尊重する: プロジェクトが`px`(または確立されたTailwindスケール)でサイズ指定している場合は、それと一貫させる。他人のシステムに単位を混在させて持ち込まない。選択の余地がある場合(新規コード、またはすでに`rem`を使っているコードベース)、`rem`はユーザーのベースフォントサイズを尊重し、`px`はそれを無視する:
 
-| Use `rem` | Use `px` |
+| `rem`を使う | `px`を使う |
 | --- | --- |
-| `font-size` | Borders and hairlines |
-| `max-width` of text containers | Focus outline width and offset |
-| Media-query breakpoints (`@media (min-width: 48rem)`) | `box-shadow` details |
-| Spacing that should scale with text | Fixed-size decorations |
+| `font-size` | ボーダーとヘアライン |
+| テキストコンテナの`max-width` | フォーカスのアウトライン幅とオフセット |
+| メディアクエリのブレークポイント(`@media (min-width: 48rem)`) | `box-shadow`の細部 |
+| テキストに合わせてスケールすべきスペーシング | 固定サイズの装飾 |
 
-Breakpoints are where the choice matters most: at a larger base font size, an `em`/`rem` query switches to the mobile layout when the text needs it; a `px` query doesn't.
+この選択が最も重要になるのはブレークポイントである: ベースフォントサイズが大きい場合、`em`/`rem`のクエリはテキストが必要とするタイミングでモバイルレイアウトに切り替わるが、`px`のクエリは切り替わらない。

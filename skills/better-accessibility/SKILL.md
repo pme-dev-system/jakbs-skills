@@ -1,148 +1,148 @@
 ---
 name: better-accessibility
-description: Accessibility engineering for product interfaces, from focus states and keyboard support to ARIA, forms, and screen readers. Use when building or reviewing UI components, modals, menus, forms, custom widgets, or when the user says "make this accessible" or reports keyboard or screen-reader issues. Triggers on accessibility, a11y, WCAG, aria, focus ring, focus-visible, focus trap, keyboard navigation, tab order, tabindex, screen reader, sr-only, aria-live, alt text, hit area, touch target, prefers-reduced-motion, autoplay, toast duration, skip link, semantic HTML, aria-label, form errors, disabled buttons, "not keyboard accessible".
+description: フォーカス状態やキーボード操作対応からARIA、フォーム、スクリーンリーダーまで、プロダクトインターフェースのためのアクセシビリティエンジニアリング。UIコンポーネント、モーダル、メニュー、フォーム、カスタムウィジェットの構築時やレビュー時、またはユーザーが「これをアクセシブルにして」と言った場合や、キーボードやスクリーンリーダーの問題が報告された場合に使用する。トリガーワードはアクセシビリティ、a11y、WCAG、aria、フォーカスリング、focus-visible、フォーカストラップ、キーボード操作、タブ順序、tabindex、スクリーンリーダー、sr-only、aria-live、altテキスト、ヒットエリア、タップ領域、prefers-reduced-motion、autoplay、トースト表示時間、スキップリンク、セマンティックHTML、aria-label、フォームエラー、無効化されたボタン、「キーボードでアクセスできない」。
 ---
 
-# Accessibility that comes with the craft
+# クラフトに内在するアクセシビリティ
 
-Accessibility is not a compliance checkbox bolted on at the end; it is the floor for interface craft. Most of it is free if you use the platform: native elements ship with keyboard support, real labels announce themselves, and a visible focus ring is one CSS rule. Apply these principles when building or reviewing UI code, and match the project's existing styling system (Tailwind vs. plain CSS vs. CSS-in-JS) when applying fixes.
+アクセシビリティは最後に取ってつけるコンプライアンスのチェック項目ではなく、インターフェースクラフトの土台である。プラットフォームを使えばその大半は無料で手に入る。ネイティブ要素にはキーボード操作対応が備わっており、本物のラベルは自ら読み上げられ、可視のフォーカスリングもCSSルール1つで済む。UIコードを構築・レビューする際にはこれらの原則を適用し、修正を適用する際にはプロジェクトの既存のスタイリングシステム(Tailwindか、素のCSSか、CSS-in-JSか)に合わせる。
 
-When reviewing, walk the interface as a keyboard-only user first (every flow must complete without a mouse), then as a screen-reader user: does each control announce a name, a role, and its state? When unsure, prefer the platform default over a custom rebuild, and remove ARIA rather than add it.
+レビューする際は、まずキーボードのみのユーザーとしてインターフェースを操作する(すべてのフローはマウスなしで完了しなければならない)。次にスクリーンリーダーユーザーとして操作する: 各コントロールは名前、ロール、状態を読み上げているか。判断に迷う場合は、カスタムでの作り直しよりプラットフォームのデフォルトを優先し、ARIAは追加するより削除する方を優先する。
 
-Rendered-pair contrast measurement and color remediation are covered by the `better-colors` skill; visual text sizing and iOS input zoom by `better-typography`; spatial RTL layout by `better-layout`.
+描画されたペアのコントラスト測定と色の是正は`better-colors`スキルが扱う。視覚的なテキストサイズとiOSの入力ズームは`better-typography`が扱う。空間的なRTLレイアウトは`better-layout`が扱う。
 
 ## Quick Reference
 
-| Category | When to Use |
+| カテゴリ | 使用場面 |
 | --- | --- |
-| [Focus & Keyboard](focus-and-keyboard.md) | Focus rings, skip links, tabindex, focus trapping, APG keyboard patterns |
-| [Semantics & ARIA](semantics-and-aria.md) | Native elements first, button vs link, landmarks, accessible names, disabled states |
-| [Forms](forms.md) | Labels, autocomplete, error messaging, input types |
-| [Screen Readers](screen-readers.md) | Visually hidden content, live regions, toasts, alt text, SVG |
-| [Hit Areas](hit-areas.md) | Target sizes, expanding hit areas, collision rules |
-| [Motion & Zoom](motion-and-zoom.md) | `prefers-reduced-motion`, autoplay and timed UI, 200% zoom, reflow, rem vs px |
+| [フォーカスとキーボード](focus-and-keyboard.md) | フォーカスリング、スキップリンク、tabindex、フォーカストラップ、APGキーボードパターン |
+| [セマンティクスとARIA](semantics-and-aria.md) | ネイティブ要素優先、ボタンとリンクの使い分け、ランドマーク、アクセシブルネーム、無効状態 |
+| [フォーム](forms.md) | ラベル、autocomplete、エラーメッセージ、入力タイプ |
+| [スクリーンリーダー](screen-readers.md) | 視覚的に隠されたコンテンツ、ライブリージョン、トースト、altテキスト、SVG |
+| [ヒットエリア](hit-areas.md) | ターゲットサイズ、ヒットエリアの拡張、衝突ルール |
+| [モーションとズーム](motion-and-zoom.md) | `prefers-reduced-motion`、autoplayとタイマー式UI、200%ズーム、リフロー、remとpx |
 
 ## Core Principles
 
-### 1. Native Elements First
+### 1. ネイティブ要素を優先する
 
-The first rule of ARIA: don't use ARIA when a native element exists. `<button>` for actions, `<a href>` for navigation (it must support Cmd/Ctrl/middle-click), never `<div onClick>`. No ARIA is better than bad ARIA.
+ARIAの第一原則: ネイティブ要素が存在するならARIAを使わない。アクションには`<button>`、ナビゲーションには`<a href>`を使う(Cmd/Ctrl/中クリックに対応する必要がある)。`<div onClick>`は使わない。悪いARIAを使うより、ARIAを使わない方がよい。
 
-### 2. Visible Focus Rings
+### 2. 可視のフォーカスリング
 
-Style `:focus-visible`, not bare `:focus`, so keyboard users get a ring and mouse users usually don't. Prefer the browser's unmodified focus indicator. If the design needs a custom ring, use a project focus token or another explicit color and verify the complete indicator against every adjacent color it crosses; `currentColor` is acceptable only after the same check. Use at least a `2px` solid perimeter or an equivalent visible area. Never use `outline: none` without a verified replacement, and preserve system colors in forced-colors mode.
+素の`:focus`ではなく`:focus-visible`にスタイルを適用する。こうすることでキーボードユーザーにはリングが表示され、マウスユーザーには通常表示されない。ブラウザ標準の未改変のフォーカスインジケーターを優先する。デザイン上カスタムリングが必要な場合は、プロジェクトのフォーカストークンか別の明示的な色を使い、隣接するすべての色に対して完全なインジケーターを検証する。`currentColor`も同じ検証を行った場合にのみ使用できる。最低でも`2px`の実線の外周、またはそれと同等の可視面積を確保する。検証済みの代替なしに`outline: none`を使わない。forced-colorsモードではシステムカラーを保持する。
 
-### 3. Full Keyboard Support
+### 3. 完全なキーボード対応
 
-Every pointer interaction needs a keyboard path, following the ARIA APG patterns: Escape closes overlays, arrow keys move within composite widgets (tabs, menus, listboxes), Tab moves between widgets, Enter and Space activate. Only `tabindex="0"` (join the natural tab order) and `tabindex="-1"` (programmatic focus), never positive values, which break the natural order. Composite widgets use roving tabindex: the active item is `0`, all others `-1`.
+すべてのポインター操作には、ARIA APGパターンに従ったキーボード操作経路が必要である: Escapeでオーバーレイを閉じ、矢印キーで複合ウィジェット(タブ、メニュー、リストボックス)内を移動し、Tabでウィジェット間を移動し、EnterとSpaceでアクティブにする。使用するのは`tabindex="0"`(自然なタブ順序に加わる)と`tabindex="-1"`(プログラムによるフォーカス)のみとし、自然な順序を壊す正の値は決して使わない。複合ウィジェットではローミングタブインデックスを使う: アクティブな項目を`0`に、それ以外をすべて`-1`にする。
 
-### 4. Trap and Restore Focus
+### 4. フォーカスのトラップと復元
 
-Modals set `inert` on the background content, move focus inside on open, and return focus to the trigger on close. Add `overscroll-behavior: contain` so background content doesn't scroll.
+モーダルは背景コンテンツに`inert`を設定し、開いたときにフォーカスを内部へ移動し、閉じたときにトリガーへフォーカスを戻す。背景コンテンツがスクロールしないよう`overscroll-behavior: contain`を追加する。
 
-### 5. Minimum Hit Area
+### 5. 最小ヒットエリア
 
-WCAG 2.5.8's Level AA baseline is a 24×24 CSS-pixel target or one of its defined spacing, equivalent-control, inline, user-agent, or essential exceptions. For easier activation, aim for 44×44px in touch contexts and 40×40px in desktop interfaces when density permits. Extend with a pseudo-element if the visible element should stay smaller. Never let extended hit areas overlap.
+WCAG 2.5.8のレベルAAのベースラインは24×24 CSSピクセルのターゲット、またはそこで定義されているspacing、equivalent-control、inline、user-agent、essentialのいずれかの例外である。より活性化しやすくするため、タッチ環境では44×44px、密度が許すデスクトップインターフェースでは40×40pxを目指す。可視要素を小さいままにしたい場合は疑似要素で拡張する。拡張したヒットエリア同士を重ねることは決してしない。
 
-### 6. Label and Type Every Control
+### 6. すべてのコントロールにラベルと型を
 
-Every input gets a `<label for>` or wrapping `<label>`; a placeholder is never a label, and label and control share one hit target: no dead zones between a checkbox and its text. Add `autocomplete` with a meaningful `name`, and the correct `type` and `inputmode` for the keyboard. Never block paste; users paste passwords and one-time codes.
+すべての入力欄に`<label for>`またはラップする`<label>`を付ける。プレースホルダーはラベルの代わりにはならない。ラベルとコントロールは1つのヒットターゲットを共有し、チェックボックスとそのテキストの間にデッドゾーンを作らない。意味のある`name`を持つ`autocomplete`を追加し、キーボードに適した正しい`type`と`inputmode`を指定する。ペーストをブロックしない。ユーザーはパスワードやワンタイムコードをペーストする。
 
-### 7. Errors That Announce
+### 7. 読み上げられるエラー
 
-Keep submit enabled until the request starts, then disable with a spinner while keeping the original label. Validate on submit: mark failing fields with `aria-invalid="true"`, point `aria-describedby` at the inline error text, and focus the first invalid field. Use native `disabled` when a native control is genuinely unavailable. Use `aria-disabled="true"` only when retaining focusability or discoverability is intentional; then block pointer, keyboard, and form behavior in code and style the state explicitly.
+送信ボタンはリクエストが開始するまで有効のままにし、開始したらスピナーを表示して元のラベルを保ったまま無効化する。送信時にバリデーションを行う: 失敗したフィールドには`aria-invalid="true"`を付け、`aria-describedby`をインラインのエラーテキストに向け、最初の無効なフィールドにフォーカスする。ネイティブコントロールが本当に使用できない場合はネイティブの`disabled`を使う。フォーカス可能性や発見可能性を意図的に維持したい場合にのみ`aria-disabled="true"`を使い、その場合はコード内でポインター・キーボード・フォーム操作をブロックし、状態を明示的にスタイリングする。
 
-### 8. Accessible Names Everywhere
+### 8. どこでもアクセシブルネームを
 
-Icon-only buttons need a descriptive `aria-label`. Visible label text must appear in the accessible name. Decorative elements get `aria-hidden="true"`, never on a focusable element.
+アイコンのみのボタンには説明的な`aria-label`が必要である。可視のラベルテキストはアクセシブルネームに含まれていなければならない。装飾的な要素には`aria-hidden="true"`を付けるが、フォーカス可能な要素には決して付けない。
 
-### 9. Don't Rely on Color Alone
+### 9. 色だけに頼らない
 
-Status needs a redundant cue: icon, text, or underline alongside the color. Determine which WCAG contrast requirement applies from the content and state, then use `better-colors` to measure the rendered foreground/background pair. When contrast fails, report the pair and requirement it misses; do not change the project's colors unless asked.
+ステータスには色に加えて冗長な手がかりが必要である: アイコン、テキスト、下線などを色と併用する。コンテンツと状態からどのWCAGコントラスト要件が適用されるかを判断し、`better-colors`を使って描画された前景色/背景色のペアを測定する。コントラストが基準を満たさない場合は、そのペアと満たしていない要件を報告する。依頼されない限りプロジェクトの色は変更しない。
 
-### 10. Honor prefers-reduced-motion
+### 10. prefers-reduced-motionを尊重する
 
-Wrap motion in `@media (prefers-reduced-motion: no-preference)` so it is opt-in. Under reduced motion, replace slides and scales with opacity crossfades; kill parallax and autoplay entirely. Independent of the preference: autoplaying media needs a visible pause control, and toasts carrying actions or errors stay until dismissed.
+モーションをオプトインにするため`@media (prefers-reduced-motion: no-preference)`でラップする。モーション低減時には、スライドやスケールを不透明度のクロスフェードに置き換える。パララックスとautoplayは完全に無効化する。この設定とは無関係に: 自動再生されるメディアには可視の一時停止コントロールが必要であり、アクションやエラーを含むトーストは閉じられるまで表示し続ける。
 
-### 11. Announce Dynamic Content
+### 11. 動的コンテンツを読み上げる
 
-Use `aria-describedby` for field-specific validation, a polite live region (`role="status"`) for non-urgent updates not tied to a control such as toasts or result counts, and `role="alert"` only for urgent errors not tied to a control. For reliable repeated polite announcements, render a stable empty region before updating its text; dynamically inserted alerts have different support and must be tested with the target screen readers.
+フィールド固有のバリデーションには`aria-describedby`を使い、トーストや結果件数などコントロールに紐づかない緊急性の低い更新にはpoliteなライブリージョン(`role="status"`)を使い、コントロールに紐づかない緊急のエラーにのみ`role="alert"`を使う。繰り返しのpolite通知を確実に行うには、テキストを更新する前に安定した空のリージョンを描画しておく。動的に挿入されるalertはサポート状況が異なるため、対象のスクリーンリーダーでテストする必要がある。
 
-### 12. Alt Text by Purpose
+### 12. 目的別のaltテキスト
 
-Decorative images get `alt=""`, informative images describe the meaning, functional images describe the action: a search icon button is `alt="Search"`, not `alt="magnifying glass"`.
+装飾的な画像には`alt=""`を付け、情報を伝える画像には意味を説明し、機能的な画像にはアクションを説明する。検索アイコンのボタンは`alt="Search"`であり、`alt="magnifying glass"`ではない。
 
-### 13. Structure Is Navigation
+### 13. 構造はナビゲーションである
 
-Use headings that describe their sections and form a coherent outline; one page-level `<h1>` and properly nested levels are the recommended default, not standalone WCAG pass/fail rules. Expose one visible primary `<main>` landmark. When repeated navigation or chrome precedes it, make a "Skip to content" link the first focusable element. Anchored headings get `scroll-margin-top`.
+各セクションを説明し、一貫したアウトラインを形成する見出しを使う。ページレベルの`<h1>`を1つ持ち、適切にネストされたレベルにするのが推奨されるデフォルトであって、単独のWCAG合否ルールではない。可視のプライマリな`<main>`ランドマークを1つ公開する。その前に繰り返されるナビゲーションやその他のchromeがある場合は、「Skip to content」リンクを最初のフォーカス可能な要素にする。アンカー付きの見出しには`scroll-margin-top`を設定する。
 
-### 14. Survive Zoom and Text Resize
+### 14. ズームとテキストリサイズに耐える
 
-The page must work at 200% zoom and reflow at 320px width without horizontal scrolling. Use `min-height` instead of fixed `height` on text containers, prefer `rem` breakpoints where they fit the codebase's conventions, and never use `user-scalable=no` or `maximum-scale=1`.
+ページは200%ズームで機能し、320px幅で水平スクロールなしにリフローしなければならない。テキストコンテナには固定の`height`ではなく`min-height`を使い、コードベースの規約に合う場合は`rem`単位のブレークポイントを優先し、`user-scalable=no`や`maximum-scale=1`は決して使わない。
 
 ## Common Mistakes
 
-| Mistake | Fix |
+| 誤り | 修正 |
 | --- | --- |
-| `outline: none` to remove the focus ring | Style `:focus-visible` instead; mouse clicks won't show it |
-| Custom focus color assumed to work everywhere | Verify the full indicator against every adjacent color and in forced-colors mode |
-| `<div onClick>` for a button or link | `<button>` for actions, `<a href>` for navigation |
-| Placeholder used as the only label | Add a visible `<label for>`; placeholders disappear on input |
-| Positive `tabindex` to fix focus order | Fix the DOM order; only use `0` and `-1` |
-| Repeated polite update inconsistently announced | Keep a stable empty status region and update its text; test the target screen readers |
-| `assertive` live region for a routine toast | Use `polite`; reserve `assertive` for errors |
-| `aria-hidden="true"` on a focusable element | Remove it or make the element non-focusable |
-| Functional icon alt describes the picture | Describe the action: `alt="Search"`, not `alt="magnifying glass"` |
-| `maximum-scale=1` to stop iOS input zoom | 16px input font on mobile (see `better-typography`); never block zoom |
-| Submit disabled until the form is valid | Keep it enabled; validate on submit and focus the first error |
+| フォーカスリングを消すための`outline: none` | 代わりに`:focus-visible`にスタイルを適用する。マウスクリックでは表示されない |
+| どこでも機能すると思い込んだカスタムフォーカスカラー | 隣接するすべての色とforced-colorsモードに対してインジケーター全体を検証する |
+| ボタンやリンクに使う`<div onClick>` | アクションには`<button>`、ナビゲーションには`<a href>` |
+| プレースホルダーを唯一のラベルとして使う | 可視の`<label for>`を追加する。プレースホルダーは入力すると消える |
+| フォーカス順序を直すための正の`tabindex` | DOMの順序を修正する。使うのは`0`と`-1`のみ |
+| 繰り返しのpolite更新が一貫して読み上げられない | 安定した空のステータスリージョンを保持しテキストを更新する。対象のスクリーンリーダーでテストする |
+| 通常のトーストに`assertive`ライブリージョンを使う | `polite`を使う。`assertive`はエラー用に確保する |
+| フォーカス可能な要素への`aria-hidden="true"` | 削除するか、要素をフォーカス不可にする |
+| 機能的アイコンのaltが絵を説明している | アクションを説明する: `alt="magnifying glass"`ではなく`alt="Search"` |
+| iOSの入力ズームを止めるための`maximum-scale=1` | モバイルでは入力フォントを16pxにする(`better-typography`を参照)。ズームは絶対にブロックしない |
+| フォームが有効になるまで無効化される送信ボタン | 有効のままにする。送信時にバリデーションを行い、最初のエラーにフォーカスする |
 
 ## Review Output Format
 
-Use this format only when the user asks for a standalone accessibility review. When `better-interface` orchestrates the review, provide domain evidence and findings to that skill and let its output format, severity scale, consolidation rules, cap, and verdict take precedence.
+このフォーマットは、ユーザーが単独のアクセシビリティレビューを求めた場合にのみ使用する。`better-interface`がレビューを統括する場合は、そのスキルにドメインの根拠と所見を提供し、出力フォーマット、重大度スケール、統合ルール、上限、判定はそちらを優先させる。
 
-Present the standalone review in two parts.
+単独のレビューは2つのパートで構成する。
 
-### Findings
+### 所見
 
-Group all confirmed findings by principle. Use a markdown table with **Severity**, **Location**, **Before**, **After**, and **Why** columns. Never use separate "Before:" / "After:" lines.
+確認済みの所見はすべて原則ごとにグループ化する。**Severity**、**Location**、**Before**、**After**、**Why**の列を持つMarkdownの表を使う。「Before:」「After:」を別々の行で書くことは絶対にしない。
 
-- **Severity**: `HIGH` prevents a task, hides content from assistive technology, or creates a systemic accessibility failure; `MEDIUM` makes an interaction meaningfully harder; `LOW` is isolated polish.
-- **Location**: cite `path/to/file:line`. If the artifact has no source files, cite the exact screen and component instead.
-- **Before / After**: show the current implementation and an actionable replacement.
-- **Why**: name the violated principle and its user impact.
+- **Severity**: `HIGH`はタスクの遂行を妨げる、支援技術からコンテンツを隠す、またはシステム的なアクセシビリティ障害を生む場合。`MEDIUM`はインタラクションを大きく困難にする場合。`LOW`は局所的な仕上げの問題。
+- **Location**: `path/to/file:line`の形式で示す。アーティファクトにソースファイルがない場合は、代わりに正確な画面とコンポーネントを示す。
+- **Before / After**: 現在の実装と、実行可能な置き換え案を示す。
+- **Why**: 違反した原則と、それがユーザーに与える影響を明示する。
 
-Consolidate a repeated systemic issue into one row and list every affected location. Omit principles with no findings.
+繰り返し発生するシステム的な問題は1行にまとめ、影響を受けるすべての場所を列挙する。所見のない原則は省略する。
 
-### Example
+### 例
 
-#### Accessible names everywhere
+#### どこでもアクセシブルネーム
 | Severity | Location | Before | After | Why |
 | --- | --- | --- | --- | --- |
-| HIGH | `src/Dialog.tsx:42` | `<button><XIcon /></button>` | Add `aria-label="Close"`; mark the icon `aria-hidden="true"` | The icon-only control has no accessible name |
-| HIGH | `src/Nav.tsx:18` | `<a href="/settings"><GearIcon /></a>` | Add `aria-label="Settings"` | The link destination is unavailable to screen readers |
+| HIGH | `src/Dialog.tsx:42` | `<button><XIcon /></button>` | `aria-label="Close"`を追加し、アイコンに`aria-hidden="true"`を付ける | アイコンのみのコントロールにアクセシブルネームがない |
+| HIGH | `src/Nav.tsx:18` | `<a href="/settings"><GearIcon /></a>` | `aria-label="Settings"`を追加 | リンク先がスクリーンリーダーで判別できない |
 
-#### Visible focus rings
+#### 可視のフォーカスリング
 | Severity | Location | Before | After | Why |
 | --- | --- | --- | --- | --- |
-| HIGH | `src/button.css:12` | `button:focus { outline: none; }` | `button:focus-visible { outline: 2px solid; outline-offset: 2px; }` | Keyboard users cannot see focus |
-| HIGH | `src/Menu.tsx:31` | `focus:outline-none` | `focus-visible:outline-2 focus-visible:outline-offset-2` | Menu navigation has no visible focus indicator |
+| HIGH | `src/button.css:12` | `button:focus { outline: none; }` | `button:focus-visible { outline: 2px solid; outline-offset: 2px; }` | キーボードユーザーがフォーカスを視認できない |
+| HIGH | `src/Menu.tsx:31` | `focus:outline-none` | `focus-visible:outline-2 focus-visible:outline-offset-2` | メニューナビゲーションに可視のフォーカスインジケーターがない |
 
-#### Errors that announce
+#### 読み上げられるエラー
 | Severity | Location | Before | After | Why |
 | --- | --- | --- | --- | --- |
-| HIGH | `src/EmailField.tsx:27` | Error shown only as `border-red-500` | Add `aria-invalid="true"` + `aria-describedby="email-error"` with inline error text | Color alone neither explains nor announces the error |
-| MEDIUM | `src/SignupForm.tsx:64` | Submit disabled until the form is valid | Keep submit enabled; on failure, focus the first invalid field | A disabled action hides what must be fixed |
+| HIGH | `src/EmailField.tsx:27` | エラーが`border-red-500`のみで表現されている | `aria-invalid="true"`と`aria-describedby="email-error"`を追加し、インラインのエラーテキストを表示する | 色だけではエラーの説明にも読み上げにもならない |
+| MEDIUM | `src/SignupForm.tsx:64` | フォームが有効になるまで送信を無効化している | 送信は有効のままにし、失敗時は最初の無効なフィールドにフォーカスする | 無効化されたアクションは、何を修正すべきかを隠してしまう |
 
-#### Minimum hit area
+#### 最小ヒットエリア
 | Severity | Location | Before | After | Why |
 | --- | --- | --- | --- | --- |
-| MEDIUM | `src/Toolbar.tsx:22` | `size-4` icon-only button | Extend the hit area to 44×44px with `after:absolute after:size-11` | The target is too small for reliable touch input |
+| MEDIUM | `src/Toolbar.tsx:22` | `size-4`のアイコンのみのボタン | `after:absolute after:size-11`でヒットエリアを44×44pxに拡張する | ターゲットが小さすぎて確実なタッチ入力ができない |
 
-### Verification and Verdict
+### 検証と判定
 
-After the findings:
+所見の後に以下を記載する:
 
-1. **Verification**: list the exact checks run and their observed results, including keyboard traversal, accessible-name inspection, and screen-reader or automated checks when applicable. If a check was not run, state what still needs verification.
-2. **Verdict**: `Block` if any `HIGH` finding remains, `Needs changes` if only `MEDIUM` or `LOW` findings remain, and `Approve` only when no actionable findings remain.
+1. **検証**: 実施した具体的なチェックとその観察結果を列挙する。該当する場合はキーボード操作での走査、アクセシブルネームの確認、スクリーンリーダーや自動チェックを含める。チェックを実施していない場合は、まだ検証が必要な内容を明記する。
+2. **判定**: `HIGH`の所見が1つでも残っていれば`Block`。`MEDIUM`または`LOW`の所見のみが残っていれば`Needs changes`。対応が必要な所見が残っていない場合のみ`Approve`。
 
-When there are no findings, omit the tables, state "No actionable accessibility findings", report verification, and end with `Approve`.
+所見がない場合は、表を省略し「対応が必要なアクセシビリティの所見はなし」と明記し、検証内容を報告したうえで`Approve`で締めくくる。

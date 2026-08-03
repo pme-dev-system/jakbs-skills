@@ -1,10 +1,10 @@
-# Screen Readers
+# スクリーンリーダー
 
-Visually hidden content, live regions, toasts, alt text, and SVG.
+視覚的に隠されたコンテンツ、ライブリージョン、トースト、altテキスト、SVG。
 
-## Visually hidden content
+## 視覚的に隠されたコンテンツ
 
-The canonical `.sr-only` pattern hides content visually while keeping it in the accessibility tree:
+定番の`.sr-only`パターンは、アクセシビリティツリーには残したままコンテンツを視覚的に隠す:
 
 ```css
 .sr-only {
@@ -21,81 +21,81 @@ The canonical `.sr-only` pattern hides content visually while keeping it in the 
 }
 ```
 
-Use `1px` boxes, not `0`; some screen readers skip zero-sized elements. `white-space: nowrap` prevents words from being read as one run-together string. Never use `display: none` or `visibility: hidden` for this; both remove the content from assistive tech entirely.
+`0`ではなく`1px`のボックスを使う。一部のスクリーンリーダーはサイズが0の要素をスキップする。`white-space: nowrap`は、単語が1つの連続した文字列として読み上げられるのを防ぐ。この目的で`display: none`や`visibility: hidden`を使うことは決してしない。どちらもコンテンツを支援技術から完全に取り除いてしまう。
 
-Tailwind ships this as `sr-only`. For skip links, add a focus variant that un-hides the element (`focus:not-sr-only`, or override the positioning on `:focus`).
+Tailwindはこれを`sr-only`として提供している。スキップリンクには、要素の非表示を解除するフォーカスバリアントを追加する(`focus:not-sr-only`、または`:focus`でポジショニングをオーバーライドする)。
 
-Use it for context that sighted users get visually: `<span class="sr-only">Opens in new tab</span>`, table caption text, or the label of an icon-only control when `aria-label` isn't an option.
+これは、目が見えるユーザーが視覚的に得ているコンテキストのために使う: `<span class="sr-only">Opens in new tab</span>`、テーブルのキャプションテキスト、または`aria-label`が選択肢にない場合のアイコンのみのコントロールのラベルなど。
 
-## Choosing how to announce a change
+## 変更をどう読み上げるか選ぶ
 
-Work down this list and stop at the first match:
+このリストを上から順に検討し、最初に該当した項目で止める:
 
-1. **Focus moves there anyway** (opened modal, first invalid field on submit): nothing extra needed; the focus move is the announcement.
-2. **Tied to a specific control** (field error, character count): `aria-describedby` on the control; it's announced with the field.
-3. **Non-urgent, not tied to a control** (toast, "Saved", result count, loading state): polite live region / `role="status"`.
-4. **Urgent and not tied to a control** (form-level failure, session expiring): `role="alert"`.
+1. **どのみちフォーカスがそこに移動する**(開いたモーダル、送信時の最初の無効なフィールド): 追加で何もする必要はない。フォーカスの移動そのものが通知である。
+2. **特定のコントロールに紐づいている**(フィールドのエラー、文字数カウント): コントロールに`aria-describedby`を付ける。フィールドと一緒に読み上げられる。
+3. **緊急性が低く、コントロールに紐づいていない**(トースト、「Saved」、結果件数、ローディング状態): politeなライブリージョン / `role="status"`。
+4. **緊急で、コントロールに紐づいていない**(フォームレベルの失敗、セッションの期限切れ): `role="alert"`。
 
-## Live regions
+## ライブリージョン
 
-Live regions announce content that changes without a page load: toasts, validation, search-result counts, loading states.
+ライブリージョンは、ページの読み込みを伴わずに変化するコンテンツを読み上げる: トースト、バリデーション、検索結果件数、ローディング状態など。
 
-| Mechanism | Politeness | Use for |
+| 仕組み | 丁寧さ | 用途 |
 | --- | --- | --- |
-| `role="status"` (= `aria-live="polite"` + `aria-atomic="true"`) | Waits for a pause | Toasts, "Saved", result counts, loading updates |
-| `role="alert"` (= `aria-live="assertive"` + `aria-atomic="true"`) | Interrupts immediately | Errors and urgent problems only |
+| `role="status"`(= `aria-live="polite"` + `aria-atomic="true"`) | 間が空くまで待つ | トースト、「Saved」、結果件数、ローディングの更新 |
+| `role="alert"`(= `aria-live="assertive"` + `aria-atomic="true"`) | 即座に割り込む | エラーと緊急の問題のみ |
 
-Rules for reliable announcements:
+確実に読み上げさせるためのルール:
 
-- For repeated polite updates, keep a stable empty region in the DOM before changing its text. Inserting a new polite region together with its content is inconsistently announced.
-- Dynamically inserted `role="alert"` content is commonly announced, but behavior varies; use it only for urgent errors not tied to a control and test the target browser/screen-reader combinations.
-- Default to polite. Overusing `assertive` is the most common live-region mistake; it interrupts whatever the user was reading.
-- Keep messages short and self-contained; `aria-atomic="true"` re-reads the whole region on change.
-- Don't move focus to a toast; announce it and leave focus where the user is working. Give toasts a generous timeout or a dismiss button, and never put the only path to an action inside an auto-dismissing toast.
+- 繰り返しのpolite更新では、テキストを変更する前に安定した空のリージョンをDOMに保持しておく。新しいpoliteリージョンをコンテンツと同時に挿入すると、読み上げが一貫しない。
+- 動的に挿入された`role="alert"`のコンテンツは一般的には読み上げられるが、挙動はさまざまである。コントロールに紐づかない緊急のエラーにのみ使い、対象のブラウザとスクリーンリーダーの組み合わせでテストする。
+- デフォルトはpoliteにする。`assertive`の使いすぎは、ライブリージョンで最もよくある誤りである。ユーザーが読んでいたものが何であれ、それを中断させてしまう。
+- メッセージは短く、それだけで完結する内容にする。`aria-atomic="true"`は変更のたびにリージョン全体を再度読み上げる。
+- トーストにフォーカスを移動しない。読み上げるだけにして、フォーカスはユーザーが作業している場所に残す。トーストには十分な猶予のあるタイムアウトか閉じるボタンを設け、自動的に消えるトーストの中にしかアクションへの唯一の経路を置くことは決してしない。
 
 ```tsx
-// Region rendered from the start, message injected later
+// リージョンは最初からレンダリングし、メッセージは後から注入する
 <div role="status" className="sr-only">
   {statusMessage}
 </div>
 ```
 
-For loading states: set `aria-busy="true"` on the updating region, announce "Loading…" politely, then announce the outcome ("Loaded, 12 results").
+ローディング状態の場合: 更新されるリージョンに`aria-busy="true"`を設定し、「Loading…」をpoliteに読み上げ、その後に結果(「Loaded, 12 results」)を読み上げる。
 
 ## aria-hidden
 
-`aria-hidden="true"` removes an element and its whole subtree from assistive tech. Use it for decorative icons and content duplicated for visual effect. Never put it on (or above) a focusable element; that creates stops you can Tab to that don't exist for a screen reader. If you hide something interactive, also remove it from the tab order.
+`aria-hidden="true"`は、要素とそのサブツリー全体を支援技術から取り除く。装飾的なアイコンや、視覚効果のために複製されたコンテンツに使う。フォーカス可能な要素(やその祖先)には決して付けない。それは、Tabで到達できるのにスクリーンリーダーには存在しない停止点を作ってしまう。インタラクティブな何かを隠す場合は、タブ順序からも取り除く。
 
-## Alt text
+## altテキスト
 
-Choose by purpose, not by what the image looks like:
+画像の見た目ではなく、目的によって選ぶ:
 
-| Purpose | Alt | Example |
+| 目的 | alt | 例 |
 | --- | --- | --- |
-| Decorative, or redundant with adjacent text | `alt=""` (empty, but present) | Logo next to the company name in text |
-| Informative | Describe the meaning it adds | `alt="Ticket QR code"` |
-| Functional (image is the link/button) | Describe the action or destination | Search icon → `alt="Search"`, not `alt="magnifying glass"` |
-| Image of text | The exact text (better: use real text) | `alt="50% off everything"` |
-| Complex (chart, diagram) | Short summary in `alt`, full data as a table or text nearby | `alt="Revenue by quarter, described below"` |
+| 装飾的、または隣接するテキストと重複 | `alt=""`(空だが存在する) | テキストで会社名の隣にあるロゴ |
+| 情報を伝える | 付加される意味を説明する | `alt="Ticket QR code"` |
+| 機能的(画像がリンク/ボタンである) | アクションまたは遷移先を説明する | 検索アイコン → `alt="magnifying glass"`ではなく`alt="Search"` |
+| テキストの画像 | そのままのテキスト(より良いのは本物のテキストを使うこと) | `alt="50% off everything"` |
+| 複雑(グラフ、図) | `alt`に短い要約、完全なデータは近くの表やテキストとして | `alt="Revenue by quarter, described below"` |
 
-A missing `alt` attribute is worse than an empty one: screen readers fall back to reading the file name.
+`alt`属性がないことは、空であることよりも悪い: スクリーンリーダーはファイル名を読み上げるほうにフォールバックしてしまう。
 
 ## SVG
 
-- Decorative SVG: `aria-hidden="true"` and `focusable="false"` (the latter for legacy Edge/IE tabbing), no title needed.
-- Meaningful inline SVG: `role="img"` plus `aria-label="…"` (or a `<title>` as the first child referenced by `aria-labelledby`).
-- Simple cases: `<img src="icon.svg" alt="…">` is the most reliable delivery.
+- 装飾的なSVG: `aria-hidden="true"`と`focusable="false"`を付ける(後者はレガシーなEdge/IEのタブ操作向け)。titleは不要。
+- 意味のあるインラインSVG: `role="img"`と`aria-label="…"`を付ける(または、`aria-labelledby`で参照される最初の子要素として`<title>`を置く)。
+- 単純なケース: `<img src="icon.svg" alt="…">`が最も確実な配信方法である。
 
 ```tsx
-// Decorative icon inside a labeled button
+// ラベル付きボタン内の装飾的アイコン
 <button aria-label="Close">
   <svg aria-hidden="true" focusable="false">…</svg>
 </button>
 
-// Standalone meaningful icon
+// 単体で意味を持つアイコン
 <svg role="img" aria-label="Verified account">…</svg>
 ```
 
-## Video and audio
+## 動画と音声
 
-Prerecorded video needs captions; provide transcripts for audio. Never autoplay with sound, and always render controls.
+録画済みの動画にはキャプションが必要である。音声にはトランスクリプトを提供する。音声付きで自動再生することは決してせず、常にコントロールを表示する。

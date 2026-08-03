@@ -1,6 +1,7 @@
 ---
 name: better-typography
-description: フォント選定から間隔、折り返し、アクセシビリティまでのWebタイポグラフィ。書体の選定やフォントの組み合わせ、可変フォントやOpenType機能の設定、タイプスケールの構築、見出し階層の確認、コンポーネント内テキストのスタイリング、テキストの切り詰め表示(truncation)、アンダーライン・セレクション・プレースホルダー・キャレットのスタイリング、あるいはタイポグラフィ観点でのフロントエンドコードのレビューを行う際に使用する。以下のキーワードで発火する: タイポグラフィ, フォント, フォント形式, woff2, 可変フォント, font-weight, opentype, font-feature-settings, letter-spacing, line-height, タイプスケール, 見出し階層, 見出しレベル, tabular numbers, text-wrap, 切り詰め表示(truncation), line clamp, アンダーライン, text-decoration, テキスト選択, iOS input zoom, font smoothing, テキストコントラスト, measure, 行の長さ, text-box, スマート約物, ドロップキャップ。
+description: >-
+  フォント選定から間隔、折り返し、アクセシビリティまでのWebタイポグラフィ。書体の選定やフォントの組み合わせ、可変フォントやOpenType機能の設定、タイプスケールの構築、見出し階層の確認、コンポーネント内テキストのスタイリング、テキストの切り詰め表示(truncation)、アンダーライン・セレクション・プレースホルダー・キャレットのスタイリング、あるいはタイポグラフィ観点でのフロントエンドコードのレビューを行う際に使用する。以下のキーワードで発火する: タイポグラフィ, フォント, フォント形式, woff2, 可変フォント, font-weight, opentype, font-feature-settings, letter-spacing, line-height, タイプスケール, 見出し階層, 見出しレベル, tabular numbers, text-wrap, 切り詰め表示(truncation), line clamp, アンダーライン, text-decoration, テキスト選択, iOS input zoom, font smoothing, テキストコントラスト, measure, 行の長さ, text-box, スマート約物, ドロップキャップ。
 ---
 
 # 優れたタイポグラフィ

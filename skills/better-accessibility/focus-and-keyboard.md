@@ -1,20 +1,20 @@
-# Focus and Keyboard
+# フォーカスとキーボード
 
-Focus rings, skip links, tabindex, focus trapping, and the APG keyboard patterns.
+フォーカスリング、スキップリンク、tabindex、フォーカストラップ、APGキーボードパターン。
 
-## Focus rings
+## フォーカスリング
 
-Style `:focus-visible`, not bare `:focus`. The browser shows `:focus-visible` for keyboard and assistive-tech focus but suppresses it for mouse clicks, where focus is already obvious. Never write `outline: none` or `focus:outline-none` without a visible replacement; that removes keyboard navigation for sighted keyboard users.
+素の`:focus`ではなく`:focus-visible`にスタイルを適用する。ブラウザはキーボードや支援技術によるフォーカスでは`:focus-visible`を表示するが、フォーカスがすでに明らかなマウスクリックでは抑制する。可視の代替なしに`outline: none`や`focus:outline-none`を書くことは決してしない。それは、目が見えるキーボードユーザーからキーボード操作を奪う。
 
-Prefer the browser's unmodified focus indicator: it adapts to platform and forced-color settings without the author predicting every background. Adding only `outline-offset` generally preserves that indicator. A custom `outline: 2px solid` with no color renders `currentColor`; that is not automatically accessible because the outline may cross colors different from the text's own background. So the preference order is:
+ブラウザ標準の未改変のフォーカスインジケーターを優先する。これはプラットフォームやforced-color設定に応じて適応し、作者があらゆる背景を予測する必要がない。`outline-offset`だけを追加すれば、通常そのインジケーターは維持される。色を指定しないカスタムの`outline: 2px solid`は`currentColor`として描画される。アウトラインはテキスト自身の背景とは異なる色を横切ることがあるため、これは自動的にアクセシブルになるわけではない。したがって優先順位は次の通りである:
 
 ```css
-/* Best: keep the browser ring, just give it breathing room */
+/* 最善: ブラウザのリングを保ち、余白を与えるだけにする */
 :focus-visible {
   outline-offset: 2px;
 }
 
-/* Custom ring when the design requires one: use the project's verified token */
+/* デザイン上カスタムリングが必要な場合: プロジェクトの検証済みトークンを使う */
 :focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
@@ -22,21 +22,21 @@ Prefer the browser's unmodified focus indicator: it adapts to platform and force
 ```
 
 ```tsx
-// Tailwind: use the project's focus token or established focus-ring utility
+// Tailwind: プロジェクトのフォーカストークンか、確立されたfocus-ringユーティリティを使う
 <button className="focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--focus-ring)]">
   Save
 </button>
 ```
 
-A custom focus indicator must meet the applicable project/WCAG target for visible area and change of contrast. Inspect the whole perimeter against every adjacent color it crosses, including component fills, page surfaces, images, gradients, and hover/selected states. A token, brand color, or `currentColor` is acceptable only when that rendered check passes.
+カスタムのフォーカスインジケーターは、可視面積とコントラストの変化について、該当するプロジェクト/WCAGのターゲットを満たさなければならない。コンポーネントの塗り、ページのサーフェス、画像、グラデーション、ホバー/選択状態を含め、横切るすべての隣接色に対して外周全体を検査する。トークン、ブランドカラー、`currentColor`は、その描画チェックに合格した場合にのみ使用できる。
 
-In `forced-colors: active` (Windows High Contrast), keep the default color adjustment or explicitly use a system color such as `Highlight`; never freeze the authored color with `forced-color-adjust: none` unless the control remains perceivable.
+`forced-colors: active`(Windows高コントラストモード)では、デフォルトの色調整を維持するか、`Highlight`のようなシステムカラーを明示的に使う。コントロールが引き続き知覚可能である場合を除き、`forced-color-adjust: none`で作者指定の色を固定することは決してしない。
 
-Group focus styles with `:focus-within` when a wrapper should light up while an inner input has focus (e.g. a search box with an icon inside the border).
+内部の入力がフォーカスされている間にラッパーを光らせたい場合は、`:focus-within`でフォーカススタイルをグループ化する(例: 枠内にアイコンがある検索ボックス)。
 
-## Skip link
+## スキップリンク
 
-When repeated navigation or other repeated chrome precedes the primary content, the first focusable element is a "Skip to content" link targeting `<main id="main">`. Visually hide it until focused:
+繰り返されるナビゲーションやその他の繰り返しのchromeが主要コンテンツより前にある場合、最初のフォーカス可能な要素は`<main id="main">`をターゲットにした「Skip to content」リンクにする。フォーカスされるまで視覚的に隠す:
 
 ```css
 .skip-link {
@@ -57,17 +57,17 @@ When repeated navigation or other repeated chrome precedes the primary content, 
 </body>
 ```
 
-Give in-page anchor targets `scroll-margin-top` (e.g. `scroll-margin-top: 80px` under a sticky header) so the target isn't hidden when jumped to.
+ページ内アンカーのターゲットには`scroll-margin-top`を指定し(例: 固定ヘッダー下では`scroll-margin-top: 80px`)、ジャンプ先が隠れないようにする。
 
-## tabindex rules
+## tabindexのルール
 
-- `tabindex="0"`: adds an element to the natural tab order. Only for custom interactive elements that aren't natively focusable.
-- `tabindex="-1"`: focusable via JavaScript only (`el.focus()`). Use for headings you move focus to, modal containers, and roving-tabindex members.
-- Positive `tabindex`: never. It hijacks the tab order for the whole page; fix the DOM order instead.
+- `tabindex="0"`: 要素を自然なタブ順序に加える。ネイティブにフォーカス不可なカスタムのインタラクティブ要素にのみ使う。
+- `tabindex="-1"`: JavaScriptからのみフォーカス可能にする(`el.focus()`)。フォーカスを移動する見出し、モーダルコンテナ、ローミングタブインデックスのメンバーに使う。
+- 正の`tabindex`: 決して使わない。ページ全体のタブ順序を乗っ取ってしまう。代わりにDOMの順序を修正する。
 
-### Roving tabindex
+### ローミングタブインデックス
 
-Composite widgets (tabs, menus, toolbars, radio groups) occupy a single Tab stop. The active item has `tabindex="0"`, all others `tabindex="-1"`, and arrow keys move both focus and the `0`:
+複合ウィジェット(タブ、メニュー、ツールバー、ラジオグループ)は1つのTabストップを占有する。アクティブな項目は`tabindex="0"`を持ち、それ以外はすべて`tabindex="-1"`を持つ。矢印キーはフォーカスと`0`の両方を移動させる:
 
 ```tsx
 <div role="tablist">
@@ -76,7 +76,7 @@ Composite widgets (tabs, menus, toolbars, radio groups) occupy a single Tab stop
       role="tab"
       tabIndex={i === activeIndex ? 0 : -1}
       aria-selected={i === activeIndex}
-      onKeyDown={handleArrowKeys} // ArrowLeft/ArrowRight move activeIndex, wrapping
+      onKeyDown={handleArrowKeys} // ArrowLeft/ArrowRightでactiveIndexを移動、末端でラップ
     >
       {tab.label}
     </button>
@@ -84,48 +84,48 @@ Composite widgets (tabs, menus, toolbars, radio groups) occupy a single Tab stop
 </div>
 ```
 
-## Focus trapping and restoration
+## フォーカストラップと復元
 
-Modals must trap focus. The modern technique is the `inert` attribute on everything behind the dialog; it removes background content from the tab order and from assistive tech in one move:
+モーダルはフォーカスをトラップしなければならない。現代的な手法は、ダイアログの背後にあるすべてに`inert`属性を付けることである。これにより背景コンテンツをタブ順序と支援技術の両方から一度に除外できる:
 
 ```tsx
-// On open
+// 開いたとき
 document.getElementById("app-content").inert = true;
 const dialog = dialogRef.current;
 (dialog.querySelector("[autofocus]") ??
   dialog.querySelector("button, [href], input, select, textarea"))?.focus();
 
-// On close
+// 閉じたとき
 document.getElementById("app-content").inert = false;
-triggerRef.current?.focus(); // always return focus to the element that opened it
+triggerRef.current?.focus(); // 常に、開いた要素にフォーカスを戻す
 ```
 
-Native `<dialog>` with `showModal()` gives you the trap, `inert` background, and Escape handling for free; prefer it. A custom overlay that can't use `<dialog>` needs `role="dialog"`, `aria-modal="true"`, and an accessible name (`aria-labelledby` pointing at its heading). Either way:
+`showModal()`を使ったネイティブの`<dialog>`は、トラップ、`inert`な背景、Escapeの処理を無料で提供してくれるので、これを優先する。`<dialog>`を使えないカスタムオーバーレイには、`role="dialog"`、`aria-modal="true"`、アクセシブルネーム(見出しを指す`aria-labelledby`)が必要である。いずれの場合も:
 
-- On open, focus the first focusable element; for destructive confirmations, focus the least destructive action instead.
-- On close, return focus to the trigger. If the trigger no longer exists, move focus to the nearest logical container.
-- Add `overscroll-behavior: contain` on the dialog so scrolling inside never scrolls the page behind it.
+- 開いたときは最初のフォーカス可能な要素にフォーカスする。破壊的な確認の場合は、代わりに最も破壊性の低いアクションにフォーカスする。
+- 閉じたときはトリガーにフォーカスを戻す。トリガーがもう存在しない場合は、最も近い論理的なコンテナにフォーカスを移動する。
+- ダイアログに`overscroll-behavior: contain`を追加し、内部のスクロールが背後のページを決してスクロールしないようにする。
 
-## Keyboard patterns (ARIA APG)
+## キーボードパターン(ARIA APG)
 
-Native elements come with these behaviors; custom widgets must implement them. A role is a promise: if you give something `role="tab"`, users expect the full tab keyboard model.
+ネイティブ要素にはこれらの挙動が備わっている。カスタムウィジェットはそれを実装しなければならない。ロールは約束である: 何かに`role="tab"`を与えれば、ユーザーは完全なタブのキーボードモデルを期待する。
 
-| Widget | Keys |
+| ウィジェット | キー |
 | --- | --- |
-| Dialog | Tab/Shift+Tab cycle inside (wrap at ends); Escape closes |
-| Tabs | Arrow keys move between tabs (wrapping); Tab exits to the panel; Home/End jump to first/last |
-| Menu button | Enter/Space/ArrowDown opens and focuses first item; ArrowUp opens and focuses last; arrows navigate; Escape closes and refocuses the button |
-| Disclosure / accordion | Header is a `<button aria-expanded>`; Enter and Space toggle |
-| Combobox | ArrowDown opens/moves into the list; Enter accepts; Escape closes and returns to the input; typing filters |
-| Listbox / radio group | Arrow keys move selection; one Tab stop for the whole group |
+| Dialog | Tab/Shift+Tabで内部を循環(端でラップ)。Escapeで閉じる |
+| Tabs | 矢印キーでタブ間を移動(ラップする)。Tabでパネルへ抜ける。Home/Endで最初/最後へジャンプ |
+| Menu button | Enter/Space/ArrowDownで開いて最初の項目にフォーカス。ArrowUpで開いて最後の項目にフォーカス。矢印キーでナビゲート。Escapeで閉じてボタンに再フォーカス |
+| Disclosure / accordion | ヘッダーは`<button aria-expanded>`。EnterとSpaceでトグル |
+| Combobox | ArrowDownでリストを開く/リスト内を移動。Enterで確定。Escapeで閉じて入力欄に戻る。入力するとフィルタされる |
+| Listbox / radio group | 矢印キーで選択を移動。グループ全体で1つのTabストップ |
 
-Universal rules:
+共通のルール:
 
-- Escape dismisses whatever opened last: tooltip, then menu, then dialog.
-- Arrow keys, not Tab, move within a composite widget; Tab moves between widgets.
-- Tabs choose activation mode: automatic (panel switches on arrow focus) when panels render instantly, manual (Enter/Space to activate) when switching is expensive.
-- Enter submits the focused input's form. In `<textarea>`, Enter inserts a newline and ⌘/Ctrl+Enter submits.
+- Escapeは最後に開いたものを閉じる: ツールチップ、次にメニュー、その次にダイアログ。
+- 複合ウィジェット内の移動はTabではなく矢印キーで行う。Tabはウィジェット間を移動する。
+- Tabsはアクティベーションモードを選択する: パネルが即座に描画される場合は自動(矢印キーのフォーカスでパネルが切り替わる)、切り替えにコストがかかる場合は手動(Enter/Spaceでアクティブにする)。
+- Enterはフォーカスされた入力欄のフォームを送信する。`<textarea>`ではEnterで改行が挿入され、⌘/Ctrl+Enterで送信される。
 
-## SPA route changes
+## SPAのルート変更
 
-Client-side navigation doesn't reset focus or announce anything. On route change: update `document.title` to match the new context, then move focus to the new view's `<h1>` (given `tabindex="-1"`) or to `<main>`. Restore scroll position on back/forward navigation; scroll to top on forward navigation.
+クライアントサイドのナビゲーションは、フォーカスをリセットしたり何かを読み上げたりしない。ルート変更時には: `document.title`を新しいコンテキストに合わせて更新し、次に新しいビューの`<h1>`(`tabindex="-1"`を付与)または`<main>`にフォーカスを移動する。戻る/進むのナビゲーションではスクロール位置を復元し、進むナビゲーションでは先頭にスクロールする。

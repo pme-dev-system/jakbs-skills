@@ -1,83 +1,83 @@
-# Semantics and ARIA
+# セマンティクスとARIA
 
-Native elements first, landmarks, accessible names, and the ARIA rules that keep custom widgets honest.
+ネイティブ要素の優先、ランドマーク、アクセシブルネーム、カスタムウィジェットを正しく保つARIAのルール。
 
-## The rules of ARIA
+## ARIAのルール
 
-1. If a native HTML element with the semantics and behavior you need exists, use it instead of repurposing another element with ARIA.
-2. Don't change native semantics unless you really have to.
-3. Every interactive ARIA control must be keyboard-operable; a role is a promise of the full keyboard model, states, and behavior.
-4. Never put `role="presentation"` or `aria-hidden="true"` on a focusable element.
-5. All interactive elements must have an accessible name.
+1. 必要なセマンティクスと挙動を持つネイティブHTML要素が存在するなら、ARIAで別の要素を転用するのではなく、それを使う。
+2. 本当に必要な場合を除き、ネイティブのセマンティクスを変更しない。
+3. インタラクティブなARIAコントロールはすべてキーボードで操作可能でなければならない。ロールは、完全なキーボードモデル、状態、挙動に対する約束である。
+4. フォーカス可能な要素に`role="presentation"`や`aria-hidden="true"`を決して付けない。
+5. すべてのインタラクティブ要素にはアクセシブルネームがなければならない。
 
-No ARIA is better than bad ARIA: a screen reader trusts your roles, so a wrong role is worse than none.
+悪いARIAを使うより、ARIAを使わない方がよい: スクリーンリーダーは指定されたロールを信頼するため、誤ったロールは何もないより悪い。
 
-## Button vs link vs div
+## ボタンとリンクとdivの使い分け
 
-| Element | Use for | Why |
+| 要素 | 用途 | 理由 |
 | --- | --- | --- |
-| `<a href>` | Navigation: anything that goes somewhere or changes the URL | Free Cmd/Ctrl/middle-click, right-click → copy link, Enter activation |
-| `<button>` | Actions: submit, toggle, open, delete | Free focus, Enter *and* Space activation, form semantics |
-| `<div onClick>` | Nothing | No role, no focus, no keyboard; screen readers see plain text |
+| `<a href>` | ナビゲーション: どこかへ移動する、またはURLを変更するもの | Cmd/Ctrl/中クリック、右クリック→リンクをコピー、Enterでのアクティブ化が無料で手に入る |
+| `<button>` | アクション: 送信、トグル、開く、削除 | フォーカス、EnterとSpaceの両方でのアクティブ化、フォームのセマンティクスが無料で手に入る |
+| `<div onClick>` | 何にも使わない | ロールなし、フォーカスなし、キーボード操作なし。スクリーンリーダーにはただのテキストとして見える |
 
 ```tsx
-// Bad: invisible to keyboard and screen readers
+// 悪い例: キーボードとスクリーンリーダーから見えない
 <div onClick={openSettings}>Settings</div>
 
-// Good: focus, Enter/Space activation, and semantics for free
+// 良い例: フォーカス、Enter/Spaceでのアクティブ化、セマンティクスが無料で手に入る
 <button onClick={openSettings}>Settings</button>
 ```
 
-If it looks clickable it must be clickable, and the reverse: if it's clickable it must be a real interactive element. Rebuilding a link as a button (or vice versa) breaks user expectations; a "button" that navigates should be a styled `<a>`.
+クリックできるように見えるなら、クリックできなければならない。逆に、クリックできるなら本物のインタラクティブ要素でなければならない。リンクをボタンとして作り直す(あるいはその逆)のは、ユーザーの期待を裏切る。ナビゲーションする「ボタン」は、スタイリングされた`<a>`にすべきである。
 
-If a native element is truly impossible, the full polyfill is `role="button"` + `tabindex="0"` + Enter and Space handlers, which is why the native element is always less code.
+ネイティブ要素が本当に不可能な場合、完全なポリフィルは`role="button"` + `tabindex="0"` + EnterとSpaceのハンドラーである。だからこそネイティブ要素は常にコード量が少なくて済む。
 
-## Landmarks and headings
+## ランドマークと見出し
 
-- Expose one visible primary `<main>` landmark. `<header>`, `<nav>`, `<aside>`, `<footer>` map to landmarks screen-reader users jump between.
-- Multiple landmarks of the same type need distinguishing labels: `<nav aria-label="Primary">`, `<nav aria-label="Breadcrumbs">`.
-- Headings describe their sections and form a coherent outline. One page-level `<h1>` and properly nested levels are the recommended default; do not report either convention as a standalone WCAG failure without a concrete navigation or comprehension impact. Headings are structure, not styling; style a heading level with CSS instead of picking the tag by size.
-- `<title>` matches the current context, most specific first: `Billing · Settings · Acme`.
+- 可視のプライマリな`<main>`ランドマークを1つ公開する。`<header>`、`<nav>`、`<aside>`、`<footer>`は、スクリーンリーダーユーザーが行き来するランドマークに対応する。
+- 同じ種類のランドマークが複数ある場合は、区別するラベルが必要である: `<nav aria-label="Primary">`、`<nav aria-label="Breadcrumbs">`。
+- 見出しはそのセクションを説明し、一貫したアウトラインを形成する。ページレベルの`<h1>`を1つ持ち、適切にネストされたレベルにするのが推奨されるデフォルトである。具体的なナビゲーションや理解への影響がない限り、どちらの慣習についても単独のWCAG違反として報告しない。見出しは構造であり、スタイリングではない。見出しレベルはCSSでスタイリングし、サイズでタグを選ばない。
+- `<title>`は現在のコンテキストに一致させ、最も具体的なものを先頭にする: `Billing · Settings · Acme`。
 
-## Accessible names
+## アクセシブルネーム
 
-Name precedence: `aria-labelledby` > `aria-label` > native label (`<label>`, text content, `alt`) > `title` attribute.
+名前の優先順位: `aria-labelledby` > `aria-label` > ネイティブラベル(`<label>`、テキストコンテンツ、`alt`) > `title`属性。
 
-- Prefer visible text or `aria-labelledby` over `aria-label`: `aria-label` is invisible, drifts out of sync with the UI, and translation tools handle it inconsistently.
-- Icon-only buttons always need a name: `<button aria-label="Close">` with the icon `aria-hidden="true"`.
-- The visible label must appear inside the accessible name (WCAG 2.5.3 Label in Name). A button showing "Send" with `aria-label="Submit message"` breaks voice control users who say "click Send".
-- Accessible names must exist even when the design omits visible labels.
+- `aria-label`よりも可視のテキストや`aria-labelledby`を優先する: `aria-label`は不可視であり、UIとの同期がずれていき、翻訳ツールの扱いも一貫しない。
+- アイコンのみのボタンには常に名前が必要である: アイコンに`aria-hidden="true"`を付けた`<button aria-label="Close">`。
+- 可視のラベルはアクセシブルネームの中に含まれていなければならない(WCAG 2.5.3 Label in Name)。「Send」と表示されているボタンに`aria-label="Submit message"`を付けると、「click Send」と発声する音声操作ユーザーの操作が壊れる。
+- デザインが可視のラベルを省いている場合でも、アクセシブルネームは存在しなければならない。
 
 ```tsx
-// Good: name from visible text, icon hidden
+// 良い例: 可視のテキストから名前を取得し、アイコンは隠す
 <button>
   <TrashIcon aria-hidden="true" /> Delete
 </button>
 
-// Good: icon-only, explicit name
+// 良い例: アイコンのみ、明示的な名前
 <button aria-label="Delete">
   <TrashIcon aria-hidden="true" />
 </button>
 ```
 
-Add `translate="no"` to brand names, code tokens, and identifiers so auto-translation doesn't garble them.
+ブランド名、コードトークン、識別子には`translate="no"`を追加し、自動翻訳で崩れないようにする。
 
-## Common ARIA mistakes
+## よくあるARIAの誤り
 
-| Mistake | Why it fails |
+| 誤り | 失敗する理由 |
 | --- | --- |
-| `aria-label` on a plain `<div>` or `<span>` | Names on non-interactive, role-less elements are ignored by most screen readers |
-| `<button role="button">` | Redundant role; adds noise, no benefit |
-| `aria-hidden="true"` on or above a focusable element | Creates elements you can Tab to but that don't exist for screen readers |
-| `aria-labelledby`/`aria-describedby` pointing at a missing ID | Silently produces no name or description |
-| `role="menu"` on a nav list | `menu` promises app-style arrow-key behavior; site navigation is `<nav>` with a list |
+| 素の`<div>`や`<span>`への`aria-label` | 非インタラクティブでロールのない要素への名前は、ほとんどのスクリーンリーダーで無視される |
+| `<button role="button">` | 冗長なロール。ノイズを増やすだけで利点がない |
+| フォーカス可能な要素、またはその上位への`aria-hidden="true"` | Tabで到達できるのにスクリーンリーダーには存在しない要素を作ってしまう |
+| 存在しないIDを指す`aria-labelledby`/`aria-describedby` | 気づかれないまま名前や説明が生成されなくなる |
+| ナビゲーションリストへの`role="menu"` | `menu`はアプリ風の矢印キー操作を約束してしまう。サイトナビゲーションはリストを伴う`<nav>`にする |
 
-## Disabled states
+## 無効状態
 
-Native `disabled` supplies the platform's complete disabled behavior: it removes the control from the tab order, suppresses activation, applies `:disabled`, and excludes form controls from submission. Use it when a native control is genuinely unavailable. `aria-disabled="true"` only announces the state; it does not change focusability, suppress behavior, or add disabled styling.
+ネイティブの`disabled`は、プラットフォームの完全な無効化挙動を提供する: コントロールをタブ順序から取り除き、アクティブ化を抑制し、`:disabled`を適用し、フォームコントロールを送信対象から除外する。ネイティブコントロールが本当に使用できない場合にこれを使う。`aria-disabled="true"`は状態を読み上げるだけである。フォーカス可能性を変えることも、挙動を抑制することも、無効化のスタイリングを追加することもない。
 
-- Don't disable submit buttons at all: keep them enabled, validate on submit, and focus the first error (see [forms.md](forms.md)).
-- Use `aria-disabled="true"` when keeping a control discoverable in the tab order is an intentional requirement, or when a custom control cannot use native `disabled`.
-- With `aria-disabled="true"`, block pointer and keyboard activation in the handler, prevent form submission where applicable, add explicit styling (including forced-colors support), and explain why the action is unavailable nearby.
-- Never set both `disabled` and `aria-disabled` on the same element.
-- Disabled controls are exempt from contrast minimums, but keep them legible anyway.
+- 送信ボタンはそもそも無効化しない: 有効なままにし、送信時にバリデーションを行い、最初のエラーにフォーカスする([forms.md](forms.md)参照)。
+- コントロールをタブ順序内で発見可能なままにすることが意図的な要件である場合、またはカスタムコントロールがネイティブの`disabled`を使えない場合に`aria-disabled="true"`を使う。
+- `aria-disabled="true"`を使う場合は、ハンドラー内でポインターとキーボードによるアクティブ化をブロックし、該当する場合はフォーム送信を防ぎ、明示的なスタイリング(forced-colors対応を含む)を追加し、そのアクションが利用できない理由を近くで説明する。
+- 同じ要素に`disabled`と`aria-disabled`の両方を設定することは決してしない。
+- 無効化されたコントロールはコントラストの最低基準の対象外だが、それでも判読可能な状態を保つ。

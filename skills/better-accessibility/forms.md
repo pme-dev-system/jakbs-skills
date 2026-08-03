@@ -1,29 +1,29 @@
-# Forms
+# フォーム
 
-Labels, autocomplete, error messaging, input types, and submit behavior.
+ラベル、autocomplete、エラーメッセージ、入力タイプ、送信の挙動。
 
-## Labels
+## ラベル
 
-Every control needs a programmatic label: `<label for>` pointing at the input's `id`, or a wrapping `<label>`. A placeholder is never a label: it disappears the moment the user types and usually fails contrast.
+すべてのコントロールにはプログラム的なラベルが必要である: 入力欄の`id`を指す`<label for>`、またはラップする`<label>`。プレースホルダーは決してラベルにはならない。ユーザーが入力した瞬間に消え、たいていコントラストも基準を満たさない。
 
 ```html
-<!-- Good: explicit association -->
+<!-- 良い例: 明示的な関連付け -->
 <label for="email">Email</label>
 <input id="email" type="email" autocomplete="email" />
 
-<!-- Good: wrapping label, so label and control share one hit target -->
+<!-- 良い例: ラップするラベルにより、ラベルとコントロールが1つのヒットターゲットを共有する -->
 <label>
   <input type="checkbox" /> Send me updates
 </label>
 ```
 
-Label and control must share one hit target: clicking the text "Send me updates" toggles the checkbox, with no dead zone between them. Mark required fields with native `required` plus a visible indicator explained once per form ("* required").
+ラベルとコントロールは1つのヒットターゲットを共有しなければならない: 「Send me updates」というテキストをクリックするとチェックボックスがトグルし、両者の間にデッドゾーンはない。必須フィールドにはネイティブの`required`に加え、フォームごとに一度説明する可視のインジケーター(「* required」)を付ける。
 
-Placeholders, when used *in addition to* a label, show an example of the expected format: `placeholder="name@company.com"`.
+プレースホルダーをラベルに*加えて*使う場合は、期待される形式の例を示す: `placeholder="name@company.com"`。
 
-## Error messaging
+## エラーメッセージ
 
-The complete pattern:
+完全なパターン:
 
 ```html
 <label for="email">Email</label>
@@ -37,50 +37,50 @@ The complete pattern:
 <p id="email-error">Enter a valid email address.</p>
 ```
 
-- `aria-invalid="true"` on the failing field, removed once fixed.
-- `aria-describedby` links the field to its inline error so screen readers announce it with the field.
-- Errors render inline next to their fields, with an icon or text, never a red border alone (color-only cues fail).
-- On submit, focus the first invalid field.
-- Allow incomplete submission so validation can surface; don't disable submit until valid (see below).
-- Accept free text and validate after; don't block typing or filter characters as the user types. Trim values before validating; autocomplete and text expansion add trailing spaces.
+- 失敗したフィールドには`aria-invalid="true"`を付け、修正されたら削除する。
+- `aria-describedby`はフィールドとインラインのエラーを結びつけ、スクリーンリーダーがフィールドと一緒に読み上げるようにする。
+- エラーはフィールドの隣にインラインで表示し、アイコンかテキストを伴わせる。赤いボーダーだけは決して使わない(色のみの手がかりは基準を満たさない)。
+- 送信時には最初の無効なフィールドにフォーカスする。
+- バリデーションが表面化するよう、不完全な送信を許可する。有効になるまで送信を無効化しない(後述)。
+- 自由なテキストを受け付け、後から検証する。ユーザーが入力している最中に入力をブロックしたり文字をフィルタしたりしない。検証前に値をトリムする。autocompleteやテキスト展開は末尾にスペースを追加する。
 
-## Autocomplete and input types
+## autocompleteと入力タイプ
 
-`autocomplete` with a meaningful `name` fills forms in one tap and is a WCAG requirement (1.3.5) for fields about the user. The common tokens:
+意味のある`name`を伴う`autocomplete`はワンタップでフォームを埋めることができ、ユーザーに関するフィールドについてはWCAGの要件(1.3.5)でもある。よく使うトークンは次の通り:
 
-| Field | `autocomplete` |
+| フィールド | `autocomplete` |
 | --- | --- |
-| Name | `name` (or `given-name` / `family-name`) |
-| Email | `email` |
-| Phone | `tel` |
-| Address | `street-address`, `address-line1`, `postal-code`, `country` |
-| Card | `cc-number`, `cc-exp`, `cc-csc`, `cc-name` |
-| Login | `username`, `current-password` |
-| Signup / reset | `new-password` |
-| 2FA code | `one-time-code` |
+| 名前 | `name`(または`given-name` / `family-name`) |
+| メール | `email` |
+| 電話番号 | `tel` |
+| 住所 | `street-address`、`address-line1`、`postal-code`、`country` |
+| カード | `cc-number`、`cc-exp`、`cc-csc`、`cc-name` |
+| ログイン | `username`、`current-password` |
+| 新規登録 / リセット | `new-password` |
+| 2FAコード | `one-time-code` |
 
-Prefix with a section where relevant: `autocomplete="shipping street-address"`.
+該当する場合はセクションを接頭辞として付ける: `autocomplete="shipping street-address"`。
 
-Correct `type` and `inputmode` pick the right mobile keyboard:
+正しい`type`と`inputmode`で適切なモバイルキーボードを選ばせる:
 
-| Input | Use |
+| 入力 | 使用する値 |
 | --- | --- |
-| Email, URL, phone | `type="email"`, `type="url"`, `type="tel"` |
-| OTP / PIN / card number | `type="text" inputmode="numeric"` (keeps text semantics, no spinner) |
-| Money, decimals | `type="text" inputmode="decimal"` |
-| True numeric quantity | `type="number"` |
+| メール、URL、電話番号 | `type="email"`、`type="url"`、`type="tel"` |
+| OTP / PIN / カード番号 | `type="text" inputmode="numeric"`(テキストのセマンティクスを維持し、スピナーを出さない) |
+| 金額、小数 | `type="text" inputmode="decimal"` |
+| 純粋な数量 | `type="number"` |
 
-Disable spellcheck on emails, codes, and usernames: `spellcheck="false"`.
+メール、コード、ユーザー名ではスペルチェックを無効にする: `spellcheck="false"`。
 
-## Never fight the user's tools
+## ユーザーのツールを妨げない
 
-- Never block paste in `<input>` or `<textarea>`; users paste passwords and one-time codes.
-- Stay compatible with password managers and 2FA autofill: real `<form>`, correct `autocomplete`, no fake inputs.
-- Never use `user-scalable=no` or `maximum-scale=1` to stop iOS input zoom; keep mobile input text at `16px` instead (covered in `better-typography`).
+- `<input>`や`<textarea>`でのペーストを決してブロックしない。ユーザーはパスワードやワンタイムコードをペーストする。
+- パスワードマネージャーと2FAの自動入力に対応し続ける: 本物の`<form>`、正しい`autocomplete`、偽の入力欄を作らない。
+- iOSの入力ズームを止めるために`user-scalable=no`や`maximum-scale=1`を決して使わない。代わりにモバイルの入力テキストを`16px`に保つ(`better-typography`が扱う)。
 
-## Submit behavior
+## 送信の挙動
 
-- Keep submit enabled until the request starts, then disable it and show a spinner *while keeping the original label*: "Save" with a spinner, not a bare spinner. The label is what tells assistive tech which button is busy.
-- Announce results: success goes through a polite live region. For submit failures, focus the first invalid field; the focus move is the announcement, and reserve `role="alert"` for form-level errors not tied to a field (see [screen-readers.md](screen-readers.md)).
-- Warn on unsaved changes before navigation, and never lose typed input to a re-render; hydration must preserve focus and value.
-- Enter submits from any focused input; in `<textarea>`, ⌘/Ctrl+Enter submits.
+- 送信ボタンはリクエストが開始するまで有効のままにし、開始したら無効化してスピナーを表示するが、*元のラベルは保つ*: スピナー付きの「Save」であって、スピナー単体ではない。ラベルこそが、どのボタンが処理中かを支援技術に伝える。
+- 結果を読み上げる: 成功はpoliteなライブリージョンを通す。送信失敗の場合は最初の無効なフィールドにフォーカスする。フォーカスの移動そのものが通知であり、`role="alert"`はフィールドに紐づかないフォームレベルのエラー用に確保する([screen-readers.md](screen-readers.md)参照)。
+- ナビゲーション前に未保存の変更を警告し、再レンダリングによって入力済みのテキストを決して失わないようにする。ハイドレーションはフォーカスと値を保持しなければならない。
+- Enterはフォーカスされたどの入力欄からでも送信する。`<textarea>`では⌘/Ctrl+Enterで送信する。

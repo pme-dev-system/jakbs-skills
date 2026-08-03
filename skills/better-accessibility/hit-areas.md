@@ -1,32 +1,32 @@
-# Hit Areas
+# ヒットエリア
 
-Target sizes, expanding hit areas without changing visual size, and collision rules.
+ターゲットサイズ、見た目のサイズを変えずにヒットエリアを拡張する方法、衝突ルール。
 
-## Target sizes
+## ターゲットサイズ
 
-Separate the conformance baseline from larger usability targets:
+適合のベースラインと、より大きなユーザビリティ目標を分けて考える:
 
-| Standard | Minimum |
+| 基準 | 最小値 |
 | --- | --- |
-| WCAG 2.5.8 (AA) | 24×24px, the hard floor |
+| WCAG 2.5.8 (AA) | 24×24px、絶対的な下限 |
 | WCAG 2.5.5 (AAA) | 44×44px |
 | Apple HIG | 44×44pt |
 | Material Design | 48×48dp |
 
-WCAG 2.5.8 Level AA requires a 24×24 CSS-pixel target or one of its defined exceptions. Treat 44px as a recommended touch target for primary controls and 40px as a useful desktop target when the product's density permits. Smaller controls are not automatically failures: check the spacing, equivalent-control, inline, user-agent, and essential exceptions before reporting one.
+WCAG 2.5.8のレベルAAは、24×24 CSSピクセルのターゲット、またはそこで定義されている例外のいずれかを要求する。44pxはプライマリコントロールの推奨タッチターゲットとして扱い、40pxはプロダクトの密度が許す場合に有用なデスクトップターゲットとして扱う。より小さいコントロールが自動的に失敗になるわけではない: 報告する前にspacing、equivalent-control、inline、user-agent、essentialの各例外を確認する。
 
-Under the spacing exception, an undersized target passes if a 24px circle centered on its bounding box does not intersect another target or another undersized target's circle; in the simple case, 20px targets need at least a 4px gap.
+spacing例外の下では、境界ボックスの中心に置いた24pxの円が他のターゲットや他の過小ターゲットの円と交差しない場合、過小なターゲットも合格となる。単純なケースでは、20pxのターゲットには最低でも4pxの間隔が必要である。
 
-The visible element can stay small; the hit area is what must be big. If it looks clickable, it must be clickable across its whole visual extent: no dead zones (a checkbox and its label share one hit target).
+可視の要素は小さいままでよい。大きくなければならないのはヒットエリアである。クリックできるように見えるなら、その視覚的な範囲全体でクリックできなければならない: デッドゾーンを作らない(チェックボックスとそのラベルは1つのヒットターゲットを共有する)。
 
-## Expanding the hit area
+## ヒットエリアの拡張
 
-If the visible element is smaller (e.g., a 20×20 checkbox), extend the hit area with a pseudo-element. Put the pseudo-element on the wrapping `<label>` or `<button>`, not on the `<input>` itself; replaced elements don't render `::before`/`::after` reliably.
+可視の要素がそれより小さい場合(例: 20×20のチェックボックス)、疑似要素でヒットエリアを拡張する。疑似要素は`<input>`自体ではなく、ラップする`<label>`や`<button>`に置く。置換要素は`::before`/`::after`を確実にはレンダリングしない。
 
-### CSS Example
+### CSSの例
 
 ```css
-/* Small checkbox with expanded 44px hit area, on the wrapping label */
+/* ラップするラベルに、44pxに拡張したヒットエリアを持つ小さいチェックボックス */
 .checkbox-label {
   position: relative;
   width: 20px;
@@ -37,14 +37,14 @@ If the visible element is smaller (e.g., a 20×20 checkbox), extend the hit area
   content: "";
   position: absolute;
   top: 50%;
-  left: 50%; /* physical centering: direction-independent */
+  left: 50%; /* 物理的な中央揃え: 方向に依存しない */
   transform: translate(-50%, -50%);
   width: 44px;
   height: 44px;
 }
 ```
 
-### Tailwind Example
+### Tailwindの例
 
 ```tsx
 <button className="relative size-5 after:absolute after:top-1/2 after:left-1/2 after:size-11 after:-translate-1/2">
@@ -52,9 +52,9 @@ If the visible element is smaller (e.g., a 20×20 checkbox), extend the hit area
 </button>
 ```
 
-### Layout alternative
+### レイアウトによる代替案
 
-When the element can afford real box size, skip the pseudo-element and let the box itself be the target; this also gives the browser the real geometry for scrolling and gestures:
+要素が実際のボックスサイズを確保できる場合は、疑似要素を使わずボックス自体をターゲットにする。これにより、スクロールやジェスチャーのための実際のジオメトリもブラウザに渡すことができる:
 
 ```css
 .icon-button {
@@ -65,12 +65,12 @@ When the element can afford real box size, skip the pseudo-element and let the b
 }
 ```
 
-## Collision Rule
+## 衝突ルール
 
-If the extended hit area overlaps another interactive element, shrink the pseudo-element, but make it as large as possible without colliding. Two interactive elements should never have overlapping hit areas.
+拡張したヒットエリアが他のインタラクティブ要素と重なる場合は、疑似要素を縮小するが、衝突しない範囲でできるだけ大きく保つ。2つのインタラクティブ要素のヒットエリアが重なることは決してあってはならない。
 
-## Touch behavior
+## タッチの挙動
 
-- Add `touch-action: manipulation` to interactive elements to remove the double-tap-to-zoom delay on mobile.
-- Set `-webkit-tap-highlight-color` to match the design instead of the default gray flash.
-- Prefer generous targets and clear affordances over finicky interactions (tiny drag handles, precise hover zones).
+- モバイルでのダブルタップズームの遅延をなくすため、インタラクティブ要素に`touch-action: manipulation`を追加する。
+- デフォルトの灰色のフラッシュの代わりに、デザインに合わせて`-webkit-tap-highlight-color`を設定する。
+- 扱いにくいインタラクション(小さすぎるドラッグハンドル、精密なホバーゾーン)よりも、余裕のあるターゲットと明確なアフォーダンスを優先する。
